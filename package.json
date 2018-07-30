@@ -13,6 +13,7 @@
   },
   "homepage": "https://github.com/variejs/varie-bundler#readme",
   "dependencies": {
+    "@types/webpack-env": "^1.13.6",
     "autoprefixer": "^8.6.4",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",

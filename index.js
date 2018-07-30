@@ -2,17 +2,13 @@ const path = require("path");
 const loadIf = require("./build/helpers/loadIf");
 const envConfig = require("dotenv").config().parsed;
 
-module.exports = (env, argv) => {
-
-  const root = `${__dirname}/../../`;
-
-  console.info(argv);
+module.exports = (env, argv, root) => {
 
   const config = {
+    root,
     mode: argv.mode,
     host: envConfig.APP_HOST,
     appName: envConfig.APP_NAME,
-    root: path.resolve(root),
     isHot: process.argv.includes("--hot"),
     isProduction: argv.mode === "production",
     outputPath: path.join(root, "public"),
@@ -65,9 +61,6 @@ module.exports = (env, argv) => {
       ]),
       ...loadIf(config.isProduction, [
         require("./build/plugins/hashedModuleIds")(config),
-      ]),
-      ...loadIf(config.isAnalyzing, [
-        require("./build/plugins/bundleAnalayzer")(config),
       ]),
     ],
     resolve: {
