@@ -3,14 +3,19 @@ const loadIf = require("./build/helpers/loadIf");
 const envConfig = require("dotenv").config().parsed;
 
 module.exports = (env, argv) => {
+
+  const root = `${__dirname}/../../`;
+
+  console.info(argv);
+
   const config = {
     mode: argv.mode,
     host: envConfig.APP_HOST,
     appName: envConfig.APP_NAME,
-    root: path.resolve(__dirname),
+    root: path.resolve(root),
     isHot: process.argv.includes("--hot"),
     isProduction: argv.mode === "production",
-    outputPath: path.join(__dirname, "public"),
+    outputPath: path.join(root, "public"),
     isAnalyzing: process.argv.includes("--analyze"),
     hashType: process.argv.includes("--hot") ? "hash" : "contenthash",
   };
@@ -70,14 +75,14 @@ module.exports = (env, argv) => {
       extensions: [".js", ".jsx", ".ts", ".tsx", ".vue", ".json"],
       alias: {
         vue$: "vue/dist/vue.esm.js",
-        "@app": path.join(__dirname, "app"),
-        "@routes": path.join(__dirname, "routes"),
-        "@config": path.join(__dirname, "config"),
-        "@store": path.join(__dirname, "app/store"),
-        "@models": path.join(__dirname, "app/models"),
-        "@resources": path.join(__dirname, "resources"),
-        "@views": path.join(__dirname, "resources/views"),
-        "@components": path.join(__dirname, "app/components"),
+        "@app": path.join(config.root, "app"),
+        "@routes": path.join(config.root, "routes"),
+        "@config": path.join(config.root, "config"),
+        "@store": path.join(config.root, "app/store"),
+        "@models": path.join(config.root, "app/models"),
+        "@resources": path.join(config.root, "resources"),
+        "@views": path.join(config.root, "resources/views"),
+        "@components": path.join(config.root, "app/components"),
       },
     },
     stats: require("./build/stats")(config),
