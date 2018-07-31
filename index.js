@@ -35,8 +35,9 @@ module.exports = class VarieBundler {
   }
 
   entry(name, entryPaths) {
+    this.config.entries[name] = [];
     entryPaths.map(entry => {
-      this.config.entries[name] = path.join(this.config.root, entry);
+      this.config.entries[name].push(path.join(this.config.root, entry));
     });
     return this;
   }
