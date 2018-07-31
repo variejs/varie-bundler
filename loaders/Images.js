@@ -1,8 +1,6 @@
-module.exports = class Images {
-  constructor(config) {
-    this.config = config;
-  }
+const Loader = require("./Loader");
 
+module.exports = class Images extends Loader {
   rules() {
     return {
       test: /\.(png|jpe?g|gif)$/,

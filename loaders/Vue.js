@@ -1,11 +1,8 @@
+const Loader = require("./Loader");
+const loadIf = require("./../helpers/loadIf");
 const { VueLoaderPlugin } = require("vue-loader");
-const loadIf = require("./../build/helpers/loadIf");
 
-module.exports = class Typescript {
-  constructor(config) {
-    this.config = config;
-  }
-
+module.exports = class Vue extends Loader {
   rules() {
     return {
       test: /\.vue$/,

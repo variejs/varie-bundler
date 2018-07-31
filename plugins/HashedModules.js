@@ -1,6 +1,6 @@
 const webpack = require("webpack");
 
-module.exports = class Clean {
+module.exports = class HashedModules {
   constructor(config) {
     this.config = config;
   }

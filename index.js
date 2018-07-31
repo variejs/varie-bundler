@@ -14,7 +14,7 @@ module.exports = class VarieBundler {
     this.config = merge(
       {
         root,
-        entries : {},
+        entries: {},
         variables: {},
         mode: args.mode,
         host: this.envConfig.APP_HOST,
@@ -25,8 +25,8 @@ module.exports = class VarieBundler {
         isAnalyzing: process.argv.includes("--analyze"),
         hashType: process.argv.includes("--hot") ? "hash" : "contenthash",
         aliases: {
-          vue$: "vue/dist/vue.esm.js",
-        },
+          vue$: "vue/dist/vue.esm.js"
+        }
       },
       config
     );
@@ -35,19 +35,23 @@ module.exports = class VarieBundler {
   }
 
   entry(name, entryPaths) {
-    entryPaths.map((entry) => {
-      this.config.entries[name] = path.join(this.config.root, entry)
-    })
+    entryPaths.map(entry => {
+      this.config.entries[name] = path.join(this.config.root, entry);
+    });
     return this;
   }
 
   addLoader(loader) {
-    this.loaders.push(loader);
+    if (loader) {
+      this.loaders.push(loader);
+    }
     return this;
   }
 
   addPlugin(plugin) {
-    this.plugins.push(plugin);
+    if (plugin) {
+      this.plugins.push(plugin);
+    }
     return this;
   }
 
@@ -130,8 +134,8 @@ module.exports = class VarieBundler {
 
   _buildLoaders() {
     return this.loaders.map(loader => {
-      if (typeof loader === "string") {
-        let builtLoader = new loaders[loader](this.config);
+      if (loader.prototype && loader.prototype.constructor.name) {
+        let builtLoader = new loader(this.config);
         if (builtLoader) {
           if (builtLoader.plugin) {
             this.addPlugin(builtLoader.plugin());
@@ -145,8 +149,8 @@ module.exports = class VarieBundler {
 
   _buildPlugins() {
     return this.plugins.map(plugin => {
-      if (typeof plugin === "string") {
-        let builtPlugin = new plugins[plugin](this.config);
+      if (plugin.prototype && plugin.prototype.constructor.name) {
+        let builtPlugin = new plugin(this.config);
         if (builtPlugin) {
           return builtPlugin.boot();
         }

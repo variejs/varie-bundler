@@ -1,8 +1,5 @@
-module.exports = class Fonts {
-  constructor(config) {
-    this.config = config;
-  }
-
+const Loader = require("./Loader");
+module.exports = class Fonts extends Loader {
   rules() {
     return {
       test: /\.(woff|woff2|ttf|eot|svg|otf)$/,

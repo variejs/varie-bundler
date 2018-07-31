@@ -1,10 +1,7 @@
+const Loader = require("./Loader");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = class Fonts {
-  constructor(config) {
-    this.config = config;
-  }
-
+module.exports = class Html extends Loader {
   rules() {
     return {
       test: /\.html$/,

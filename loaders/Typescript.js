@@ -1,10 +1,7 @@
-const loadIf = require("./../build/helpers/loadIf");
+const Loader = require("./Loader");
+const loadIf = require("./../helpers/loadIf");
 
-module.exports = class Typescript {
-  constructor(config) {
-    this.config = config;
-  }
-
+module.exports = class Typescript extends Loader {
   rules() {
     return {
       test: /\.tsx?$/,

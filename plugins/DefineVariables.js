@@ -1,7 +1,7 @@
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 
-module.exports = class Define {
+module.exports = class DefineVariables {
   constructor(config) {
     this.config = config;
   }

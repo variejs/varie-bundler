@@ -1,12 +1,9 @@
+const Loader = require("./Loader");
 const autoprefixer = require("autoprefixer");
-const loadIf = require("./../build/helpers/loadIf");
+const loadIf = require("./../helpers/loadIf");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-module.exports = class Typescript {
-  constructor(config) {
-    this.config = config;
-  }
-
+module.exports = class Sass extends Loader {
   rules() {
     return {
       test: /\.s[ac]ss|\.css/,
