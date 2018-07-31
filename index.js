@@ -1,84 +1,133 @@
-const path = require("path");
-const loadIf = require("./build/helpers/loadIf");
-const envConfig = require("dotenv").config().parsed;
+const path = require('path');
+const dotenv = require('dotenv')
+const merge = require('webpack-merge');
 
-module.exports = (env, argv, root) => {
+const loaders = require('./loaders');
+const plugins = require('./plugins');
 
-  const config = {
-    root,
-    mode: argv.mode,
-    host: envConfig.APP_HOST,
-    appName: envConfig.APP_NAME,
-    isHot: process.argv.includes("--hot"),
-    isProduction: argv.mode === "production",
-    outputPath: path.join(root, "public"),
-    isAnalyzing: process.argv.includes("--analyze"),
-    hashType: process.argv.includes("--hot") ? "hash" : "contenthash",
-  };
+module.exports = class VarieBundler {
 
-  return {
-    mode: config.mode,
-    context: config.root,
-    optimization: require("./build/optimization")(config),
-    devtool: config.isProduction ? "hidden-source-map" : "eval-source-map",
-    entry: {
-      app: [
-        path.join(config.root, "app/app.ts"),
-        path.join(config.root, "resources/sass/app.scss"),
-      ],
-    },
-    output: {
-      publicPath: "/",
-      path: config.outputPath,
-      filename: `js/[name].js?[${config.hashType}]`,
-      chunkFilename: `js/[name].js?[${config.hashType}]`,
-    },
-    module: {
-      noParse: /^(vue|vue-router|vuex|vuex-router-sync|varie)$/,
-      rules: [
-        require("./build/loaders/ts")(config),
-        require("./build/loaders/vue")(config),
-        require("./build/loaders/scss")(config),
-        require("./build/loaders/html")(config),
-        require("./build/loaders/fonts")(config),
-        require("./build/loaders/images")(config),
-      ],
-    },
-    plugins: [
-      require("./build/plugins/define")({
-        ENV: config.mode,
-      }),
-      require("./build/plugins/html")(config),
-      require("./build/plugins/vue")(config),
-      ...loadIf(!config.isHot, [
-        require("./build/plugins/clean")(config),
-        require("./build/plugins/cssExtract")(config),
-      ]),
-      ...loadIf(!config.isProduction, [
-        require("./build/plugins/errors")(config),
-        require("./build/plugins/browserSync")(config),
-        require("./build/plugins/notifications")(config),
-      ]),
-      ...loadIf(config.isProduction, [
-        require("./build/plugins/hashedModuleIds")(config),
-      ]),
-    ],
-    resolve: {
-      symlinks: false,
-      extensions: [".js", ".jsx", ".ts", ".tsx", ".vue", ".json"],
-      alias: {
-        vue$: "vue/dist/vue.esm.js",
-        "@app": path.join(config.root, "app"),
-        "@routes": path.join(config.root, "routes"),
-        "@config": path.join(config.root, "config"),
-        "@store": path.join(config.root, "app/store"),
-        "@models": path.join(config.root, "app/models"),
-        "@resources": path.join(config.root, "resources"),
-        "@views": path.join(config.root, "resources/views"),
-        "@components": path.join(config.root, "app/components"),
-      },
-    },
-    stats: require("./build/stats")(config),
-    devServer: require("./build/devServer")(config),
-  };
+    constructor(args, root, config = {}) {
+        this.args = args;
+        this.envConfig = dotenv.config().parsed;
+        this.config = merge({
+            root,
+            mode: this.args.mode,
+            host: this.envConfig.APP_HOST,
+            appName: this.envConfig.APP_NAME,
+            isHot: process.argv.includes("--hot"),
+            isProduction: this.args.mode === "production",
+            outputPath: path.join(root, "public"),
+            isAnalyzing: process.argv.includes("--analyze"),
+            hashType: process.argv.includes("--hot") ? "hash" : "contenthash",
+            aliases : {
+                vue$: "vue/dist/vue.esm.js",
+            }
+        }, config);
+
+        this.plugins = [];
+        this.loaders = [];
+        this._variables = {
+            ENV : this.config.mode,
+        };
+        this.customWebpackconfig = {};
+
+        Object.keys(loaders).map((type) => {
+            this._addLoader(type)
+        });
+
+        Object.keys(plugins).map((type) => {
+            this[type] = () => {
+                return this._addPlugin(type);
+            }
+        });
+    }
+
+    addLoader(loader) {
+        this.loaders.push(loader);
+        return this;
+    }
+
+    addPlugin(plugin) {
+        this.plugins.push(plugin);
+        return this;
+    }
+
+    _addPlugin(type) {
+        let plugin = new plugins[type](this.config);
+        this.addPlugin(plugin.boot());
+        return this;
+    }
+
+    _addLoader(type) {
+        let loader = new loaders[type](this.config);
+        this.addLoader(loader.rules());
+        if(loader.plugin) {
+            this.addPlugin(loader.plugin());
+        }
+        return this;
+    }
+
+    variables(variables) {
+        this._variables = merge(this._variables, variables);
+        return this;
+    }
+
+    aliases(aliases) {
+        this.config.aliases = merge(this.config.aliases,  aliases);
+        return this;
+    }
+
+    customWebpackConfig(config) {
+        this.customWebpackconfig = config;
+        return this;
+    }
+
+    build() {
+
+        return merge({
+            mode: this.config.mode,
+            context: this.config.root,
+            optimization: require("./build/optimization")(this.config),
+            devtool: this.config.isProduction ? "hidden-source-map" : "eval-source-map",
+            entry: {
+                app: [
+                    path.join(this.config.root, "app/app.ts"),
+                    path.join(this.config.root, "resources/sass/app.scss"),
+                ],
+            },
+            output: {
+                publicPath: "/",
+                path: this.config.outputPath,
+                filename: `js/[name].js?[${this.config.hashType}]`,
+                chunkFilename: `js/[name].js?[${this.config.hashType}]`,
+            },
+            module: {
+                noParse: /^(vue|vue-router|vuex|varie)$/,
+                rules: this.loaders,
+            },
+            plugins: this.plugins,
+            resolve: {
+                symlinks: false,
+                extensions: [".js", ".jsx", ".ts", ".tsx", ".vue", ".json"],
+                alias: this.config.aliases,
+            },
+            stats: require("./build/stats")(this.config),
+            devServer: require("./build/devServer")(this.config),
+        }, this.customWebpackconfig);
+    }
 };
+
+
+// require("./build/plugins/define")({
+//     ENV: this.config.mode,
+// }),
+// ...loadIf(!this.config.isHot, [
+//     require("./build/plugins/clean")(this.config),
+// ]),
+// ...loadIf(!this.config.isProduction, [
+//     require("./build/plugins/errors")(this.config),
+// ]),
+// ...loadIf(this.config.isProduction, [
+//     require("./build/plugins/hashedModuleIds")(this.config),
+// ]),
