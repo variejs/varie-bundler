@@ -8,17 +8,17 @@ module.exports = function(config) {
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
           name: "vendor",
-          chunks: "initial",
+          chunks: "initial"
         },
         default: {
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true,
-        },
-      },
+          reuseExistingChunk: true
+        }
+      }
     },
-    runtimeChunk : true,
-    providedExports : true,
-    minimizer: require("./minimizer")(config),
+    runtimeChunk: true,
+    providedExports: true,
+    minimizer: require("./minimizer")(config)
   };
 };

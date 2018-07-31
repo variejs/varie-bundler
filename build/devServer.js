@@ -1,7 +1,7 @@
 module.exports = function(config) {
   return {
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "*"
     },
     contentBase: config.root,
     host: config.host,
@@ -9,6 +9,6 @@ module.exports = function(config) {
     noInfo: true,
     compress: true,
     quiet: true,
-    overlay: true,
+    overlay: true
   };
 };

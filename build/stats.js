@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = function(config) {
   return {
     hash: false,
     version: false,
@@ -9,6 +9,6 @@ module.exports = function() {
     modules: false,
     reasons: false,
     source: false,
-    publicPath: false,
+    publicPath: false
   };
 };

@@ -4,6 +4,6 @@ module.exports = function() {
   return new UglifyJSPlugin({
     cache: true,
     parallel: true,
-    sourceMap: true,
+    sourceMap: true
   });
 };
