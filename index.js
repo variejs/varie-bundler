@@ -115,7 +115,7 @@ module.exports = class VarieBundler {
       .addLoader(loaders.Sass)
       .addLoader(loaders.Fonts)
       .addLoader(loaders.Images)
-      .addPlugin(plugins.DefineVariables)
+      // .addPlugin(plugins.DefineVariables)
       .when(this._env.isProduction, () => {
         this.addPlugin(plugins.HashedModules);
       })
