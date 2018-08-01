@@ -1,14 +1,9 @@
-const webpack = require("webpack");
-const merge = require("webpack-merge");
+const Plugin = require("./Plugin");
 
-module.exports = class DefineVariables {
-  constructor(config) {
-    this.config = config;
-  }
-
+module.exports = class DefineVariables extends Plugin {
   boot() {
-    return new webpack.DefinePlugin(
-      merge(
+    return new this.webpack.DefinePlugin(
+      this.merge(
         {
           ENV: this.config.mode
         },

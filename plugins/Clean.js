@@ -1,10 +1,7 @@
+const Plugin = require("./Plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
-module.exports = class Clean {
-  constructor(config) {
-    this.config = config;
-  }
-
+module.exports = class Clean extends Plugin {
   boot() {
     if (!this.config.isHot) {
       return new CleanWebpackPlugin([this.config.outputPath], {

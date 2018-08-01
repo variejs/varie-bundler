@@ -1,13 +1,9 @@
-const webpack = require("webpack");
+const Plugin = require("./Plugin");
 
-module.exports = class HashedModules {
-  constructor(config) {
-    this.config = config;
-  }
-
+module.exports = class HashedModules extends Plugin {
   boot() {
     if (this.config.isProduction) {
-      return new webpack.HashedModuleIdsPlugin({
+      return new this.webpack.HashedModuleIdsPlugin({
         hashFunction: "sha256",
         hashDigest: "hex",
         hashDigestLength: 20

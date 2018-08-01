@@ -1,6 +1,5 @@
 const Loader = require("./Loader");
 const autoprefixer = require("autoprefixer");
-const loadIf = require("./../helpers/loadIf");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = class Sass extends Loader {
@@ -8,7 +7,7 @@ module.exports = class Sass extends Loader {
     return {
       test: /\.s[ac]ss|\.css/,
       use: [
-        ...loadIf(!this.config.isProduction, ["cache-loader"]),
+        ...this.loadIf(!this.config.isProduction, ["cache-loader"]),
         {
           loader: this.config.isHot
             ? "style-loader"

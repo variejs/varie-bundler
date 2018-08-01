@@ -1,12 +1,11 @@
 const Loader = require("./Loader");
-const loadIf = require("./../helpers/loadIf");
 
 module.exports = class Typescript extends Loader {
   rules() {
     return {
       test: /\.tsx?$/,
       use: [
-        ...loadIf(!this.config.isProduction, ["cache-loader"]),
+        ...this.loadIf(!this.config.isProduction, ["cache-loader"]),
         {
           loader: "babel-loader"
         },

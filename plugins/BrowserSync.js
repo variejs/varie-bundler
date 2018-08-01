@@ -1,10 +1,7 @@
+const Plugin = require("./Plugin");
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 
-module.exports = class BrowserSync {
-  constructor(config) {
-    this.config = config;
-  }
-
+module.exports = class BrowserSync extends Plugin {
   boot() {
     return new BrowserSyncPlugin(
       {

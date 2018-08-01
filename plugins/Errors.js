@@ -1,10 +1,7 @@
+const Plugin = require("./Plugin");
 let FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 
-module.exports = class Errors {
-  constructor(config) {
-    this.config = config;
-  }
-
+module.exports = class Errors extends Plugin {
   boot() {
     if (!this.config.isProduction) {
       return new FriendlyErrorsWebpackPlugin({

@@ -1,5 +1,4 @@
 const Loader = require("./Loader");
-const loadIf = require("./../helpers/loadIf");
 const { VueLoaderPlugin } = require("vue-loader");
 
 module.exports = class Vue extends Loader {
@@ -7,7 +6,7 @@ module.exports = class Vue extends Loader {
     return {
       test: /\.vue$/,
       use: [
-        ...loadIf(!this.config.isProduction, ["cache-loader"]),
+        ...this.loadIf(!this.config.isProduction, ["cache-loader"]),
         "vue-loader"
       ]
     };
