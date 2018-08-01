@@ -3,7 +3,7 @@ const merge = require("webpack-merge");
 const getDependency = require("./../helpers/getDependency");
 
 module.exports = class Plugin {
-  constructor(env, config, data) {
+  constructor(env, config, data = {}) {
     this.env = env;
     this.data = data;
     this.merge = merge;

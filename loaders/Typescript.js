@@ -5,7 +5,7 @@ module.exports = class Typescript extends Loader {
     return {
       test: /\.tsx?$/,
       use: [
-        ...this.loadIf(!this.env.isProduction, ["cache-loader"]),
+        ...this.useIf(this.env.isHot, ["cache-loader"]),
         {
           loader: "babel-loader"
         },

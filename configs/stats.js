@@ -6,7 +6,7 @@ module.exports = function(config) {
     source: false,
     reasons: false,
     version: false,
-    timings: false,
+    timings: true,
     children: false,
     publicPath: false,
     errorDetails: false

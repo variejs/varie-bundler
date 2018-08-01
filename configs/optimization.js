@@ -1,8 +1,8 @@
+const UglifyPlugin = require("./../plugins/Uglify");
+
 module.exports = function(env, config) {
   return {
     splitChunks: {
-      minSize: 30000,
-      maxSize: 50000,
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
@@ -19,6 +19,6 @@ module.exports = function(env, config) {
     },
     runtimeChunk: true,
     providedExports: true,
-    minimizer: require("./minimizer")(env, config)
+    minimizer: [new UglifyPlugin(env.config).boot()]
   };
 };

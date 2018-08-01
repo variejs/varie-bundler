@@ -9,9 +9,11 @@ module.exports = class Html extends Loader {
     };
   }
 
-  plugin() {
-    return new HtmlWebpackPlugin({
-      template: "./index.html"
-    });
+  plugins() {
+    return [
+      new HtmlWebpackPlugin({
+        template: "./index.html"
+      })
+    ];
   }
 };
