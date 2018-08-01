@@ -18,10 +18,11 @@ module.exports = class VarieBundler {
     };
 
     this._env = {
+      mode: this._mode,
       isHot: this._argumentsHas("--hot"),
       isProduction: this._mode === "production",
       isDevelopment: this._mode === "development",
-      isAnalyzing: this._argumentsHas("--analyze"),
+      isAnalyzing: this._argumentsHas("--analyze")
     };
 
     this._pluginData = {
