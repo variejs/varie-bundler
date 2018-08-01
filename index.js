@@ -12,14 +12,16 @@ module.exports = class VarieBundler {
     this._entries = {};
     this._customWebpackconfig = {};
     this._envConfig = dotenv.config().parsed;
+    this._mode = args ? args.mode : "development";
     this._aliases = {
       vue$: "vue/dist/vue.esm.js"
     };
 
     this._env = {
       isHot: this._argumentsHas("--hot"),
+      isProduction: this._mode === "production",
+      isDevelopment: this._mode === "development",
       isAnalyzing: this._argumentsHas("--analyze"),
-      isProduction: this._webpackMode(args) === "production"
     };
 
     this._pluginData = {
@@ -29,7 +31,6 @@ module.exports = class VarieBundler {
     this._config = merge(
       {
         root,
-        mode: this._webpackMode(args),
         outputPath: path.join(root, "public"),
         appName: this._envConfig.APP_NAME || "Varie",
         host: this._envConfig.APP_HOST || "localhost",
@@ -64,7 +65,7 @@ module.exports = class VarieBundler {
     return merge(
       {
         entry: this._entries,
-        mode: this._config.mode,
+        mode: this._env.mode,
         context: this._config.root,
         stats: webpackConfigs.stats(this._config),
         devServer: webpackConfigs.devServer(this._config),
@@ -177,9 +178,5 @@ module.exports = class VarieBundler {
       }
       return plugin;
     });
-  }
-
-  _webpackMode(args) {
-    return args ? args.mode : "development";
   }
 };
