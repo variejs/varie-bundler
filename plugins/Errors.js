@@ -3,7 +3,7 @@ let FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 
 module.exports = class Errors extends Plugin {
   boot() {
-    if (!this.config.isProduction) {
+    if (!this.env.isProduction) {
       return new FriendlyErrorsWebpackPlugin({
         clearConsole: true
       });

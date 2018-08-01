@@ -1,14 +1,14 @@
 module.exports = function(config) {
   return {
     hash: false,
+    chunks: false,
+    modules: false,
+    source: false,
+    reasons: false,
     version: false,
     timings: false,
     children: false,
-    errorDetails: false,
-    chunks: false,
-    modules: false,
-    reasons: false,
-    source: false,
-    publicPath: false
+    publicPath: false,
+    errorDetails: false
   };
 };

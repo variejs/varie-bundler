@@ -5,9 +5,9 @@ module.exports = class DefineVariables extends Plugin {
     return new this.webpack.DefinePlugin(
       this.merge(
         {
-          ENV: this.config.mode
+          ENV: JSON.stringify(this.config.mode)
         },
-        this.config.variables
+        this.data.variables
       )
     );
   }

@@ -1,14 +1,14 @@
 module.exports = function(config) {
   return {
+    quiet: true,
+    noInfo: true,
+    overlay: true,
+    compress: true,
+    host: config.host,
+    contentBase: config.root,
+    historyApiFallback: true,
     headers: {
       "Access-Control-Allow-Origin": "*"
-    },
-    contentBase: config.root,
-    host: config.host,
-    historyApiFallback: true,
-    noInfo: true,
-    compress: true,
-    quiet: true,
-    overlay: true
+    }
   };
 };

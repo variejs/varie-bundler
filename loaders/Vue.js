@@ -6,7 +6,7 @@ module.exports = class Vue extends Loader {
     return {
       test: /\.vue$/,
       use: [
-        ...this.loadIf(!this.config.isProduction, ["cache-loader"]),
+        ...this.loadIf(!this.env.isProduction, ["cache-loader"]),
         "vue-loader"
       ]
     };

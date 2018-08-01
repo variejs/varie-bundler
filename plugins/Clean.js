@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = class Clean extends Plugin {
   boot() {
-    if (!this.config.isHot) {
+    if (!this.env.isHot) {
       return new CleanWebpackPlugin([this.config.outputPath], {
         root: this.config.root
       });

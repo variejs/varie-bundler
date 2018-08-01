@@ -7,26 +7,33 @@ const plugins = require("./plugins");
 
 module.exports = class VarieBundler {
   constructor(args, root, config = {}) {
-    this.plugins = [];
-    this.loaders = [];
-    this.customWebpackconfig = {};
-    this.envConfig = dotenv.config().parsed;
+    this._plugins = [];
+    this._loaders = [];
+    this._entries = {};
+    this._customWebpackconfig = {};
+    this._envConfig = dotenv.config().parsed;
+    this._aliases = {
+      vue$: "vue/dist/vue.esm.js"
+    };
+
+    this._env = {
+      isHot: process.argv.includes("--hot"),
+      isProduction: args.mode === "production",
+      isAnalyzing: process.argv.includes("--analyze")
+    };
+
+    this._pluginData = {
+      variables: {}
+    };
+
     this.config = merge(
       {
         root,
-        entries: {},
-        variables: {},
         mode: args.mode,
-        host: this.envConfig.APP_HOST,
-        appName: this.envConfig.APP_NAME,
         outputPath: path.join(root, "public"),
-        isHot: process.argv.includes("--hot"),
-        isProduction: args.mode === "production",
-        isAnalyzing: process.argv.includes("--analyze"),
-        hashType: process.argv.includes("--hot") ? "hash" : "contenthash",
-        aliases: {
-          vue$: "vue/dist/vue.esm.js"
-        }
+        appName: this._envConfig.APP_NAME || "Varie",
+        host: this._envConfig.APP_HOST || "localhost",
+        hashType: this._env.isHot ? "hash" : "contenthash"
       },
       config
     );
@@ -35,39 +42,39 @@ module.exports = class VarieBundler {
   }
 
   entry(name, entryPaths) {
-    this.config.entries[name] = [];
+    this._entries[name] = [];
     entryPaths.map(entry => {
-      this.config.entries[name].push(path.join(this.config.root, entry));
+      this._entries[name].push(path.join(this.config.root, entry));
     });
     return this;
   }
 
   addLoader(loader) {
     if (loader) {
-      this.loaders.push(loader);
+      this._loaders.push(loader);
     }
     return this;
   }
 
   addPlugin(plugin) {
     if (plugin) {
-      this.plugins.push(plugin);
+      this._plugins.push(plugin);
     }
     return this;
   }
 
   aliases(aliases) {
-    this.config.aliases = merge(this.config.aliases, aliases);
+    this._aliases = merge(this._aliases, aliases);
     return this;
   }
 
   customWebpackConfig(config) {
-    this.customWebpackconfig = config;
+    this._customWebpackconfig = config;
     return this;
   }
 
   variables(variables) {
-    this.config.variables = merge(this.config.variables, variables);
+    this._pluginData.variables = merge(this._pluginData.variables, variables);
     return this;
   }
 
@@ -79,16 +86,16 @@ module.exports = class VarieBundler {
       .addLoader(loaders.Fonts)
       .addLoader(loaders.Images)
       .addPlugin(plugins.DefineVariables)
-      .when(this.config.isProduction, () => {
+      .when(this._env.isProduction, () => {
         this.addPlugin(plugins.HashedModules);
       })
-      .when(!this.config.isHot && !this.config.isProduction, () => {
+      .when(!this._env.isHot && !this._env.isProduction, () => {
         this.addPlugin(plugins.Clean);
       })
-      .when(!this.config.isProduction, () => {
+      .when(!this._env.isProduction, () => {
         this.addPlugin(plugins.BrowserSync);
       })
-      .when(this.config.isAnalyzing, () => {
+      .when(this._env.isAnalyzing, () => {
         this.addPlugin(plugins.BundleAnalyzer);
       });
   }
@@ -105,11 +112,11 @@ module.exports = class VarieBundler {
       {
         mode: this.config.mode,
         context: this.config.root,
-        optimization: require("./build/optimization")(this.config),
-        devtool: this.config.isProduction
+        optimization: require("./build/optimization")(this._env, this.config),
+        devtool: this._env.isProduction
           ? "hidden-source-map"
           : "eval-source-map",
-        entry: this.config.entries,
+        entry: this._entries,
         output: {
           publicPath: "/",
           path: this.config.outputPath,
@@ -124,19 +131,19 @@ module.exports = class VarieBundler {
         resolve: {
           symlinks: false,
           extensions: [".js", ".jsx", ".ts", ".tsx", ".vue", ".json"],
-          alias: this.config.aliases
+          alias: this._aliases
         },
         stats: require("./build/stats")(this.config),
         devServer: require("./build/devServer")(this.config)
       },
-      this.customWebpackconfig
+      this._customWebpackconfig
     );
   }
 
   _buildLoaders() {
-    return this.loaders.map(loader => {
+    return this._loaders.map(loader => {
       if (loader.prototype && loader.prototype.constructor.name) {
-        let builtLoader = new loader(this.config);
+        let builtLoader = new loader(this._env, this.config);
         if (builtLoader) {
           if (builtLoader.plugin) {
             this.addPlugin(builtLoader.plugin());
@@ -149,9 +156,9 @@ module.exports = class VarieBundler {
   }
 
   _buildPlugins() {
-    return this.plugins.map(plugin => {
+    return this._plugins.map(plugin => {
       if (plugin.prototype && plugin.prototype.constructor.name) {
-        let builtPlugin = new plugin(this.config);
+        let builtPlugin = new plugin(this._env, this.config, this._pluginData);
         if (builtPlugin) {
           return builtPlugin.boot();
         }

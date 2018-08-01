@@ -7,7 +7,7 @@ module.exports = class BrowserSync extends Plugin {
       {
         open: this.config.host ? "external" : "local",
         host: this.config.host,
-        proxy: this.config.isHot ? "http://localhost:8080/" : this.config.host,
+        proxy: this.env.isHot ? "http://localhost:8080/" : this.config.host,
         files: [
           this.config.outputPath + "/**/*.js",
           this.config.outputPath + "**/*.css"

@@ -7,18 +7,16 @@ module.exports = class Sass extends Loader {
     return {
       test: /\.s[ac]ss|\.css/,
       use: [
-        ...this.loadIf(!this.config.isProduction, ["cache-loader"]),
+        ...this.loadIf(!this.env.isProduction, ["cache-loader"]),
         {
-          loader: this.config.isHot
-            ? "style-loader"
-            : MiniCssExtractPlugin.loader
+          loader: this.env.isHot ? "style-loader" : MiniCssExtractPlugin.loader
         },
         {
           loader: "css-loader",
           options: {
             sourceMap: true,
             importLoaders: 1,
-            minimize: this.config.isProduction
+            minimize: this.env.isProduction
           }
         },
         {
@@ -49,7 +47,7 @@ module.exports = class Sass extends Loader {
   }
 
   plugin() {
-    if (!this.config.isHot) {
+    if (!this.env.isHot) {
       return new MiniCssExtractPlugin({
         filename: `css/[name].css?[${this.config.hashType}]`,
         chunkFilename: `css/[name].css?[${this.config.hashType}]`

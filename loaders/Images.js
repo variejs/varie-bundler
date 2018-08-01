@@ -14,7 +14,7 @@ module.exports = class Images extends Loader {
         {
           loader: "img-loader",
           options: {
-            enabled: this.config.isProduction,
+            enabled: this.env.isProduction,
             gifsicle: {},
             mozjpeg: {},
             optipng: {},

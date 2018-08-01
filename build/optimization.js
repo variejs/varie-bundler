@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = function(env, config) {
   return {
     splitChunks: {
       minSize: 30000,
@@ -19,6 +19,6 @@ module.exports = function(config) {
     },
     runtimeChunk: true,
     providedExports: true,
-    minimizer: require("./minimizer")(config)
+    minimizer: require("./minimizer")(env, config)
   };
 };

@@ -7,9 +7,9 @@ const DefineVariables = require("./DefineVariables");
 
 module.exports = {
   Clean,
-  DefineVariables,
   Errors,
   BrowserSync,
   HashedModules,
-  BundleAnalyzer
+  BundleAnalyzer,
+  DefineVariables
 };
