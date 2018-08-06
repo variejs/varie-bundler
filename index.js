@@ -132,7 +132,7 @@ module.exports = class VarieBundler {
 
   when(conditional, callback) {
     if (conditional) {
-      callback();
+      callback(this);
     }
     return this;
   }
