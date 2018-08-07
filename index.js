@@ -110,12 +110,10 @@ module.exports = class VarieBundler {
     new loaders.Fonts(this);
     new loaders.Images(this);
 
+    new plugins.Clean(this);
     new plugins.DefineEnvironmentVariables(this);
 
     this._webpackChain
-      .when(!this._env.isHot, () => {
-        new plugins.Clean(this);
-      })
       .when(!this._env.isProduction, () => {
         new plugins.Errors(this);
         new plugins.BrowserSync(this);
