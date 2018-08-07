@@ -3,7 +3,7 @@ const Errors = require("./Errors");
 const BrowserSync = require("./BrowserSync");
 const HashedModules = require("./HashedModules");
 const BundleAnalyzer = require("./BundleAnalyzer");
-const DefineVariables = require("./DefineVariables");
+const DefineEnvironmentVariables = require("./DefineEnvironmentVariables");
 
 module.exports = {
   Clean,
@@ -11,5 +11,5 @@ module.exports = {
   BrowserSync,
   HashedModules,
   BundleAnalyzer,
-  DefineVariables
+  DefineEnvironmentVariables
 };

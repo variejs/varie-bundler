@@ -1,9 +1,12 @@
 const useIf = require("./../helpers/useIf");
 
 module.exports = class Loader {
-  constructor(env, config) {
-    this.env = env;
+  constructor(varieLoader) {
     this.useIf = useIf;
-    this.config = config;
+    this.varieLoader = varieLoader;
+    this.env = this.varieLoader._env;
+    this.config = this.varieLoader._config;
+    this.webpackChain = this.varieLoader._webpackChain;
+    this.register();
   }
 };

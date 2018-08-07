@@ -1,9 +1,15 @@
-const stats = require("./stats");
-const devServer = require("./devServer");
-const optimization = require("./optimization");
+const Stats = require("./Stats");
+const Output = require("./Output");
+const Aliases = require("./Aliases");
+const DevServer = require("./DevServer");
+const Extensions = require("./Extensions");
+const Optimization = require("./Optimization");
 
 module.exports = {
-  stats,
-  devServer,
-  optimization
+  Stats,
+  Output,
+  Aliases,
+  DevServer,
+  Extensions,
+  Optimization
 };

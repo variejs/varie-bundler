@@ -2,18 +2,21 @@ const Loader = require("./Loader");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = class Html extends Loader {
-  rules() {
-    return {
-      test: /\.html$/,
-      loaders: ["html-loader"]
-    };
-  }
+  register() {
+    this.webpackChain.module
+      .rule("html")
+      .test(/\.html$/)
+      .use("html")
+      .loader("html-loader")
+      .options({
+        limit: 4096,
+        name: "fonts/[name].[ext]?[hash:8]"
+      });
 
-  plugins() {
-    return [
-      new HtmlWebpackPlugin({
+    this.webpackChain.plugin("html").use(HtmlWebpackPlugin, [
+      {
         template: "./index.html"
-      })
-    ];
+      }
+    ]);
   }
 };

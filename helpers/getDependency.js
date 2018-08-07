@@ -6,7 +6,7 @@ module.exports = function(dependency) {
   } catch (e) {
     console.log(`Installing ${dependency}.`);
     childProcess.execSync(`npm install ${dependency} --save-dev`);
-    console.info("Finished, re-run this command.");
+    console.log("Finished, re-run this command.");
     process.exit(0);
   }
 };
