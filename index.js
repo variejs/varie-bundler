@@ -57,19 +57,8 @@ module.exports = class VarieBundler {
   }
 
   _bundle() {
-    this._webpackChain
-      .mode(this._env.mode)
-      .context(this._config.root)
-      .devtool(this._env.isProduction ? "hidden-source-map" : "eval-source-map")
-      .resolve.symlinks(false);
-
-    new webpackConfigs.Stats(this);
-    new webpackConfigs.Output(this);
     new webpackConfigs.Aliases(this);
-    new webpackConfigs.DevServer(this);
-    new webpackConfigs.Extensions(this);
-    new webpackConfigs.Optimization(this);
-
+    new plugins.DefineEnvironmentVariables(this);
     return this._webpackChain;
   }
 
@@ -111,7 +100,6 @@ module.exports = class VarieBundler {
     new loaders.Images(this);
 
     new plugins.Clean(this);
-    new plugins.DefineEnvironmentVariables(this);
 
     this._webpackChain
       .when(!this._env.isProduction, () => {
@@ -124,5 +112,17 @@ module.exports = class VarieBundler {
       .when(this._env.isAnalyzing, () => {
         new plugins.BundleAnalyzer(this);
       });
+
+      this._webpackChain
+          .mode(this._env.mode)
+          .context(this._config.root)
+          .devtool(this._env.isProduction ? "hidden-source-map" : "eval-source-map")
+          .resolve.symlinks(false);
+
+      new webpackConfigs.Stats(this);
+      new webpackConfigs.Output(this);
+      new webpackConfigs.DevServer(this);
+      new webpackConfigs.Extensions(this);
+      new webpackConfigs.Optimization(this);
   }
 };
