@@ -28,7 +28,7 @@ module.exports = class VarieBundler {
   }
 
   chainWebpack(callback) {
-    callback(this._webpackChain);
+    callback(this._webpackChain, this._env);
     return this;
   }
 
