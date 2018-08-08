@@ -32,6 +32,11 @@ module.exports = class VarieBundler {
     return this;
   }
 
+  environmentVariables(variables) {
+    this._config.environmentVariables = variables;
+    return this;
+  }
+
   entry(name, entryPaths) {
     let webpackEntry = this._webpackChain.entry(name);
 
@@ -41,11 +46,6 @@ module.exports = class VarieBundler {
 
     webpackEntry.end();
 
-    return this;
-  }
-
-  environmentVariables(variables) {
-    this._config.environmentVariables = variables;
     return this;
   }
 
