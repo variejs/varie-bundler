@@ -113,16 +113,16 @@ module.exports = class VarieBundler {
         new plugins.BundleAnalyzer(this);
       });
 
-      this._webpackChain
-          .mode(this._env.mode)
-          .context(this._config.root)
-          .devtool(this._env.isProduction ? "hidden-source-map" : "eval-source-map")
-          .resolve.symlinks(false);
+    this._webpackChain
+      .mode(this._env.mode)
+      .context(this._config.root)
+      .devtool(this._env.isProduction ? "hidden-source-map" : "eval-source-map")
+      .resolve.symlinks(false);
 
-      new webpackConfigs.Stats(this);
-      new webpackConfigs.Output(this);
-      new webpackConfigs.DevServer(this);
-      new webpackConfigs.Extensions(this);
-      new webpackConfigs.Optimization(this);
+    new webpackConfigs.Stats(this);
+    new webpackConfigs.Output(this);
+    new webpackConfigs.DevServer(this);
+    new webpackConfigs.Extensions(this);
+    new webpackConfigs.Optimization(this);
   }
 };
