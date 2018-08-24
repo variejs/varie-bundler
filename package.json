@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "A webpack bundler for Varie",
   "main": "index.js",
   "repository": {
@@ -25,9 +25,7 @@
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.0",
     "cssnano": "^4.0.5",
-    "dart-sass": "^1.10.3",
     "dotenv": "^6.0.0",
-    "fibers": "^3.0.0",
     "file-loader": "^1.1.11",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-loader": "^0.5.5",
@@ -36,6 +34,7 @@
     "img-loader": "^3.0.0",
     "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^0.4.1",
+    "node-sass": "^4.9.3",
     "optimize-css-assets-webpack-plugin": "^5.0.0",
     "postcss-loader": "^2.1.6",
     "resolve-url-loader": "^2.3.0",
@@ -51,5 +50,8 @@
     "webpack-dev-server": "^3.1.5",
     "webpack-merge": "^4.1.4",
     "webpack-notifier": "^1.6.0"
+  },
+  "peerDependencies": {
+    "vue-template-compiler": "^2.5.17"
   }
 }

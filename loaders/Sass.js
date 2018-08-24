@@ -68,8 +68,7 @@ module.exports = class Sass extends Loader {
       .loader("sass-loader")
       .options({
         sourceMap: true,
-        fiber: require("fibers"),
-        implementation: require("dart-sass")
+        implementation: require("node-sass")
       });
   }
 };
