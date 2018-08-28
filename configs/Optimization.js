@@ -1,5 +1,5 @@
 const Config = require("./Config");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = class Optimization extends Config {
   register() {
@@ -23,7 +23,7 @@ module.exports = class Optimization extends Config {
       .runtimeChunk(true)
       .providedExports(true)
       .minimizer([
-        new UglifyJsPlugin({
+        new TerserPlugin({
           cache: true,
           parallel: true,
           sourceMap: true
