@@ -55,7 +55,10 @@ module.exports = class Sass extends Loader {
       .options({
         sourceMap: true,
         ident: "postcss",
-        plugins: () => [autoprefixer, ...this.useIf(this.env.isHot, [cssnano])]
+        plugins: [
+            autoprefixer,
+            ...this.useIf(this.env.isHot, [cssnano])
+        ]
       })
       .end()
       .use("resolve-urls")
