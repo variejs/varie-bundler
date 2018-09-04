@@ -47,7 +47,7 @@ module.exports = class Sass extends Loader {
       .loader("css-loader")
       .options({
         sourceMap: true,
-        importLoaders: 1
+        importLoaders: 4 // postcss-loader , resolve-url-loader, sass-loader, vue-loader
       })
       .end()
       .use("postcss")

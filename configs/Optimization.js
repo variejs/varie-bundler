@@ -19,9 +19,8 @@ module.exports = class Optimization extends Config {
           }
         }
       })
-      .sideEffects(true)
       .runtimeChunk(true)
-      .providedExports(true)
+      .noEmitOnErrors(this.env.isProduction)
       .minimizer([
         new TerserPlugin({
           cache: true,
