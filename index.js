@@ -100,6 +100,7 @@ module.exports = class VarieBundler {
     new loaders.Images(this);
 
     new plugins.Clean(this);
+    new plugins.CaseSensitivePaths(this);
 
     this._webpackChain
       .when(!this._env.isProduction, () => {

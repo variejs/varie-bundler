@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "A webpack bundler for Varie",
   "main": "index.js",
   "repository": {
@@ -22,6 +22,7 @@
     "browser-sync": "^2.24.7",
     "browser-sync-webpack-plugin": "^2.2.2",
     "cache-loader": "^1.2.2",
+    "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.0",
     "cssnano": "^4.1.0",
