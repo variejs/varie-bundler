@@ -3,7 +3,6 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 module.exports = class Typescript extends Loader {
   register() {
-    console.info(this.env.isProduction);
     this.webpackChain.module
       .rule("typescript")
       .test(/\.tsx?$/)
