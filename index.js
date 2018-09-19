@@ -32,7 +32,7 @@ module.exports = class VarieBundler {
     return this;
   }
 
-  environmentVariables(variables) {
+  config(variables) {
     this._config.environmentVariables = variables;
     return this;
   }

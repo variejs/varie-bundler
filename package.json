@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.3.7",
+  "version": "0.4.0",
   "description": "A webpack bundler for Varie",
   "main": "index.js",
   "repository": {
@@ -13,9 +13,9 @@
   },
   "homepage": "https://varie.io/docs/latest/varie-bundler",
   "dependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.1.0",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
     "@types/webpack-env": "^1.13.6",
     "autoprefixer": "^9.1.5",
     "babel-loader": "^8.0.2",
@@ -35,7 +35,7 @@
     "imagemin": "^6.0.0",
     "img-loader": "^3.0.0",
     "json-loader": "^0.5.7",
-    "mini-css-extract-plugin": "^0.4.2",
+    "mini-css-extract-plugin": "^0.4.3",
     "node-sass": "^4.9.3",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
@@ -47,7 +47,7 @@
     "tslint": "^5.11.0",
     "typescript": "^3.0.3",
     "vue-loader": "^15.4.1",
-    "webpack": "^4.17.2",
+    "webpack": "^4.19.1",
     "webpack-chain": "^4.9.0",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.7",
