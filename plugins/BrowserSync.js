@@ -6,8 +6,8 @@ module.exports = class BrowserSync extends Plugin {
     this.webpackChain.plugin("browser-sync").use(BrowserSyncPlugin, [
       {
         open: this.config.host ? "external" : "local",
-        host: this.config.host,
-        proxy: this.env.isHot ? "http://localhost:8080/" : this.config.host,
+        port: this.config.port,
+        proxy: this.env.isHot ? "http://localhost:"+this.config.port : this.config.host,
         files: [
           this.config.outputPath + "/**/*.js",
           this.config.outputPath + "**/*.css"
