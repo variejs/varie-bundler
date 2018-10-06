@@ -75,7 +75,6 @@ module.exports = class VarieBundler {
         outputPath: path.join(root, "public"),
         appName: envConfig.APP_NAME || "Varie",
         host: envConfig.APP_HOST || "localhost",
-        port: envConfig.APP_PORT || 3000,
         hashType: this._env.isHot ? "hash" : "contenthash"
       },
       config
