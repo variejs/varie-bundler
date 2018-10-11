@@ -25,7 +25,10 @@ module.exports = class Optimization extends Config {
         new TerserPlugin({
           cache: true,
           parallel: true,
-          sourceMap: true
+          sourceMap: true,
+          terserOptions: {
+            keep_fnames: true
+          }
         })
       ]);
   }
