@@ -21,15 +21,15 @@ module.exports = class Optimization extends Config {
       })
       .runtimeChunk(true)
       .noEmitOnErrors(this.env.isProduction)
-      .minimizer([
-        new TerserPlugin({
+      .minimizer("minify")
+        .use(TerserPlugin, [{
           cache: true,
           parallel: true,
           sourceMap: true,
           terserOptions: {
             keep_fnames: true
           }
-        })
+        }
       ]);
   }
 };
