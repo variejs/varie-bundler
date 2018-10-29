@@ -16,7 +16,7 @@ module.exports = class Typescript extends Loader {
       .loader("ts-loader")
       .options({
         appendTsSuffixTo: [/\.vue$/],
-        transpileOnly: this.env.isProduction
+        transpileOnly: this.env.isHot || this.env.isProduction
       })
       .end()
       .exclude.add(/node_modules/);
@@ -26,6 +26,8 @@ module.exports = class Typescript extends Loader {
         .plugin("typecript-checker")
         .use(ForkTsCheckerWebpackPlugin, [
           {
+            vue: true,
+            async: false,
             checkSyntacticErrors: true
           }
         ]);
