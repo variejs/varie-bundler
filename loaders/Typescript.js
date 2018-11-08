@@ -11,8 +11,22 @@ module.exports = class Typescript extends Loader {
       })
       .use("babel")
       .loader("babel-loader")
+      .options({
+        presets: [
+          [
+            "@babel/preset-env",
+            {
+              useBuiltIns: false,
+              targets: {
+                browsers: ["> 1%", "last 2 versions", "Firefox ESR"]
+              }
+            }
+          ]
+        ],
+        plugins: ["@babel/plugin-syntax-dynamic-import"]
+      })
       .end()
-      .use("typescript")
+      .use("typescript-loader")
       .loader("ts-loader")
       .options({
         appendTsSuffixTo: [/\.vue$/],

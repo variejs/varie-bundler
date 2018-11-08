@@ -22,7 +22,8 @@ module.exports = class Optimization extends Config {
       .runtimeChunk(true)
       .noEmitOnErrors(this.env.isProduction)
       .minimizer("minify")
-        .use(TerserPlugin, [{
+      .use(TerserPlugin, [
+        {
           cache: true,
           parallel: true,
           sourceMap: true,

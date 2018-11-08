@@ -1,4 +1,5 @@
 const Loader = require("./Loader");
+const MultiBuild = require("./../plugins/MultiBuild");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = class Html extends Loader {
@@ -15,8 +16,13 @@ module.exports = class Html extends Loader {
 
     this.webpackChain.plugin("html").use(HtmlWebpackPlugin, [
       {
-        template: "./index.html"
+        inject: false,
+        template: "./index.ejs"
       }
     ]);
+
+    if (this.env.isModern) {
+      new MultiBuild(this.varieLoader);
+    }
   }
 };

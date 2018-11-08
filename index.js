@@ -22,9 +22,58 @@ module.exports = class VarieBundler {
   }
 
   build() {
+    let legacy = this._bundle().toConfig();
+    if (this._argumentsHas("--inspect")) {
+      legacy = this._bundle().toString();
+    }
+
+    if (this._env.isModern) {
+      let chain = this._bundle();
+      chain.module
+        .rule("typescript")
+        .use("babel")
+        .tap(() => {
+          return {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  useBuiltIns: false,
+                  targets: {
+                    browsers: [
+                      "last 2 Chrome versions",
+                      "not Chrome < 60",
+                      "last 2 Safari versions",
+                      "not Safari < 10.1",
+                      "last 2 iOS versions",
+                      "not iOS < 10.3",
+                      "last 2 Firefox versions",
+                      "not Firefox < 54",
+                      "last 2 Edge versions",
+                      "not Edge < 15"
+                    ]
+                  }
+                }
+              ]
+            ],
+            plugins: ["@babel/plugin-syntax-dynamic-import"]
+          };
+        });
+
+      chain.output
+        .filename(`js/[name]-[${this._config.hashType}].mjs`)
+        .chunkFilename(`js/[name]-[${this._config.hashType}].mjs`);
+
+      chain.plugins.delete("clean");
+
+      return this._argumentsHas("--inspect")
+        ? this._inspect(legacy, chain.toString())
+        : [chain.toConfig(), legacy];
+    }
+
     return this._argumentsHas("--inspect")
-      ? this._inspect()
-      : this._bundle().toConfig();
+      ? this._inspect(legacy)
+      : legacy.toConfig();
   }
 
   chainWebpack(callback) {
@@ -62,8 +111,10 @@ module.exports = class VarieBundler {
     return this._webpackChain;
   }
 
-  _inspect() {
-    console.log(this._bundle().toString());
+  _inspect(...bundles) {
+    bundles.forEach(bundle => {
+      console.log(bundle.toString());
+    });
     process.exit(0);
   }
 
@@ -87,6 +138,7 @@ module.exports = class VarieBundler {
       isHot: this._argumentsHas("--hot"),
       isProduction: mode === "production",
       isDevelopment: mode === "development",
+      isModern: !this._argumentsHas("--hot"),
       isAnalyzing: this._argumentsHas("--analyze")
     };
   }

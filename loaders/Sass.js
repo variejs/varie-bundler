@@ -43,14 +43,14 @@ module.exports = class Sass extends Loader {
             }
           ]);
       })
-      .use("css")
+      .use("css-loader")
       .loader("css-loader")
       .options({
         sourceMap: true,
         importLoaders: 4 // postcss-loader , resolve-url-loader, sass-loader, vue-loader
       })
       .end()
-      .use("postcss")
+      .use("postcss-loader")
       .loader("postcss-loader")
       .options({
         sourceMap: true,
@@ -64,7 +64,7 @@ module.exports = class Sass extends Loader {
         sourceMap: true
       })
       .end()
-      .use("sass")
+      .use("sass-loader")
       .loader("sass-loader")
       .options({
         sourceMap: true,
