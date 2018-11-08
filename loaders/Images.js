@@ -14,10 +14,19 @@ module.exports = class Images extends Loader {
       .use("img")
       .loader("img-loader")
       .options({
-        svgo: {},
-        mozjpeg: {},
-        optipng: {},
-        gifsicle: {},
+        svgo: {
+          plugins: [{ convertPathData: false }]
+        },
+        mozjpeg: {
+          progressive: true,
+          arithmetic: false
+        },
+        optipng: {
+          optimizationLevel: 5
+        },
+        gifsicle: {
+          interlaced: true
+        },
         enabled: this.env.isProduction
       });
   }
