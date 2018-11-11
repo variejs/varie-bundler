@@ -17,7 +17,6 @@ module.exports = class Typescript extends Loader {
       .options({
         appendTsSuffixTo: [/\.vue$/],
         transpileOnly: this.env.isHot || this.env.isProduction
-        // happyPackMode: TODO
       })
       .end();
 

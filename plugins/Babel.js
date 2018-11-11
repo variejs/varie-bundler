@@ -7,29 +7,24 @@ module.exports = class Babel extends Plugin {
       .use("babel-loader")
       .tap(() => {
         let targets = {
-          browsers: [
-            "> 1%",
-            "last 50 versions",
-            "not ie <= 8"
-          ]
-        }
-        if(this.modern) {
-          targets =  {
-           browsers : [
-             "last 1 versions",
-           ]
+          browsers: ["> 1%", "last 50 versions", "not ie <= 8"]
+        };
+        if (this.modern) {
+          targets = {
+            browsers: ["last 1 versions"]
           };
         }
 
         return {
           presets: [
             [
-              '@babel/preset-env', {
+              "@babel/preset-env",
+              {
                 targets,
                 modules: false,
-                useBuiltIns: 'entry',
+                useBuiltIns: "entry"
               }
-            ],
+            ]
           ],
           plugins: [
             "@babel/plugin-syntax-dynamic-import"

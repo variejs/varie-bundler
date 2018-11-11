@@ -11,7 +11,5 @@ module.exports = class Javascript extends Loader {
       .use("babel-loader")
       .loader("babel-loader")
       .end();
-
-    // .use('thread-loader')
   }
 };

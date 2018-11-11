@@ -19,7 +19,10 @@ module.exports = class Sass extends Loader {
           .end();
       })
       .when(!this.env.isHot, config => {
-        config.use("extract").loader(MiniCssExtractPlugin.loader);
+        config
+          .use("extract")
+          .loader(MiniCssExtractPlugin.loader)
+          .end();
 
         this.webpackChain
           .plugin("optimize-assets")
