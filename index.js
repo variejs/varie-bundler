@@ -28,47 +28,18 @@ module.exports = class VarieBundler {
     }
 
     if (this._env.isModern) {
-      let chain = this._bundle();
-      chain.module
-        .rule("typescript")
-        .use("babel")
-        .tap(() => {
-          return {
-            presets: [
-              [
-                "@babel/preset-env",
-                {
-                  useBuiltIns: false,
-                  targets: {
-                    browsers: [
-                      "last 2 Chrome versions",
-                      "not Chrome < 60",
-                      "last 2 Safari versions",
-                      "not Safari < 10.1",
-                      "last 2 iOS versions",
-                      "not iOS < 10.3",
-                      "last 2 Firefox versions",
-                      "not Firefox < 54",
-                      "last 2 Edge versions",
-                      "not Edge < 15"
-                    ]
-                  }
-                }
-              ]
-            ],
-            plugins: ["@babel/plugin-syntax-dynamic-import"]
-          };
-        });
+      let modern = this._bundle(true);
 
-      chain.output
-        .filename(`js/[name]-[${this._config.hashType}].mjs`)
-        .chunkFilename(`js/[name]-[${this._config.hashType}].mjs`);
+      modern.output
+        .filename(`js/[name]-[${this._config.hashType}].modern.js`)
+        .chunkFilename(`js/[name]-[${this._config.hashType}].modern.js`);
 
-      chain.plugins.delete("clean");
+      modern.plugins.delete("clean");
+      // chain.module.use('sass').module.use('extract')
 
       return this._argumentsHas("--inspect")
-        ? this._inspect(legacy, chain.toString())
-        : [chain.toConfig(), legacy];
+        ? this._inspect(legacy, modern.toString())
+        : [modern.toConfig(), legacy];
     }
 
     return this._argumentsHas("--inspect")
@@ -105,9 +76,10 @@ module.exports = class VarieBundler {
       : false;
   }
 
-  _bundle() {
+  _bundle(modern = false) {
     new webpackConfigs.Aliases(this);
     new plugins.DefineEnvironmentVariables(this);
+    new plugins.Babel(this, modern);
     return this._webpackChain;
   }
 
@@ -145,6 +117,7 @@ module.exports = class VarieBundler {
 
   _variePresets() {
     new loaders.Html(this);
+    new loaders.Javascript(this);
     new loaders.Typescript(this);
     new loaders.Vue(this);
     new loaders.Sass(this);

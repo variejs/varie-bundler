@@ -9,31 +9,17 @@ module.exports = class Typescript extends Loader {
       .when(this.env.isHot, config => {
         config.use("cache").loader("cache-loader");
       })
-      .use("babel")
+      .use("babel-loader")
       .loader("babel-loader")
-      .options({
-        presets: [
-          [
-            "@babel/preset-env",
-            {
-              useBuiltIns: false,
-              targets: {
-                browsers: ["> 1%", "last 2 versions", "Firefox ESR"]
-              }
-            }
-          ]
-        ],
-        plugins: ["@babel/plugin-syntax-dynamic-import"]
-      })
       .end()
       .use("typescript-loader")
       .loader("ts-loader")
       .options({
         appendTsSuffixTo: [/\.vue$/],
         transpileOnly: this.env.isHot || this.env.isProduction
+        // happyPackMode: TODO
       })
-      .end()
-      .exclude.add(/node_modules/);
+      .end();
 
     if (this.env.isHot) {
       this.webpackChain
@@ -42,6 +28,7 @@ module.exports = class Typescript extends Loader {
           {
             vue: true,
             async: false,
+            formatter: "codeframe",
             checkSyntacticErrors: true
           }
         ]);

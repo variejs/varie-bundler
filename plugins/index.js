@@ -1,3 +1,4 @@
+const Babel = require("./Babel");
 const Clean = require("./Clean");
 const Errors = require("./Errors");
 const MultiBuild = require("./MultiBuild");
@@ -8,6 +9,7 @@ const CaseSensitivePaths = require("./CaseSensitivePaths");
 const DefineEnvironmentVariables = require("./DefineEnvironmentVariables");
 
 module.exports = {
+  Babel,
   Clean,
   Errors,
   MultiBuild,

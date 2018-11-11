@@ -4,6 +4,7 @@ const Sass = require("./Sass");
 const Fonts = require("./Fonts");
 const Images = require("./Images");
 const Typescript = require("./Typescript");
+const Javascript = require("./Javascript");
 
 module.exports = {
   Vue,
@@ -11,5 +12,6 @@ module.exports = {
   Sass,
   Fonts,
   Images,
-  Typescript
+  Typescript,
+  Javascript
 };
