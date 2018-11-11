@@ -7,7 +7,7 @@ module.exports = class Babel extends Plugin {
       .use("babel-loader")
       .tap(() => {
         let targets = {
-          browsers: ["> 1%", "last 50 versions", "not ie <= 8"]
+          browsers: ["> 1%", "last 2 versions", "not ie <= 8"]
         };
         if (this.modern) {
           targets = {
