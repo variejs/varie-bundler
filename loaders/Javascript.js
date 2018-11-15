@@ -5,9 +5,9 @@ module.exports = class Javascript extends Loader {
     this.webpackChain.module
       .rule("js")
       .test(/\.jsx?$/)
-      .when(this.env.isHot, config => {
-        config.use("cache").loader("cache-loader");
-      })
+      // .when(!this.env.isProduction, config => {
+      //   config.use("cache").loader("cache-loader");
+      // })
       .use("babel-loader")
       .loader("babel-loader")
       .end();

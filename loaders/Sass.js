@@ -8,12 +8,13 @@ module.exports = class Sass extends Loader {
   register() {
     this.webpackChain.module
       .rule("sass")
+
       .test(/\.s[ac]ss|\.css/)
-      .when(this.env.isHot, config => {
+      .when(!this.env.isProduction, config => {
         config
-          .use("cache")
-          .loader("cache-loader")
-          .end()
+          // .use("cache")
+          // .loader("cache-loader")
+          // .end()
           .use("style")
           .loader("style-loader")
           .end();

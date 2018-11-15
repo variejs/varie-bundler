@@ -6,9 +6,9 @@ module.exports = class Vue extends Loader {
     this.webpackChain.module
       .rule("vue")
       .test(/\.vue$/)
-      .when(!this.env.isProduction, config => {
-        config.use("cache").loader("cache-loader");
-      })
+      // .when(!this.env.isProduction, config => {
+      //   config.use("cache").loader("cache-loader");
+      // })
       .use("babel")
       .loader("vue-loader");
 
