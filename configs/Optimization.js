@@ -15,7 +15,7 @@ module.exports = class Optimization extends Config {
           default: {
             minChunks: 2,
             priority: -20,
-            chunks: 'initial',
+            chunks: "initial",
             reuseExistingChunk: true
           }
         }
@@ -31,7 +31,7 @@ module.exports = class Optimization extends Config {
           terserOptions: {
             keep_fnames: true,
             mangle: {
-              safari10: 'true'
+              safari10: "true"
             }
           }
         }
