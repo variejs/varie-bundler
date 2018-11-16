@@ -12,7 +12,7 @@ module.exports = class Vue extends Loader {
       .use("vue-loader")
       .loader("vue-loader", [
         {
-          preserveWhiteSpace : false
+          preserveWhiteSpace: false
         }
       ]);
 

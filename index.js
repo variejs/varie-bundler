@@ -35,16 +35,13 @@ module.exports = class VarieBundler {
         .chunkFilename(`js/[name]-[${this._config.hashType}].modern.js`);
 
       modern.plugins.delete("clean");
-      // chain.module.use('sass').module.use('extract')
 
       return this._argumentsHas("--inspect")
         ? this._inspect(legacy, modern.toString())
         : [modern.toConfig(), legacy];
     }
 
-    return this._argumentsHas("--inspect")
-      ? this._inspect(legacy)
-      : legacy;
+    return this._argumentsHas("--inspect") ? this._inspect(legacy) : legacy;
   }
 
   chainWebpack(callback) {
@@ -110,15 +107,13 @@ module.exports = class VarieBundler {
       isHot: this._argumentsHas("--hot"),
       isProduction: mode === "production",
       isDevelopment: mode === "development",
-      isModern: false,
+      isModern: !this._argumentsHas("--hot"),
       isAnalyzing: this._argumentsHas("--analyze")
     };
   }
 
   _variePresets() {
-
-    this._webpackChain.module
-      .noParse(/^(vue|vue-router|vuex)$/);
+    this._webpackChain.module.noParse(/^(vue|vue-router|vuex)$/);
 
     new loaders.Html(this);
     new loaders.Javascript(this);

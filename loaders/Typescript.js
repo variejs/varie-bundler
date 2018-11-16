@@ -10,7 +10,7 @@ module.exports = class Typescript extends Loader {
         config.use("cache").loader("cache-loader");
       })
       .use("thread-loader")
-      .loader('thread-loader')
+      .loader("thread-loader")
       .end()
       .use("babel-loader")
       .loader("babel-loader")
@@ -18,9 +18,9 @@ module.exports = class Typescript extends Loader {
       .use("typescript-loader")
       .loader("ts-loader")
       .options({
-        happyPackMode : true,
+        happyPackMode: true,
         appendTsSuffixTo: [/\.vue$/],
-        transpileOnly: this.env.isHot || this.env.isProduction,
+        transpileOnly: this.env.isHot || this.env.isProduction
       })
       .end();
 

@@ -4,7 +4,7 @@ module.exports = class Javascript extends Loader {
   register() {
     this.webpackChain.module
       .rule("js")
-        .exclude.add(filepath => {
+      .exclude.add(filepath => {
         // always transpile js in vue files
         if (/\.vue\.jsx?$/.test(filepath)) {
           return false;
@@ -16,7 +16,7 @@ module.exports = class Javascript extends Loader {
       .end()
       .test(/\.jsx?$/)
       .use("thread-loader")
-      .loader('thread-loader')
+      .loader("thread-loader")
       .end()
       .when(!this.env.isProduction, config => {
         config.use("cache").loader("cache-loader");

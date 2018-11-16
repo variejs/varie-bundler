@@ -9,4 +9,6 @@ module.exports = class Loader {
     this.webpackChain = this.varieLoader._webpackChain;
     this.register();
   }
+
+  generateCacheConfig() {}
 };

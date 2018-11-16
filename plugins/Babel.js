@@ -15,7 +15,7 @@ module.exports = class Babel extends Plugin {
             "Electron >= 0.36"
           ]
         };
-        if (this.modern) {
+        if (this.modernBuild) {
           targets = {
             esmodules: true
           };
@@ -31,7 +31,7 @@ module.exports = class Babel extends Plugin {
                 debug: false,
                 modules: false,
                 useBuiltIns: "entry",
-                ignoreBrowserslistConfig: this.modern
+                ignoreBrowserslistConfig: this.modernBuild
               }
             ]
           ],
