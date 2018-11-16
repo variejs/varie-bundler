@@ -43,6 +43,14 @@ MultiBuildHtml.prototype = {
               tag.attributes.rel = "modulepreload";
             }
           });
+
+          // inject inline Safari 10 nomodule fix
+          data.body.unshift({
+            tagName: "script",
+            closeTag: true,
+            innerHTML: safariFix
+          });
+
           cb();
         }
       );
