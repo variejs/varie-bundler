@@ -1,5 +1,6 @@
 let runs = 0;
 let scripts = [];
+let previousData = null;
 const Plugin = require("./Plugin");
 
 // https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
@@ -17,7 +18,7 @@ MultiBuildHtml.prototype = {
   apply: function(compiler) {
     let tapName = "multi-build";
     compiler.hooks.compilation.tap(tapName, compilation => {
-      compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync(
+      compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration.tapAsync(
         tapName,
         (data, cb) => {
           scripts = scripts.concat(data.assets.js);
@@ -31,7 +32,7 @@ MultiBuildHtml.prototype = {
         async (data, cb) => {
           runs++;
 
-          data.body.forEach(tag => {
+          data.body.forEach((tag, index) => {
             if (tag.tagName === "script" && tag.attributes) {
               if (tag.attributes.src.includes(".modern.js")) {
                 return (tag.attributes.type = "module");
@@ -39,6 +40,7 @@ MultiBuildHtml.prototype = {
               tag.attributes.nomodule = "";
             }
           });
+
           data.head.forEach(tag => {
             if (
               tag.tagName === "link" &&
@@ -51,16 +53,21 @@ MultiBuildHtml.prototype = {
             }
           });
 
-          // inject inline Safari 10 nomodule fix
-          data.body.unshift({
-            tagName: "script",
-            closeTag: true,
-            innerHTML: safariFix
-          });
-
           if (runs === 2) {
+            // TODO - we have duplicates
+            data.body = data.body.concat(previousData.body);
+            data.head = data.head.concat(previousData.head);
+
+            // inject inline Safari 10 nomodule fix
+            data.body.unshift({
+              tagName: "script",
+              closeTag: true,
+              innerHTML: safariFix
+            });
+
             data.plugin.options.inject = true;
           } else {
+            previousData = data;
             data.plugin.options.inject = false;
           }
           cb();
