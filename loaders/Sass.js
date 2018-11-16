@@ -13,6 +13,13 @@ module.exports = class Sass extends Loader {
         config
           .use("cache")
           .loader("cache-loader")
+          .options(
+            this.generateCacheConfig(
+              "sass-loader",
+              ["sass-loader", "style-loader", "postcss-loader"],
+              [".browserslistrc"]
+            )
+          )
           .end()
           .use("style")
           .loader("style-loader")

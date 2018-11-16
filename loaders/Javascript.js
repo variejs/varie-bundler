@@ -19,7 +19,16 @@ module.exports = class Javascript extends Loader {
       .loader("thread-loader")
       .end()
       .when(!this.env.isProduction, config => {
-        config.use("cache").loader("cache-loader");
+        config
+          .use("cache")
+          .loader("cache-loader")
+          .options(
+            this.generateCacheConfig(
+              "js",
+              ["@babel/core", "babel-loader"],
+              [".babelrc", ".browserslistrc"]
+            )
+          );
       })
       .use("babel-loader")
       .loader("babel-loader")

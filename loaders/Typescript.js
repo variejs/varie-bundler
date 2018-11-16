@@ -7,7 +7,16 @@ module.exports = class Typescript extends Loader {
       .rule("typescript")
       .test(/\.tsx?$/)
       .when(!this.env.isProduction, config => {
-        config.use("cache").loader("cache-loader");
+        config
+          .use("cache")
+          .loader("cache-loader")
+          .options(
+            this.generateCacheConfig(
+              "ts-loader",
+              ["ts-loader", "typescript"],
+              ["tsconfig.json"]
+            )
+          );
       })
       .use("thread-loader")
       .loader("thread-loader")

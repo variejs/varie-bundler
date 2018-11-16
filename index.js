@@ -1,4 +1,5 @@
 const path = require("path");
+const util = require("util");
 const dotenv = require("dotenv");
 const loaders = require("./loaders");
 const plugins = require("./plugins");
@@ -82,7 +83,7 @@ module.exports = class VarieBundler {
 
   _inspect(...bundles) {
     bundles.forEach(bundle => {
-      console.log(bundle.toString());
+      util.inspect(console.log(bundle.toString()), false, null, true);
     });
     process.exit(0);
   }
