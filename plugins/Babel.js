@@ -2,19 +2,10 @@ const Plugin = require("./Plugin");
 module.exports = class Babel extends Plugin {
   register() {
     this.webpackChain.module
-      .rule("typescript")
+      .rule("js")
       .use("babel-loader")
       .tap(() => {
-        let targets = {
-          browsers: [
-            "Chrome >= 49",
-            "Firefox >= 45",
-            "Safari >= 10",
-            "Edge >= 13",
-            "iOS >= 10",
-            "Electron >= 0.36"
-          ]
-        };
+        let targets = undefined;
         if (this.modernBuild) {
           targets = {
             esmodules: true
@@ -30,7 +21,7 @@ module.exports = class Babel extends Plugin {
                 loose: false,
                 debug: false,
                 modules: false,
-                useBuiltIns: "entry",
+                useBuiltIns: "usage",
                 ignoreBrowserslistConfig: this.modernBuild
               }
             ]
@@ -40,7 +31,7 @@ module.exports = class Babel extends Plugin {
             [
               "@babel/plugin-transform-runtime",
               {
-                regenerator: true,
+                regenerator: false,
                 corejs: false,
                 helpers: true,
                 useESModules: true
