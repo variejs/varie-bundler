@@ -11,9 +11,9 @@ module.exports = class Sass extends Loader {
       .test(/\.s[ac]ss|\.css/)
       .when(!this.env.isProduction, config => {
         config
-          // .use("cache")
-          // .loader("cache-loader")
-          // .end()
+          .use("cache")
+          .loader("cache-loader")
+          .end()
           .use("style")
           .loader("style-loader")
           .end();

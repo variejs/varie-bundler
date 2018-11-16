@@ -4,26 +4,23 @@ module.exports = class Javascript extends Loader {
   register() {
     this.webpackChain.module
       .rule("js")
-    //     .exclude.add(filepath => {
-    //   // always transpile js in vue files
-    //   if (/\.vue\.jsx?$/.test(filepath)) {
-    //     return false;
-    //   }
-    //
-    //   // if(/.*varie.*/.test(filepath)) {
-    //   //   return false;
-    //   // }
-    //
-    //   // Don't transpile node_modules
-    //   return /node_modules/.test(filepath);
-    // })
+        .exclude.add(filepath => {
+        // always transpile js in vue files
+        if (/\.vue\.jsx?$/.test(filepath)) {
+          return false;
+        }
+
+        // Don't transpile node_modules
+        return /node_modules/.test(filepath);
+      })
+      .end()
       .test(/\.jsx?$/)
       .use("thread-loader")
       .loader('thread-loader')
       .end()
-      // .when(!this.env.isProduction, config => {
-      //   config.use("cache").loader("cache-loader");
-      // })
+      .when(!this.env.isProduction, config => {
+        config.use("cache").loader("cache-loader");
+      })
       .use("babel-loader")
       .loader("babel-loader")
       .end();

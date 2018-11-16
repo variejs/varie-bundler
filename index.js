@@ -44,7 +44,7 @@ module.exports = class VarieBundler {
 
     return this._argumentsHas("--inspect")
       ? this._inspect(legacy)
-      : legacy.toConfig();
+      : legacy;
   }
 
   chainWebpack(callback) {
@@ -110,7 +110,7 @@ module.exports = class VarieBundler {
       isHot: this._argumentsHas("--hot"),
       isProduction: mode === "production",
       isDevelopment: mode === "development",
-      isModern: !this._argumentsHas("--hot"),
+      isModern: false,
       isAnalyzing: this._argumentsHas("--analyze")
     };
   }

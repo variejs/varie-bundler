@@ -6,9 +6,9 @@ module.exports = class Typescript extends Loader {
     this.webpackChain.module
       .rule("typescript")
       .test(/\.tsx?$/)
-      // .when(!this.env.isProduction, config => {
-      //   config.use("cache").loader("cache-loader");
-      // })
+      .when(!this.env.isProduction, config => {
+        config.use("cache").loader("cache-loader");
+      })
       .use("thread-loader")
       .loader('thread-loader')
       .end()
