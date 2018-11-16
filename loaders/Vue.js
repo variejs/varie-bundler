@@ -4,6 +4,7 @@ const { VueLoaderPlugin } = require("vue-loader");
 module.exports = class Vue extends Loader {
   register() {
     this.webpackChain.module
+      .noParse(/^(vue|vue-router|vuex)$/)
       .rule("vue")
       .test(/\.vue$/)
       .when(!this.env.isProduction, config => {
