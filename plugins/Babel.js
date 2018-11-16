@@ -26,9 +26,7 @@ module.exports = class Babel extends Plugin {
             [
               "@babel/preset-env",
               {
-                targets : {
-                  esmodules: true
-                },
+                targets,
                 loose: false,
                 debug: false,
                 modules: false,
