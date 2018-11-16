@@ -16,8 +16,8 @@ module.exports = class Html extends Loader {
 
     this.webpackChain.plugin("html").use(HtmlWebpackPlugin, [
       {
-        inject: false,
-        template: "./index.ejs"
+        inject: true,
+        template: "./index.html"
       }
     ]);
 

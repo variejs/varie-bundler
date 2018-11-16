@@ -21,7 +21,7 @@ module.exports = class Babel extends Plugin {
                 loose: false,
                 debug: false,
                 modules: false,
-                useBuiltIns: "usage",
+                // useBuiltIns: "usage", // TODO
                 ignoreBrowserslistConfig: this.modernBuild
               }
             ]
