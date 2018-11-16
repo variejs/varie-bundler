@@ -24,6 +24,7 @@ module.exports = class VarieBundler {
 
   build() {
     let legacy = this._bundle().toConfig();
+
     if (this._argumentsHas("--inspect")) {
       legacy = this._bundle().toString();
     }
@@ -78,6 +79,9 @@ module.exports = class VarieBundler {
     new webpackConfigs.Aliases(this);
     new plugins.DefineEnvironmentVariables(this);
     new plugins.Babel(this, modern);
+    if (modern) {
+      new plugins.Preload(this);
+    }
     return this._webpackChain;
   }
 
@@ -123,6 +127,7 @@ module.exports = class VarieBundler {
     new loaders.Images(this);
 
     new plugins.Clean(this);
+    new plugins.NamedChunks(this);
     new plugins.CaseSensitivePaths(this);
 
     this._webpackChain

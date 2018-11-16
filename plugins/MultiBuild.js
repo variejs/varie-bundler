@@ -1,3 +1,4 @@
+let runs = 0;
 let scripts = [];
 const Plugin = require("./Plugin");
 
@@ -16,14 +17,20 @@ MultiBuildHtml.prototype = {
   apply: function(compiler) {
     let tapName = "multi-build";
     compiler.hooks.compilation.tap(tapName, compilation => {
-      compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration.tapAsync(
+      compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync(
         tapName,
-        this.beforeHtmlGeneration.bind(this)
+        (data, cb) => {
+          scripts = scripts.concat(data.assets.js);
+          data.plugin.options.scripts = scripts;
+          cb(null, data);
+        }
       );
 
       compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(
         tapName,
         async (data, cb) => {
+          runs++;
+
           data.body.forEach(tag => {
             if (tag.tagName === "script" && tag.attributes) {
               if (tag.attributes.src.includes(".modern.js")) {
@@ -51,6 +58,11 @@ MultiBuildHtml.prototype = {
             innerHTML: safariFix
           });
 
+          if (runs === 2) {
+            data.plugin.options.inject = true;
+          } else {
+            data.plugin.options.inject = false;
+          }
           cb();
         }
       );
@@ -62,12 +74,5 @@ MultiBuildHtml.prototype = {
         }
       );
     });
-  },
-
-  beforeHtmlGeneration: function(data, cb) {
-    scripts = scripts.concat(data.assets.js);
-    data.assets.js = scripts;
-    data.plugin.options.scripts = scripts;
-    cb(null, data);
   }
 };

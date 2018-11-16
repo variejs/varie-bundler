@@ -3,6 +3,11 @@ const { VueLoaderPlugin } = require("vue-loader");
 
 module.exports = class Vue extends Loader {
   register() {
+    // Vue has their own setImmediate polyfill
+    this.webpackChain.node.merge({
+      setImmediate: false
+    });
+
     this.webpackChain.module
       .noParse(/^(vue|vue-router|vuex)$/)
       .rule("vue")
