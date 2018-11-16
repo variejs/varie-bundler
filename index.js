@@ -116,6 +116,10 @@ module.exports = class VarieBundler {
   }
 
   _variePresets() {
+
+    this._webpackChain.module
+      .noParse(/^(vue|vue-router|vuex)$/);
+
     new loaders.Html(this);
     new loaders.Javascript(this);
     new loaders.Typescript(this);

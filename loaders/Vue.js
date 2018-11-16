@@ -9,8 +9,12 @@ module.exports = class Vue extends Loader {
       // .when(!this.env.isProduction, config => {
       //   config.use("cache").loader("cache-loader");
       // })
-      .use("babel")
-      .loader("vue-loader");
+      .use("vue-loader")
+      .loader("vue-loader", [
+        {
+          preserveWhiteSpace : false
+        }
+      ]);
 
     this.webpackChain.resolve.alias.set("vue$", "vue/dist/vue.esm.js");
 

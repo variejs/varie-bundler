@@ -1,23 +1,8 @@
 const Plugin = require("./Plugin");
-
 module.exports = class Babel extends Plugin {
   register() {
     this.webpackChain.module
-      .rule("js")
-      .exclude.add(filepath => {
-        // always transpile js in vue files
-        if (/\.vue\.jsx?$/.test(filepath)) {
-          return false;
-        }
-
-        // if(/.*varie.*/.test(filepath)) {
-        //   return false;
-        // }
-
-        // Don't transpile node_modules
-        return /node_modules/.test(filepath);
-      })
-      .end()
+      .rule("typescript")
       .use("babel-loader")
       .tap(() => {
         let targets = {

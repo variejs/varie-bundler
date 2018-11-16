@@ -8,7 +8,6 @@ module.exports = class Sass extends Loader {
   register() {
     this.webpackChain.module
       .rule("sass")
-
       .test(/\.s[ac]ss|\.css/)
       .when(!this.env.isProduction, config => {
         config
