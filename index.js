@@ -23,14 +23,45 @@ module.exports = class VarieBundler {
   }
 
   build() {
+
+    this._webpackChain.module.rule('typescript').use('babel-loader').tap((options) => {
+      return {
+        overrides : [{
+          plugins : [
+            'varie-app', {
+              modern : true,
+            }
+          ]
+        }
+        ]
+      }
+    })
+    this._webpackChain.module.rule('js').use('babel-loader').tap((options) => {
+      return {
+        overrides : [{
+          plugins : [
+            'varie-app', {
+            modern : true,
+            }
+          ]
+        }
+        ]
+      }
+    })
+
     let legacy = this._bundle().toConfig();
 
     if (this._argumentsHas("--inspect")) {
       legacy = this._bundle().toString();
     }
 
+
+
     if (this._env.isModern) {
       let modern = this._bundle(true);
+
+
+
 
       modern.output
         .filename(`js/[name]-[${this._config.hashType}].js`)
