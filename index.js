@@ -22,53 +22,17 @@ module.exports = class VarieBundler {
     return this;
   }
 
+  // When building modern, we must first separate legacy into its own config
+  // otherwise it would keep its reference
   build() {
-
-    this._webpackChain.module.rule('typescript').use('babel-loader').tap((options) => {
-      return {
-        overrides : [{
-          plugins : [
-            'varie-app', {
-              modern : true,
-            }
-          ]
-        }
-        ]
-      }
-    })
-    this._webpackChain.module.rule('js').use('babel-loader').tap((options) => {
-      return {
-        overrides : [{
-          plugins : [
-            'varie-app', {
-            modern : true,
-            }
-          ]
-        }
-        ]
-      }
-    })
-
     let legacy = this._bundle().toConfig();
 
     if (this._argumentsHas("--inspect")) {
       legacy = this._bundle().toString();
     }
 
-
-
     if (this._env.isModern) {
-      let modern = this._bundle(true);
-
-
-
-
-      modern.output
-        .filename(`js/[name]-[${this._config.hashType}].js`)
-        .chunkFilename(`js/[name]-[${this._config.hashType}].js`);
-
-      modern.plugins.delete("clean");
-
+      let modern = this._makeModernBundle();
       return this._argumentsHas("--inspect")
         ? this._inspect(legacy, modern)
         : [modern.toConfig(), legacy];
@@ -106,12 +70,9 @@ module.exports = class VarieBundler {
       : false;
   }
 
-  _bundle(modern = false) {
+  _bundle() {
     new webpackConfigs.Aliases(this);
     new plugins.DefineEnvironmentVariables(this);
-    if (modern) {
-      new plugins.Preload(this);
-    }
     return this._webpackChain;
   }
 
@@ -183,5 +144,49 @@ module.exports = class VarieBundler {
     new webpackConfigs.DevServer(this);
     new webpackConfigs.Extensions(this);
     new webpackConfigs.Optimization(this);
+  }
+
+  _makeModernBundle() {
+    let modern = this._bundle(true);
+
+    new plugins.Preload(this);
+
+    modern.module
+      .rule("typescript")
+      .use("babel-loader")
+      .tap(options => {
+        if (!options) {
+          options = {};
+        }
+        if (!options.overrides) {
+          options.overrides = [];
+        }
+        options.overrides.push({
+          presets: [["varie-app", { modern: true }]]
+        });
+        return options;
+      });
+
+    modern.module
+      .rule("js")
+      .use("babel-loader")
+      .tap(options => {
+        if (!options) {
+          options = {};
+        }
+        if (!options.overrides) {
+          options.overrides = [];
+        }
+        options.overrides.push({
+          presets: [["varie-app", { modern: true }]]
+        });
+        return options;
+      });
+
+    modern.output
+      .filename(`js/[name]-[${this._config.hashType}].js`)
+      .chunkFilename(`js/[name]-[${this._config.hashType}].js`);
+
+    modern.plugins.delete("clean");
   }
 };
