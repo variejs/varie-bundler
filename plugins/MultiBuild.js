@@ -31,34 +31,31 @@ MultiBuildHtml.prototype = {
         tapName,
         async (data, cb) => {
           runs++;
-
-          data.body.forEach((tag, index) => {
-            if (tag.tagName === "script" && tag.attributes) {
-              if (tag.attributes.src.includes(".modern.js")) {
-                return (tag.attributes.type = "module");
-              }
-              tag.attributes.nomodule = "";
-            }
-          });
-
-          data.head.forEach(tag => {
-            if (
-              tag.tagName === "link" &&
-              tag.attributes &&
-              tag.attributes.as === "script" &&
-              tag.attributes.rel === "preload" &&
-              tag.attributes.src.includes(".modern.js")
-            ) {
-              tag.attributes.rel = "modulepreload";
-            }
-          });
-
           if (runs === 2) {
-            // TODO - we have duplicates
             data.body = data.body.concat(previousData.body);
             data.head = data.head.concat(previousData.head);
 
-            // inject inline Safari 10 nomodule fix
+            data.body.forEach(tag => {
+              if (tag.tagName === "script" && tag.attributes) {
+                if (tag.attributes.src.includes(".modern.js")) {
+                  return (tag.attributes.type = "module");
+                }
+                tag.attributes.nomodule = "";
+              }
+            });
+
+            // Only modern assets get preload
+            data.head.forEach(tag => {
+              if (
+                tag.tagName === "link" &&
+                tag.attributes &&
+                tag.attributes.as === "script" &&
+                tag.attributes.rel === "preload"
+              ) {
+                tag.attributes.rel = "modulepreload";
+              }
+            });
+
             data.body.unshift({
               tagName: "script",
               closeTag: true,
