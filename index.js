@@ -39,7 +39,7 @@ module.exports = class VarieBundler {
       modern.plugins.delete("clean");
 
       return this._argumentsHas("--inspect")
-        ? this._inspect(legacy, modern.toString())
+        ? this._inspect(legacy, modern)
         : [modern.toConfig(), legacy];
     }
 
@@ -87,7 +87,7 @@ module.exports = class VarieBundler {
 
   _inspect(...bundles) {
     bundles.forEach(bundle => {
-      util.inspect(console.log(bundle.toString()), false, null, true);
+      util.inspect(bundle.toString(), false, null, true);
     });
     process.exit(0);
   }

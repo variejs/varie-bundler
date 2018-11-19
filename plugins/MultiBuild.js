@@ -51,7 +51,7 @@ MultiBuildHtml.prototype = {
             data.body.forEach(tag => {
               if (tag.tagName === "script" && tag.attributes) {
                 if (tag.attributes.src.includes(".legacy.js")) {
-                  return tag.attributes.nomodule = "";
+                  return (tag.attributes.nomodule = "");
                 }
                 tag.attributes.type = "module";
               }
