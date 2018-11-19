@@ -35,6 +35,19 @@ MultiBuildHtml.prototype = {
             data.body = data.body.concat(previousData.body);
             data.head = data.head.concat(previousData.head);
 
+            // Filter out duplicated head tags
+            data.body = data.body.filter((tag, index, self) => {
+              return (
+                index ===
+                self.findIndex(
+                  selfTag =>
+                    !tag.attributes ||
+                    (tag.attributes.src === selfTag.attributes.src &&
+                      tag.attributes.rel === selfTag.attributes.rel)
+                )
+              );
+            });
+
             data.body.forEach(tag => {
               if (tag.tagName === "script" && tag.attributes) {
                 if (tag.attributes.src.includes(".modern.js")) {
@@ -42,6 +55,19 @@ MultiBuildHtml.prototype = {
                 }
                 tag.attributes.nomodule = "";
               }
+            });
+
+            // Filter out duplicated head tags
+            data.head = data.head.filter((tag, index, self) => {
+              return (
+                index ===
+                self.findIndex(
+                  selfTag =>
+                    !tag.attributes ||
+                    (tag.attributes.href === selfTag.attributes.href &&
+                      tag.attributes.rel === selfTag.attributes.rel)
+                )
+              );
             });
 
             // Only modern assets get preload
