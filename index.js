@@ -1,4 +1,5 @@
 const path = require("path");
+const util = require("util");
 const dotenv = require("dotenv");
 const loaders = require("./loaders");
 const plugins = require("./plugins");
@@ -21,10 +22,23 @@ module.exports = class VarieBundler {
     return this;
   }
 
+  // When building modern, we must first separate legacy into its own config
+  // otherwise it would keep its reference
   build() {
-    return this._argumentsHas("--inspect")
-      ? this._inspect()
-      : this._bundle().toConfig();
+    let legacy = this._bundle().toConfig();
+
+    if (this._argumentsHas("--inspect")) {
+      legacy = this._bundle().toString();
+    }
+
+    if (this._env.isModern) {
+      let modern = this._makeModernBundle();
+      return this._argumentsHas("--inspect")
+        ? this._inspect(legacy, modern)
+        : [modern.toConfig(), legacy];
+    }
+
+    return this._argumentsHas("--inspect") ? this._inspect(legacy) : legacy;
   }
 
   chainWebpack(callback) {
@@ -62,8 +76,10 @@ module.exports = class VarieBundler {
     return this._webpackChain;
   }
 
-  _inspect() {
-    console.log(this._bundle().toString());
+  _inspect(...bundles) {
+    bundles.forEach(bundle => {
+      util.inspect(bundle.toString(), false, null, true);
+    });
     process.exit(0);
   }
 
@@ -87,12 +103,14 @@ module.exports = class VarieBundler {
       isHot: this._argumentsHas("--hot"),
       isProduction: mode === "production",
       isDevelopment: mode === "development",
+      isModern: this._argumentsHas("--modern"),
       isAnalyzing: this._argumentsHas("--analyze")
     };
   }
 
   _variePresets() {
     new loaders.Html(this);
+    new loaders.Javascript(this);
     new loaders.Typescript(this);
     new loaders.Vue(this);
     new loaders.Sass(this);
@@ -100,6 +118,7 @@ module.exports = class VarieBundler {
     new loaders.Images(this);
 
     new plugins.Clean(this);
+    new plugins.NamedChunks(this);
     new plugins.CaseSensitivePaths(this);
 
     this._webpackChain
@@ -125,5 +144,51 @@ module.exports = class VarieBundler {
     new webpackConfigs.DevServer(this);
     new webpackConfigs.Extensions(this);
     new webpackConfigs.Optimization(this);
+  }
+
+  _makeModernBundle() {
+    let modern = this._bundle(true);
+
+    new plugins.Preload(this);
+
+    modern.module
+      .rule("typescript")
+      .use("babel-loader")
+      .tap(options => {
+        if (!options) {
+          options = {};
+        }
+        if (!options.overrides) {
+          options.overrides = [];
+        }
+        options.overrides.push({
+          presets: [["varie-app", { modern: true }]]
+        });
+        return options;
+      });
+
+    modern.module
+      .rule("js")
+      .use("babel-loader")
+      .tap(options => {
+        if (!options) {
+          options = {};
+        }
+        if (!options.overrides) {
+          options.overrides = [];
+        }
+        options.overrides.push({
+          presets: [["varie-app", { modern: true }]]
+        });
+        return options;
+      });
+
+    modern.output
+      .filename(`js/[name]-[${this._config.hashType}].js`)
+      .chunkFilename(`js/[name]-[${this._config.hashType}].js`);
+
+    modern.plugins.delete("clean");
+
+    return modern;
   }
 };

@@ -6,20 +6,32 @@ module.exports = class Typescript extends Loader {
     this.webpackChain.module
       .rule("typescript")
       .test(/\.tsx?$/)
-      .when(this.env.isHot, config => {
-        config.use("cache").loader("cache-loader");
+      .when(!this.env.isProduction, config => {
+        config
+          .use("cache")
+          .loader("cache-loader")
+          .options(
+            this.generateCacheConfig(
+              "ts-loader",
+              ["ts-loader", "typescript"],
+              ["babel.config.js", "tsconfig.json"]
+            )
+          );
       })
-      .use("babel")
+      .use("thread-loader")
+      .loader("thread-loader")
+      .end()
+      .use("babel-loader")
       .loader("babel-loader")
       .end()
-      .use("typescript")
+      .use("typescript-loader")
       .loader("ts-loader")
       .options({
+        happyPackMode: true,
         appendTsSuffixTo: [/\.vue$/],
         transpileOnly: this.env.isHot || this.env.isProduction
       })
-      .end()
-      .exclude.add(/node_modules/);
+      .end();
 
     if (this.env.isHot) {
       this.webpackChain
@@ -28,6 +40,7 @@ module.exports = class Typescript extends Loader {
           {
             vue: true,
             async: false,
+            formatter: "codeframe",
             checkSyntacticErrors: true
           }
         ]);

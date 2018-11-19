@@ -15,6 +15,7 @@ module.exports = class Optimization extends Config {
           default: {
             minChunks: 2,
             priority: -20,
+            chunks: "initial",
             reuseExistingChunk: true
           }
         }
@@ -22,12 +23,16 @@ module.exports = class Optimization extends Config {
       .runtimeChunk(true)
       .noEmitOnErrors(this.env.isProduction)
       .minimizer("minify")
-        .use(TerserPlugin, [{
+      .use(TerserPlugin, [
+        {
           cache: true,
           parallel: true,
           sourceMap: true,
           terserOptions: {
-            keep_fnames: true
+            keep_fnames: true,
+            mangle: {
+              safari10: "true"
+            }
           }
         }
       ]);
