@@ -78,7 +78,7 @@ module.exports = class VarieBundler {
 
   _inspect(...bundles) {
     bundles.forEach(bundle => {
-      util.inspect(bundle.toString(), false, null, true);
+      util.inspect(console.log(bundle.toString()), false, null, true);
     });
     process.exit(0);
   }
