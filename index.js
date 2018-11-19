@@ -112,7 +112,7 @@ module.exports = class VarieBundler {
       isHot: this._argumentsHas("--hot"),
       isProduction: mode === "production",
       isDevelopment: mode === "development",
-      isModern: !this._argumentsHas("--hot"),
+      isModern: this._argumentsHas("--modern"),
       isAnalyzing: this._argumentsHas("--analyze")
     };
   }
