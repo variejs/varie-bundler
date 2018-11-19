@@ -151,37 +151,23 @@ module.exports = class VarieBundler {
 
     new plugins.Preload(this);
 
-    modern.module
-      .rule("typescript")
-      .use("babel-loader")
-      .tap(options => {
-        if (!options) {
-          options = {};
-        }
-        if (!options.overrides) {
-          options.overrides = [];
-        }
-        options.overrides.push({
-          presets: [["varie-app", { modern: true }]]
+    ['typescript', 'js'].forEach((rule) => {
+      modern.module
+        .rule(rule)
+        .use("babel-loader")
+        .tap(options => {
+          if (!options) {
+            options = {};
+          }
+          if (!options.overrides) {
+            options.overrides = [];
+          }
+          options.overrides.push({
+            presets: [["varie-app", { modern: true }]]
+          });
+          return options;
         });
-        return options;
-      });
-
-    modern.module
-      .rule("js")
-      .use("babel-loader")
-      .tap(options => {
-        if (!options) {
-          options = {};
-        }
-        if (!options.overrides) {
-          options.overrides = [];
-        }
-        options.overrides.push({
-          presets: [["varie-app", { modern: true }]]
-        });
-        return options;
-      });
+    })
 
     modern.output
       .filename(`js/[name]-[${this._config.hashType}].js`)
