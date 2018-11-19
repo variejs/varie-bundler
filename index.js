@@ -188,5 +188,7 @@ module.exports = class VarieBundler {
       .chunkFilename(`js/[name]-[${this._config.hashType}].js`);
 
     modern.plugins.delete("clean");
+
+    return modern;
   }
 };
