@@ -33,8 +33,8 @@ module.exports = class VarieBundler {
       let modern = this._bundle(true);
 
       modern.output
-        .filename(`js/[name]-[${this._config.hashType}].modern.js`)
-        .chunkFilename(`js/[name]-[${this._config.hashType}].modern.js`);
+        .filename(`js/[name]-[${this._config.hashType}].js`)
+        .chunkFilename(`js/[name]-[${this._config.hashType}].js`);
 
       modern.plugins.delete("clean");
 

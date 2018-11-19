@@ -35,7 +35,7 @@ MultiBuildHtml.prototype = {
             data.body = data.body.concat(previousData.body);
             data.head = data.head.concat(previousData.head);
 
-            // Filter out duplicated head tags
+            // Filter out duplicated body tags
             data.body = data.body.filter((tag, index, self) => {
               return (
                 index ===
@@ -50,10 +50,10 @@ MultiBuildHtml.prototype = {
 
             data.body.forEach(tag => {
               if (tag.tagName === "script" && tag.attributes) {
-                if (tag.attributes.src.includes(".modern.js")) {
-                  return (tag.attributes.type = "module");
+                if (tag.attributes.src.includes(".legacy.js")) {
+                  return tag.attributes.nomodule = "";
                 }
-                tag.attributes.nomodule = "";
+                tag.attributes.type = "module";
               }
             });
 

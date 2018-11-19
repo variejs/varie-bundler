@@ -1,10 +1,11 @@
 const Config = require("./Config");
 module.exports = class Output extends Config {
   register() {
+    let fileName = `js/[name]-[${this.config.hashType}]${this.env.isModern ? '.legacy' : '' }.js`
     this.webpackChain.output
       .publicPath("/")
       .path(this.config.outputPath)
-      .filename(`js/[name]-[${this.config.hashType}].js`)
-      .chunkFilename(`js/[name]-[${this.config.hashType}].js`);
+      .filename(fileName)
+      .chunkFilename(fileName);
   }
 };
