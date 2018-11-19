@@ -151,7 +151,7 @@ module.exports = class VarieBundler {
 
     new plugins.Preload(this);
 
-    ['typescript', 'js'].forEach((rule) => {
+    ["typescript", "js"].forEach(rule => {
       modern.module
         .rule(rule)
         .use("babel-loader")
@@ -167,7 +167,7 @@ module.exports = class VarieBundler {
           });
           return options;
         });
-    })
+    });
 
     modern.output
       .filename(`js/[name]-[${this._config.hashType}].js`)
