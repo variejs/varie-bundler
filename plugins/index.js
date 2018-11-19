@@ -1,4 +1,3 @@
-const Babel = require("./Babel");
 const Clean = require("./Clean");
 const Errors = require("./Errors");
 const Preload = require("./Preload");
@@ -11,7 +10,6 @@ const CaseSensitivePaths = require("./CaseSensitivePaths");
 const DefineEnvironmentVariables = require("./DefineEnvironmentVariables");
 
 module.exports = {
-  Babel,
   Clean,
   Errors,
   Preload,

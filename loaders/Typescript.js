@@ -14,7 +14,7 @@ module.exports = class Typescript extends Loader {
             this.generateCacheConfig(
               "ts-loader",
               ["ts-loader", "typescript"],
-              ["tsconfig.json"]
+              ["babel.config.js", "tsconfig.json"]
             )
           );
       })

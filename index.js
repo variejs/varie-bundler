@@ -78,7 +78,6 @@ module.exports = class VarieBundler {
   _bundle(modern = false) {
     new webpackConfigs.Aliases(this);
     new plugins.DefineEnvironmentVariables(this);
-    new plugins.Babel(this, modern);
     if (modern) {
       new plugins.Preload(this);
     }
