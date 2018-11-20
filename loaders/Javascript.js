@@ -31,7 +31,7 @@ module.exports = class Javascript extends Loader {
           );
       })
       .use("babel-loader")
-      .loader(require("./BabelLoader"))
+      .loader("babel-loader")
       .end();
   }
 };

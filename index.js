@@ -6,7 +6,7 @@ const plugins = require("./plugins");
 const merge = require("webpack-merge");
 const webpackConfigs = require("./configs");
 const WebpackChain = require("webpack-chain");
-const core = require('@babel/core')
+
 module.exports = class VarieBundler {
   constructor(args, root, config = {}) {
     this._aliases = {};
@@ -151,26 +151,12 @@ module.exports = class VarieBundler {
 
     new plugins.Preload(this);
 
-    // console.info(
-    //   core.loadPartialConfig()
-    // )
-    // ["typescript", "js"].forEach(rule => {
-    //   modern.module
-    //     .rule(rule)
-    //     .use("babel-loader")
-    //     .tap(options => {
-    //       if (!options) {
-    //         options = {};
-    //       }
-    //       if (!options.overrides) {
-    //         options.overrides = [];
-    //       }
-    //       options.overrides.push({
-    //         presets: [["varie-app", { modern: true }]]
-    //       });
-    //       return options;
-    //     });
-    // });
+    ["typescript", "js"].forEach(rule => {
+      modern.module
+        .rule(rule)
+        .use("babel-loader")
+				.loader(path.join(__dirname, 'loaders/ModernBabelLoader'))
+    });
 
     modern.output
       .filename(`js/[name]-[${this._config.hashType}].js`)
