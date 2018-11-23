@@ -1,5 +1,4 @@
 module.exports = require("babel-loader").custom(() => {
-  console.info("CUSTOM ONE");
   return {
     config(cfg) {
       cfg.options.presets.map(preset => {
