@@ -155,18 +155,7 @@ module.exports = class VarieBundler {
       modern.module
         .rule(rule)
         .use("babel-loader")
-        .tap(options => {
-          if (!options) {
-            options = {};
-          }
-          if (!options.overrides) {
-            options.overrides = [];
-          }
-          options.overrides.push({
-            presets: [["varie-app", { modern: true }]]
-          });
-          return options;
-        });
+        .loader(path.join(__dirname, "loaders/ModernBabelLoader"));
     });
 
     modern.output
