@@ -4,7 +4,7 @@ module.exports = require("babel-loader").custom(() => {
       cfg.options.presets.map(preset => {
         if (preset.file.request === "varie-app") {
           if (!preset.options) {
-            preset.options = {};
+            preset = Object.assign({}, preset, { options: {} });
           }
           preset.options.modern = true;
         }
