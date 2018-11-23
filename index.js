@@ -158,6 +158,16 @@ module.exports = class VarieBundler {
         .loader(path.join(__dirname, "loaders/ModernBabelLoader"));
     });
 
+    if (this._env.isAnalyzing) {
+      modern.plugin("analyzer").tap(() => {
+        return [
+          {
+            analyzerPort: 8889
+          }
+        ];
+      });
+    }
+
     modern.output
       .filename(`js/[name]-[${this._config.hashType}].js`)
       .chunkFilename(`js/[name]-[${this._config.hashType}].js`);
