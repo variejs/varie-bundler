@@ -152,8 +152,6 @@ module.exports = class VarieBundler {
     new plugins.Preload(this);
 
     ["typescript", "js"].forEach(rule => {
-      console.info("change loader....", rule);
-
       modern.module
         .rule(rule)
         .use("babel-loader")
