@@ -152,10 +152,12 @@ module.exports = class VarieBundler {
     new plugins.Preload(this);
 
     ["typescript", "js"].forEach(rule => {
+      console.info("change loader....", rule);
+
       modern.module
         .rule(rule)
         .use("babel-loader")
-				.loader(path.join(__dirname, 'loaders/ModernBabelLoader'))
+        .loader(path.join(__dirname, "loaders/ModernBabelLoader"));
     });
 
     modern.output
