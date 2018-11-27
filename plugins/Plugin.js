@@ -2,9 +2,8 @@ const webpack = require("webpack");
 const getDependency = require("./../helpers/getDependency");
 
 module.exports = class Plugin {
-  constructor(varieLoader, modernBuild = false) {
+  constructor(varieLoader) {
     this.webpack = webpack;
-    this.modernBuild = modernBuild;
     this.varieLoader = varieLoader;
     this.env = this.varieLoader._env;
     this.getDependency = getDependency;

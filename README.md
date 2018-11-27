@@ -17,4 +17,3 @@ Documentation can be found on the n-sourced software licensed under the.
 ## License
 
 Varie Bundler is open-sourced software licensed under the
- 

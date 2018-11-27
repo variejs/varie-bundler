@@ -4,7 +4,7 @@ module.exports = class Fonts extends Loader {
     this.webpackChain.module
       .rule("fonts")
       .test(/\.(woff|woff2|ttf|eot|svg|otf)$/)
-      .use("file")
+      .use("file-loader")
       .loader("file-loader")
       .options({
         limit: 4096,

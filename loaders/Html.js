@@ -7,7 +7,7 @@ module.exports = class Html extends Loader {
     this.webpackChain.module
       .rule("html")
       .test(/\.html$/)
-      .use("html")
+      .use("html-loader")
       .loader("html-loader")
       .options({
         limit: 4096,

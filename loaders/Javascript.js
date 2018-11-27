@@ -9,7 +9,6 @@ module.exports = class Javascript extends Loader {
         if (/\.vue\.jsx?$/.test(filepath)) {
           return false;
         }
-
         // Don't transpile node_modules
         return /node_modules/.test(filepath);
       })
@@ -20,7 +19,7 @@ module.exports = class Javascript extends Loader {
       .end()
       .when(!this.env.isProduction, config => {
         config
-          .use("cache")
+          .use("cache-loader")
           .loader("cache-loader")
           .options(
             this.generateCacheConfig(

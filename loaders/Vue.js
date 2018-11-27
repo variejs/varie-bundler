@@ -14,7 +14,7 @@ module.exports = class Vue extends Loader {
       .test(/\.vue$/)
       .when(!this.env.isProduction, config => {
         config
-          .use("cache")
+          .use("cache-loader")
           .loader("cache-loader")
           .options(
             this.generateCacheConfig("vue-loader", [
@@ -31,7 +31,6 @@ module.exports = class Vue extends Loader {
       ]);
 
     this.webpackChain.resolve.alias.set("vue$", "vue/dist/vue.esm.js");
-
     this.webpackChain.plugin("vue").use(VueLoaderPlugin);
   }
 };

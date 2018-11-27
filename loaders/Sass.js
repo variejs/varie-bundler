@@ -11,7 +11,7 @@ module.exports = class Sass extends Loader {
       .test(/\.s[ac]ss|\.css/)
       .when(!this.env.isProduction, config => {
         config
-          .use("cache")
+          .use("cache-loader")
           .loader("cache-loader")
           .options(
             this.generateCacheConfig(
@@ -20,11 +20,11 @@ module.exports = class Sass extends Loader {
               [".browserslistrc"]
             )
           )
-          .end()
-          .use("style")
-          .loader("style-loader")
           .end();
       })
+      .use("style-loader")
+      .loader("style-loader")
+      .end()
       .when(!this.env.isHot, config => {
         config
           .use("extract")

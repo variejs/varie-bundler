@@ -11,7 +11,7 @@ module.exports = class Images extends Loader {
         name: "img/[name].[ext]?[hash:8]"
       })
       .end()
-      .use("img")
+      .use("img-loader")
       .loader("img-loader")
       .options({
         svgo: {

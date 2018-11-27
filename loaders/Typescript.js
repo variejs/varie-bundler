@@ -8,7 +8,7 @@ module.exports = class Typescript extends Loader {
       .test(/\.tsx?$/)
       .when(!this.env.isProduction, config => {
         config
-          .use("cache")
+          .use("cache-loader")
           .loader("cache-loader")
           .options(
             this.generateCacheConfig(
@@ -24,7 +24,7 @@ module.exports = class Typescript extends Loader {
       .use("babel-loader")
       .loader("babel-loader")
       .end()
-      .use("typescript-loader")
+      .use("ts-loader")
       .loader("ts-loader")
       .options({
         happyPackMode: true,
@@ -34,16 +34,14 @@ module.exports = class Typescript extends Loader {
       .end();
 
     if (this.env.isHot) {
-      this.webpackChain
-        .plugin("typecript-checker")
-        .use(ForkTsCheckerWebpackPlugin, [
-          {
-            vue: true,
-            async: false,
-            formatter: "codeframe",
-            checkSyntacticErrors: true
-          }
-        ]);
+      this.webpackChain.plugin("ts-checker").use(ForkTsCheckerWebpackPlugin, [
+        {
+          vue: true,
+          async: false,
+          formatter: "codeframe",
+          checkSyntacticErrors: true
+        }
+      ]);
     }
   }
 };
