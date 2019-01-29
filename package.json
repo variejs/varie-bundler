@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A webpack bundler for Varie",
   "main": "index.js",
   "repository": {
@@ -17,11 +17,11 @@
     "@types/webpack-env": "^1.13.6",
     "@vue/preload-webpack-plugin": "^1.1.0",
     "autoprefixer": "^9.4.7",
-    "babel-loader": "^8.0.2",
+    "babel-loader": "^8.0.5",
     "babel-preset-varie-app": "^0.1.0",
     "browser-sync": "^2.26.3",
     "browser-sync-webpack-plugin": "^2.2.2",
-    "cache-loader": "^2.0.0",
+    "cache-loader": "^2.0.1",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "clean-webpack-plugin": "^1.0.1",
     "css-loader": "^2.1.0",
@@ -42,16 +42,16 @@
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.1",
     "thread-loader": "^2.1.2",
-    "ts-loader": "^5.3.2",
-    "tslint": "^5.12.0",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.12.1",
     "typescript": "^3.2.4",
     "vue-loader": "^15.6.2",
-    "vue-template-compiler": "^2.5.21",
+    "vue-template-compiler": "^2.5.22",
     "webpack": "^4.29.0",
     "webpack-chain": "^5.2.0",
-    "webpack-cli": "^3.1.0",
+    "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14",
-    "webpack-merge": "^4.1.5"
+    "webpack-merge": "^4.2.1"
   },
   "peerDependencies": {
     "vue-template-compiler": "^2.5.17"
