@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "A webpack bundler for Varie",
   "main": "index.js",
   "repository": {
@@ -12,6 +12,12 @@
     "url": "https://github.com/variejs/varie-bundler/issues"
   },
   "homepage": "https://varie.io/docs/latest/varie-bundler",
+  "files": [
+    "configs",
+    "helpers",
+    "loaders",
+    "plugins"
+  ],
   "dependencies": {
     "@babel/core": "^7.2.2",
     "@types/webpack-env": "^1.13.6",
