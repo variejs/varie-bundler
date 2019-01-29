@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "A webpack bundler for Varie",
   "main": "index.js",
   "repository": {
@@ -18,7 +18,7 @@
     "@vue/preload-webpack-plugin": "^1.1.0",
     "autoprefixer": "^9.4.7",
     "babel-loader": "^8.0.5",
-    "babel-preset-varie-app": "^0.1.0",
+    "babel-preset-varie-app": "^0.1.1",
     "browser-sync": "^2.26.3",
     "browser-sync-webpack-plugin": "^2.2.2",
     "cache-loader": "^2.0.1",
