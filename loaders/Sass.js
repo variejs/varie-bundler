@@ -23,6 +23,10 @@ module.exports = class Sass extends Loader {
           .end();
       })
       .use("style-loader")
+      .options({
+        singleton:true,
+        hmr : this.env.isHot
+      })
       .loader("style-loader")
       .end()
       .when(!this.env.isHot, config => {
