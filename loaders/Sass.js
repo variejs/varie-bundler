@@ -45,7 +45,7 @@ module.exports = class Sass extends Loader {
             }
           ])
           .end()
-          .plugin("optimize-assets")
+          .plugin("mini-extract")
           .use(MiniCssExtractPlugin, [
             {
               filename: `css/[name]-[${this.config.hashType}].css`,
