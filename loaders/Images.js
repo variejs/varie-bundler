@@ -11,23 +11,24 @@ module.exports = class Images extends Loader {
         name: "img/[name].[ext]?[hash:8]"
       })
       .end()
-      .use("img-loader")
-      .loader("img-loader")
+      .use("image-webpack-loader")
+      .loader("image-webpack-loader")
       .options({
-        svgo: {
-          plugins: [{ convertPathData: false }]
-        },
         mozjpeg: {
           progressive: true,
-          arithmetic: false
+          quality: 75
         },
         optipng: {
-          optimizationLevel: 5
+          optimizationLevel: 3
+        },
+        pngquant: {
+          quality: "75-90",
+          speed: 4
         },
         gifsicle: {
           interlaced: true
         },
-        enabled: this.env.isProduction
+        disable: !this.env.isProduction
       });
   }
 };

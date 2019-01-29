@@ -39,7 +39,9 @@ module.exports = class Typescript extends Loader {
           vue: true,
           async: false,
           formatter: "codeframe",
-          checkSyntacticErrors: true
+          checkSyntacticErrors: true,
+          useTypescriptIncrementalApi: this.env.isHot,
+          workers: this.env.isHot ? 1 : ForkTsCheckerWebpackPlugin.TWO_CPUS_FREE
         }
       ]);
     }

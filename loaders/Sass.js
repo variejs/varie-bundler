@@ -24,8 +24,8 @@ module.exports = class Sass extends Loader {
       })
       .use("style-loader")
       .options({
-        singleton:true,
-        hmr : this.env.isHot
+        singleton: true,
+        hmr: this.env.isHot
       })
       .loader("style-loader")
       .end()
