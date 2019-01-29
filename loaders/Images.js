@@ -19,7 +19,7 @@ module.exports = class Images extends Loader {
           quality: 75
         },
         optipng: {
-          enabled: true
+          optimizationLevel: 3
         },
         pngquant: {
           quality: "75-90",
@@ -27,9 +27,6 @@ module.exports = class Images extends Loader {
         },
         gifsicle: {
           interlaced: true
-        },
-        webp: {
-          quality: 75
         },
         disable: !this.env.isProduction
       });
