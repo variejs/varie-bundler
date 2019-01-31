@@ -29,11 +29,10 @@ module.exports = class Optimization extends Config {
           parallel: true,
           sourceMap: true,
           terserOptions: {
-            comments: false,
-            keep_fnames: true,
-            mangle: {
-              safari10: "true"
-            }
+						mangle: true,
+						safari10 : true,
+						keep_fnames: true,
+						extractComments: true,
           }
         }
       ]);
