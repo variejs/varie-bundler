@@ -32,7 +32,9 @@ module.exports = class Optimization extends Config {
 						mangle: true,
 						safari10 : true,
 						keep_fnames: true,
-						extractComments: true,
+						output: {
+							comments: false,
+						},
           }
         }
       ]);
