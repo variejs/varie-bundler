@@ -7,6 +7,7 @@ const NamedChunks = require("./NamedChunks");
 const HashedModules = require("./HashedModules");
 const BundleAnalyzer = require("./BundleAnalyzer");
 const CaseSensitivePaths = require("./CaseSensitivePaths");
+const AggressiveSplitting = require("./AggressiveSplitting");
 const DefineEnvironmentVariables = require("./DefineEnvironmentVariables");
 
 module.exports = {
@@ -19,5 +20,6 @@ module.exports = {
   HashedModules,
   BundleAnalyzer,
   CaseSensitivePaths,
+	AggressiveSplitting,
   DefineEnvironmentVariables
 };

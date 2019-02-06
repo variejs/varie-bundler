@@ -131,6 +131,7 @@ module.exports = class VarieBundler {
       })
       .when(this._env.isProduction, () => {
         new plugins.HashedModules(this);
+				new plugins.AggressiveSplitting(this);
       })
       .when(this._env.isAnalyzing, () => {
         new plugins.BundleAnalyzer(this);
