@@ -30,7 +30,12 @@ module.exports = class Vue extends Loader {
         }
       ]);
 
-    this.webpackChain.resolve.alias.set("vue$", "vue/dist/vue.esm.js");
+		let alias = "vue/dist/vue.runtime.esm.js";
+		if (!this.config.vue.runtimeOnly) {
+			alias = "vue/dist/vue.esm.js";
+		}
+
+		this.webpackChain.resolve.alias.set("vue$", alias);
     this.webpackChain.plugin("vue").use(VueLoaderPlugin);
   }
 };

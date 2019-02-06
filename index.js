@@ -83,11 +83,14 @@ module.exports = class VarieBundler {
     process.exit(0);
   }
 
-  _setupConfig(root, config) {
+  _setupConfig(root, config = {}) {
     let envConfig = dotenv.config().parsed;
     this._config = merge(
       {
         root,
+				vue : {
+					runtimeOnly : true
+				},
         outputPath: path.join(root, "public"),
         appName: envConfig.APP_NAME || "Varie",
         host: envConfig.APP_HOST || "localhost",
