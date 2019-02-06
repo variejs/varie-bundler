@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "description": "A webpack bundler for Varie",
   "main": "index.js",
   "repository": {
@@ -52,7 +52,6 @@
     "tslint": "^5.12.1",
     "typescript": "^3.3.1",
     "vue-loader": "^15.6.2",
-    "vue-template-compiler": "^2.6.2",
     "webpack": "^4.29.2",
     "webpack-chain": "^5.2.0",
     "webpack-cli": "^3.2.3",
@@ -60,6 +59,6 @@
     "webpack-merge": "^4.2.1"
   },
   "peerDependencies": {
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.0.0"
   }
 }
