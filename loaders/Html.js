@@ -11,18 +11,18 @@ module.exports = class Html extends Loader {
       .loader("html-loader")
       .options({
         limit: 4096,
-        name: "fonts/[name].[ext]?[hash:8]"
+        name: "fonts/[name].[ext]?[hash:8]",
       });
 
     this.webpackChain.plugin("html").use(HtmlWebpackPlugin, [
       {
         inject: true,
-        template: "./index.html"
-      }
+        template: "./index.html",
+      },
     ]);
 
     if (this.env.isModern) {
-      new MultiBuild(this.varieLoader);
+      this.webpackChain.plugin("multi-build").use(MultiBuild);
     }
   }
 };

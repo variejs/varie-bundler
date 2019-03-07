@@ -11,5 +11,5 @@ module.exports = {
   Aliases,
   DevServer,
   Extensions,
-  Optimization
+  Optimization,
 };

@@ -1,14 +1,11 @@
-const webpack = require("webpack");
 const getDependency = require("./../helpers/getDependency");
 
 module.exports = class Plugin {
-  constructor(varieLoader) {
-    this.webpack = webpack;
-    this.varieLoader = varieLoader;
-    this.env = this.varieLoader._env;
+  constructor(varieLoader, options = {}) {
+    this.options = options;
+    this.env = varieLoader._env;
     this.getDependency = getDependency;
-    this.config = this.varieLoader._config;
-    this.webpackChain = this.varieLoader._webpackChain;
+    this.webpackChain = varieLoader._webpackChain;
     this.register();
   }
 };

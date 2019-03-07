@@ -6,7 +6,7 @@ module.exports = class Typescript extends Loader {
     this.webpackChain.module
       .rule("typescript")
       .test(/\.tsx?$/)
-      .when(!this.env.isProduction, config => {
+      .when(!this.env.isProduction, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")
@@ -14,8 +14,8 @@ module.exports = class Typescript extends Loader {
             this.generateCacheConfig(
               "ts-loader",
               ["ts-loader", "typescript"],
-              ["babel.config.js", "tsconfig.json"]
-            )
+              ["babel.config.js", "tsconfig.json"],
+            ),
           );
       })
       .use("thread-loader")
@@ -29,7 +29,7 @@ module.exports = class Typescript extends Loader {
       .options({
         happyPackMode: true,
         appendTsSuffixTo: [/\.vue$/],
-        transpileOnly: this.env.isHot || this.env.isProduction
+        transpileOnly: this.env.isHot || this.env.isProduction,
       })
       .end();
 
@@ -40,9 +40,10 @@ module.exports = class Typescript extends Loader {
           async: false,
           formatter: "codeframe",
           checkSyntacticErrors: true,
-          useTypescriptIncrementalApi: this.env.isHot,
-          workers: this.env.isHot ? 1 : ForkTsCheckerWebpackPlugin.TWO_CPUS_FREE
-        }
+          workers: this.env.isHot
+            ? 1
+            : ForkTsCheckerWebpackPlugin.TWO_CPUS_FREE,
+        },
       ]);
     }
   }

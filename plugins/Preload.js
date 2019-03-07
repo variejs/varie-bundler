@@ -8,8 +8,8 @@ module.exports = class Preload extends Plugin {
         {
           rel: "preload",
           include: "initial",
-          fileBlacklist: [/\.map$/, /hot-update\.js$/]
-        }
+          fileBlacklist: [/\.map$/, /hot-update\.js$/],
+        },
       ])
       .before("multi-build");
 
@@ -18,8 +18,8 @@ module.exports = class Preload extends Plugin {
       .use(PreloadPlugin, [
         {
           rel: "prefetch",
-          include: "asyncChunks"
-        }
+          include: "asyncChunks",
+        },
       ])
       .before("multi-build");
   }

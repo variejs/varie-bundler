@@ -8,7 +8,7 @@ module.exports = class Fonts extends Loader {
       .loader("file-loader")
       .options({
         limit: 4096,
-        name: "fonts/[name].[ext]?[hash:8]"
+        name: "fonts/[name].[ext]?[hash:8]",
       });
   }
 };

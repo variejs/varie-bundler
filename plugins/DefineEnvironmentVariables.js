@@ -1,25 +1,25 @@
 const Plugin = require("./Plugin");
-
+const { DefinePlugin } = require("webpack");
 module.exports = class DefineEnvironmentVariables extends Plugin {
   register() {
     let variables = {
       app: {
-        env: this.env.mode
-      }
+        env: this.env.mode,
+      },
     };
 
-    for (let variableName in this.config.environmentVariables) {
+    for (let variableName in this.options.variables) {
       variables[variableName] = Object.assign(
         {},
         variables[variableName],
-        this.config.environmentVariables[variableName]
+        this.options.variables[variableName],
       );
     }
 
-    this.webpackChain.plugin("variables").use(this.webpack.DefinePlugin, [
+    this.webpackChain.plugin("variables").use(DefinePlugin, [
       {
-        __ENV_VARIABLES__: this._stringify(variables)
-      }
+        __ENV_VARIABLES__: this._stringify(variables),
+      },
     ]);
   }
 

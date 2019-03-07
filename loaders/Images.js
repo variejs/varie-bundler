@@ -8,7 +8,7 @@ module.exports = class Images extends Loader {
       .use("file")
       .loader("file-loader")
       .options({
-        name: "img/[name].[ext]?[hash:8]"
+        name: "img/[name].[ext]?[hash:8]",
       })
       .end()
       .use("image-webpack-loader")
@@ -16,19 +16,19 @@ module.exports = class Images extends Loader {
       .options({
         mozjpeg: {
           progressive: true,
-          quality: 75
+          quality: 75,
         },
         optipng: {
-          optimizationLevel: 3
+          optimizationLevel: 3,
         },
         pngquant: {
           quality: "75-90",
-          speed: 4
+          speed: 4,
         },
         gifsicle: {
-          interlaced: true
+          interlaced: true,
         },
-        disable: !this.env.isProduction
+        disable: !this.env.isProduction,
       });
   }
 };

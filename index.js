@@ -3,22 +3,27 @@ const util = require("util");
 const dotenv = require("dotenv");
 const loaders = require("./loaders");
 const plugins = require("./plugins");
-const merge = require("webpack-merge");
 const webpackConfigs = require("./configs");
 const WebpackChain = require("webpack-chain");
 
 module.exports = class VarieBundler {
-  constructor(args, root, config = {}) {
-    this._aliases = {};
+  constructor(args, root) {
     this._webpackChain = new WebpackChain();
-
     this._setupEnv(args ? args.mode : "development");
-    this._setupConfig(root, config);
-    this._variePresets();
+    this._setupConfig(root);
+    this._presets();
   }
 
   aliases(aliases) {
-    this._aliases = merge(this._aliases, aliases);
+    this._config.webpack.aliases = aliases;
+    return this;
+  }
+
+  aggressiveSplitting(minSize = 30000, maxSize = 50000) {
+    new plugins.AggressiveSplitting(this, {
+      minSize,
+      maxSize,
+    });
     return this;
   }
 
@@ -41,25 +46,96 @@ module.exports = class VarieBundler {
     return this._argumentsHas("--inspect") ? this._inspect(legacy) : legacy;
   }
 
+  browserSync(options = {}) {
+    this._config.webpack.devServer.open = false;
+    let browserSyncOptions = Object.assign(
+      this._config.plugins.browserSync,
+      options,
+    );
+    browserSyncOptions.devServer = this._config.webpack.devServer;
+    new plugins.BrowserSync(this, browserSyncOptions);
+    return this;
+  }
+
   chainWebpack(callback) {
     callback(this._webpackChain, this._env);
     return this;
   }
 
-  config(variables) {
-    this._config.environmentVariables = variables;
+  config(config) {
+    this._config = Object.assign(this._config, config);
+    return this;
+  }
+
+  copy(from, to = "") {
+    this._config.plugins.copy.patterns.push({
+      from: from,
+      to: path.join(this._config.outputPath, to),
+    });
+    return this;
+  }
+
+  dontClean(exclude) {
+    if (Array.isArray(exclude)) {
+      this._config.plugins.clean.excludeList.push(...exclude);
+    } else {
+      this._config.plugins.clean.excludeList.push(exclude);
+    }
     return this;
   }
 
   entry(name, entryPaths) {
     let webpackEntry = this._webpackChain.entry(name);
 
-    entryPaths.map(entry => {
+    entryPaths.map((entry) => {
       webpackEntry.add(path.join(this._config.root, entry));
     });
 
     webpackEntry.end();
 
+    return this;
+  }
+
+  laravel(layout, destination = './resources/views/layouts') {
+    new plugins.LaravelPlugin(this, {
+      layout,
+      destination,
+      root : this._config.root,
+    });
+    return this;
+  }
+
+  plugin(Plugin, options) {
+    new Plugin(this, options);
+    return this;
+  }
+
+  proxy(
+    from,
+    to,
+    options = {
+      changeOrigin: true,
+    },
+  ) {
+    this._config.webpack.devServer.proxies.push(
+      Object.assign(
+        {
+          context: Array.isArray(from) ? from : [from],
+          target: to,
+        },
+        options,
+      ),
+    );
+    return this;
+  }
+
+  varieConfig(variables) {
+    this._config.plugins.defineEnvironmentVariables.variables = variables;
+    return this;
+  }
+
+  webWorkers() {
+    new loaders.WebWorkers(this);
     return this;
   }
 
@@ -71,67 +147,104 @@ module.exports = class VarieBundler {
   }
 
   _bundle() {
-    new webpackConfigs.Aliases(this);
-    new plugins.DefineEnvironmentVariables(this);
+    this._webpackChain.when(this._env.isHot, () => {
+      new webpackConfigs.DevServer(this, this._config.webpack.devServer);
+    });
+
+    new plugins.Clean(this, this._config.plugins.clean);
+    new webpackConfigs.Aliases(this, this._config.webpack.aliases);
+    new plugins.DefineEnvironmentVariables(
+      this,
+      this._config.plugins.defineEnvironmentVariables,
+    );
+
+    if (this._config.plugins.copy.patterns.length > 0) {
+      new plugins.Copy(this, this._config.plugins.copy.patterns);
+    }
+
     return this._webpackChain;
   }
 
   _inspect(...bundles) {
-    bundles.forEach(bundle => {
+    bundles.forEach((bundle) => {
       util.inspect(console.log(bundle.toString()), false, null, true);
     });
     process.exit(0);
   }
 
-  _setupConfig(root, config = {}) {
+  _setupConfig(root) {
     let envConfig = dotenv.config().parsed;
-    this._config = merge(
-      {
+    let outputPath = path.join(root, "public");
+    let host = envConfig.APP_HOST || "localhost";
+    this._config = {
         root,
-				vue : {
-					runtimeOnly : true
-				},
-        outputPath: path.join(root, "public"),
+        host,
+        outputPath,
         appName: envConfig.APP_NAME || "Varie",
-        host: envConfig.APP_HOST || "localhost",
-        hashType: this._env.isHot ? "hash" : "contenthash"
-      },
-      config
-    );
+        hashType: this._env.isHot ? "hash" : "contenthash",
+        plugins: {
+          aliases: {},
+          copy: {
+            patterns: [],
+          },
+          browserSync: {
+            host,
+            outputPath,
+            port: 3000,
+            proxy: "localhost:8080",
+          },
+          clean: {
+            excludeList: [],
+          },
+          defineEnvironmentVariables: {
+            variables: [],
+          },
+        },
+        webpack: {
+          aliases: [],
+          devServer: {
+            open: true,
+            proxies: [],
+          },
+        },
+        vue: {
+          runtimeOnly: true,
+        },
+      };
   }
 
   _setupEnv(mode = "development") {
     this._env = {
       mode,
-      isHot: this._argumentsHas("--hot"),
       isProduction: mode === "production",
       isDevelopment: mode === "development",
+      isHot: this._argumentsHas("--hot"),
       isModern: this._argumentsHas("--modern"),
-      isAnalyzing: this._argumentsHas("--analyze")
+      isAnalyzing: this._argumentsHas("--analyze"),
     };
   }
 
-  _variePresets() {
-    new loaders.Html(this);
+  _presets() {
+    // new loaders.Html(this);
     new loaders.Javascript(this);
     new loaders.Typescript(this);
-    new loaders.Vue(this);
-    new loaders.Sass(this);
+    new loaders.Vue(this, this._config.vue);
+    new loaders.Sass(this, {
+      hashType: this._config.hashType,
+    });
     new loaders.Fonts(this);
     new loaders.Images(this);
 
-    new plugins.Clean(this);
     new plugins.NamedChunks(this);
     new plugins.CaseSensitivePaths(this);
 
     this._webpackChain
       .when(!this._env.isProduction, () => {
         new plugins.Errors(this);
-        new plugins.BrowserSync(this);
       })
       .when(this._env.isProduction, () => {
         new plugins.HashedModules(this);
-				new plugins.AggressiveSplitting(this);
+        new plugins.AggressiveSplitting(this);
       })
       .when(this._env.isAnalyzing, () => {
         new plugins.BundleAnalyzer(this);
@@ -145,7 +258,6 @@ module.exports = class VarieBundler {
 
     new webpackConfigs.Stats(this);
     new webpackConfigs.Output(this);
-    new webpackConfigs.DevServer(this);
     new webpackConfigs.Extensions(this);
     new webpackConfigs.Optimization(this);
   }
@@ -155,7 +267,7 @@ module.exports = class VarieBundler {
 
     new plugins.Preload(this);
 
-    ["typescript", "js"].forEach(rule => {
+    ["typescript", "js"].forEach((rule) => {
       modern.module
         .rule(rule)
         .use("babel-loader")
@@ -166,8 +278,8 @@ module.exports = class VarieBundler {
       modern.plugin("analyzer").tap(() => {
         return [
           {
-            analyzerPort: 8889
-          }
+            analyzerPort: 8889,
+          },
         ];
       });
     }

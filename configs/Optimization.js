@@ -10,15 +10,15 @@ module.exports = class Optimization extends Config {
             test: /[\\/]node_modules[\\/]/,
             priority: -10,
             name: "vendor",
-            chunks: "initial"
+            chunks: "initial",
           },
           default: {
             minChunks: 2,
             priority: -20,
             chunks: "initial",
-            reuseExistingChunk: true
-          }
-        }
+            reuseExistingChunk: true,
+          },
+        },
       })
       .runtimeChunk(true)
       .noEmitOnErrors(this.env.isProduction)
@@ -29,14 +29,14 @@ module.exports = class Optimization extends Config {
           parallel: true,
           sourceMap: true,
           terserOptions: {
-						mangle: true,
-						safari10 : true,
-						keep_fnames: true,
-						output: {
-							comments: false,
-						},
-          }
-        }
+            mangle: true,
+            safari10: true,
+            keep_fnames: true,
+            output: {
+              comments: false,
+            },
+          },
+        },
       ]);
   }
 };

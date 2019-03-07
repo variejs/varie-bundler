@@ -6,11 +6,12 @@ module.exports = class DevServer extends Config {
       .noInfo(true)
       .overlay(true)
       .compress(true)
-      .host(this.config.host)
       .historyApiFallback(true)
       .contentBase(this.config.root)
       .headers({
-        "Access-Control-Allow-Origin": "*"
-      });
+        "Access-Control-Allow-Origin": "*",
+      })
+      .open(this.options.open)
+      .proxy(this.options.proxies);
   }
 };

@@ -11,7 +11,7 @@ module.exports = class Extensions extends Config {
       timings: true,
       children: false,
       publicPath: false,
-      errorDetails: false
+      errorDetails: false,
     });
   }
 };

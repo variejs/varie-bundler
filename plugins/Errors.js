@@ -5,8 +5,8 @@ module.exports = class Errors extends Plugin {
   register() {
     this.webpackChain.plugin("errors").use(FriendlyErrorsWebpackPlugin, [
       {
-        clearConsole: true
-      }
+        clearConsole: true,
+      },
     ]);
   }
 };

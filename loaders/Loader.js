@@ -4,12 +4,12 @@ const hash = require("hash-sum");
 const useIf = require("./../helpers/useIf");
 
 module.exports = class Loader {
-  constructor(varieLoader) {
+  constructor(varieLoader, options = {}) {
     this.useIf = useIf;
+    this.options = options;
+    this.env = varieLoader._env;
     this.varieLoader = varieLoader;
-    this.env = this.varieLoader._env;
-    this.config = this.varieLoader._config;
-    this.webpackChain = this.varieLoader._webpackChain;
+    this.webpackChain = varieLoader._webpackChain;
     this.register();
   }
 
@@ -18,16 +18,16 @@ module.exports = class Loader {
 
     let configs = {};
     let versions = {
-      "varie-bundler": require("./../package.json").version
+      "varie-bundler": require("./../package.json").version,
     };
 
-    relatedPackages.forEach(relatedPackage => {
+    relatedPackages.forEach((relatedPackage) => {
       versions[
         relatedPackage
       ] = require(`${relatedPackage}/package.json`).version;
     });
 
-    configFiles.forEach(configFile => {
+    configFiles.forEach((configFile) => {
       configs[configFile] = this._getFile(configFile);
     });
 
@@ -36,15 +36,16 @@ module.exports = class Loader {
         loader,
         configs,
         versions,
-        modern: this.env.isModern
+        modern: this.env.isModern,
       }),
-      cacheDirectory: this._getPath(`node_modules/.cache/${loader}`)
+      cacheDirectory: this._getPath(`node_modules/.cache/${loader}`),
     };
   }
 
   _getPath(_path) {
-    return path.resolve(this.config.root, _path);
+    return path.resolve(this.varieLoader._config.root, _path);
   }
+
   _getFile(_path) {
     let filePath = this._getPath(_path);
     if (fs.existsSync(filePath)) {

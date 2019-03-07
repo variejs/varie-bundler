@@ -5,6 +5,7 @@ const Fonts = require("./Fonts");
 const Images = require("./Images");
 const Typescript = require("./Typescript");
 const Javascript = require("./Javascript");
+const WebWorkers = require("./WebWorkers");
 
 module.exports = {
   Vue,
@@ -13,5 +14,6 @@ module.exports = {
   Fonts,
   Images,
   Typescript,
-  Javascript
+  Javascript,
+  WebWorkers,
 };
