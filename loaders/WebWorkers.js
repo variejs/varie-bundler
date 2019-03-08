@@ -2,7 +2,9 @@ const Loader = require("./Loader");
 
 module.exports = class WebWorkers extends Loader {
   register() {
-    this.webpackChain.output.globalObject("this");
+    this.webpackChain.output.globalObject(
+      `(typeof self !== 'undefined' ? self : this)`,
+    );
 
     // TODO - https://github.com/webpack-contrib/worker-loader/issues/177
     // We have to wait till this issue goes away to turn this back on

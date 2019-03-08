@@ -1,3 +1,4 @@
+const path = require("path");
 const Loader = require("./Loader");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
@@ -22,7 +23,11 @@ module.exports = class Typescript extends Loader {
       .loader("thread-loader")
       .end()
       .use("babel-loader")
-      .loader("babel-loader")
+      .loader(path.join(__dirname, "BabelLoader"))
+      .options({
+        entryFiles: this.options.entryFiles,
+        modernBuild: this.options.modernBuild,
+      })
       .end()
       .use("ts-loader")
       .loader("ts-loader")
@@ -33,7 +38,7 @@ module.exports = class Typescript extends Loader {
       })
       .end();
 
-    if (this.env.isHot) {
+    if (this.env.isHot && !this.webpackChain.plugins.has("ts-checker")) {
       this.webpackChain.plugin("ts-checker").use(ForkTsCheckerWebpackPlugin, [
         {
           vue: true,

@@ -1,3 +1,4 @@
+const path = require("path");
 const Loader = require("./Loader");
 
 module.exports = class Javascript extends Loader {
@@ -30,7 +31,11 @@ module.exports = class Javascript extends Loader {
           );
       })
       .use("babel-loader")
-      .loader("babel-loader")
+      .loader(path.join(__dirname, "BabelLoader"))
+      .options({
+        entryFiles: this.options.entryFiles,
+        modernBuild: this.options.modernBuild,
+      })
       .end();
   }
 };

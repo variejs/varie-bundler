@@ -91,20 +91,15 @@ module.exports = class VarieBundler {
     let webpackEntry = this._webpackChain.entry(name);
 
     entryPaths.map((entry) => {
-      webpackEntry.add(path.join(this._config.root, entry));
+      let entryPath = path.join(this._config.root, entry);
+      this._config.webpack.entryFiles.push(entryPath);
+      webpackEntry.add(entryPath);
     });
 
     webpackEntry.end();
 
-    return this;
-  }
+    this._updateJavascriptLoaders();
 
-  laravel(layout, destination = "./resources/views/layouts") {
-    new plugins.LaravelPlugin(this, {
-      layout,
-      destination,
-      root: this._config.root,
-    });
     return this;
   }
 
@@ -204,6 +199,7 @@ module.exports = class VarieBundler {
       },
       webpack: {
         aliases: [],
+        entryFiles: [],
         devServer: {
           host,
           open: true,
@@ -229,8 +225,7 @@ module.exports = class VarieBundler {
 
   _presets() {
     new loaders.Html(this);
-    new loaders.Javascript(this);
-    new loaders.Typescript(this);
+    this._updateJavascriptLoaders();
     new loaders.Vue(this, this._config.vue);
     new loaders.Sass(this, {
       hashType: this._config.hashType,
@@ -267,16 +262,11 @@ module.exports = class VarieBundler {
   }
 
   _makeModernBundle() {
-    let modern = this._bundle(true);
+    let modern = this._bundle();
 
     new plugins.Preload(this);
 
-    ["typescript", "js"].forEach((rule) => {
-      modern.module
-        .rule(rule)
-        .use("babel-loader")
-        .loader(path.join(__dirname, "loaders/ModernBabelLoader"));
-    });
+    this._updateJavascriptLoaders();
 
     if (this._env.isAnalyzing) {
       modern.plugin("analyzer").tap(() => {
@@ -295,5 +285,16 @@ module.exports = class VarieBundler {
     modern.plugins.delete("clean");
 
     return modern;
+  }
+
+  _updateJavascriptLoaders(modernBuild = false) {
+    new loaders.Javascript(this, {
+      modernBuild,
+      entryFiles: this._config.webpack.entryFiles,
+    });
+    new loaders.Typescript(this, {
+      modernBuild,
+      entryFiles: this._config.webpack.entryFiles,
+    });
   }
 };
