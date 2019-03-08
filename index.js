@@ -81,6 +81,9 @@ module.exports = class VarieBundler {
     } else {
       this._config.plugins.clean.excludeList.push(exclude);
     }
+
+    new plugins.Clean(this, this._config.plugins.clean);
+
     return this;
   }
 
@@ -96,11 +99,11 @@ module.exports = class VarieBundler {
     return this;
   }
 
-  laravel(layout, destination = './resources/views/layouts') {
+  laravel(layout, destination = "./resources/views/layouts") {
     new plugins.LaravelPlugin(this, {
       layout,
       destination,
-      root : this._config.root,
+      root: this._config.root,
     });
     return this;
   }
@@ -151,7 +154,6 @@ module.exports = class VarieBundler {
       new webpackConfigs.DevServer(this, this._config.webpack.devServer);
     });
 
-    new plugins.Clean(this, this._config.plugins.clean);
     new webpackConfigs.Aliases(this, this._config.webpack.aliases);
     new plugins.DefineEnvironmentVariables(
       this,
@@ -177,40 +179,40 @@ module.exports = class VarieBundler {
     let outputPath = path.join(root, "public");
     let host = envConfig.APP_HOST || "localhost";
     this._config = {
-        root,
-        host,
-        outputPath,
-        appName: envConfig.APP_NAME || "Varie",
-        hashType: this._env.isHot ? "hash" : "contenthash",
-        plugins: {
-          aliases: {},
-          copy: {
-            patterns: [],
-          },
-          browserSync: {
-            host,
-            outputPath,
-            port: 3000,
-            proxy: "localhost:8080",
-          },
-          clean: {
-            excludeList: [],
-          },
-          defineEnvironmentVariables: {
-            variables: [],
-          },
+      root,
+      host,
+      outputPath,
+      appName: envConfig.APP_NAME || "Varie",
+      hashType: this._env.isHot ? "hash" : "contenthash",
+      plugins: {
+        aliases: {},
+        copy: {
+          patterns: [],
         },
-        webpack: {
-          aliases: [],
-          devServer: {
-            open: true,
-            proxies: [],
-          },
+        browserSync: {
+          host,
+          outputPath,
+          port: 3000,
+          proxy: "localhost:8080",
         },
-        vue: {
-          runtimeOnly: true,
+        clean: {
+          excludeList: [],
         },
-      };
+        defineEnvironmentVariables: {
+          variables: [],
+        },
+      },
+      webpack: {
+        aliases: [],
+        devServer: {
+          open: true,
+          proxies: [],
+        },
+      },
+      vue: {
+        runtimeOnly: true,
+      },
+    };
   }
 
   _setupEnv(mode = "development") {
@@ -225,7 +227,7 @@ module.exports = class VarieBundler {
   }
 
   _presets() {
-    // new loaders.Html(this);
+    new loaders.Html(this);
     new loaders.Javascript(this);
     new loaders.Typescript(this);
     new loaders.Vue(this, this._config.vue);
@@ -237,6 +239,7 @@ module.exports = class VarieBundler {
 
     new plugins.NamedChunks(this);
     new plugins.CaseSensitivePaths(this);
+    new plugins.Clean(this, this._config.plugins.clean);
 
     this._webpackChain
       .when(!this._env.isProduction, () => {

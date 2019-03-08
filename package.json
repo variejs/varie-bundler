@@ -62,5 +62,8 @@
   },
   "peerDependencies": {
     "vue-template-compiler": "^2.0.0"
+  },
+  "devDependencies": {
+    "webpack-manifest-plugin": "^2.0.4"
   }
 }
