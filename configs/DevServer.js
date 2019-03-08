@@ -6,6 +6,7 @@ module.exports = class DevServer extends Config {
       .noInfo(true)
       .overlay(true)
       .compress(true)
+      .host(this.options.host)
       .historyApiFallback(true)
       .contentBase(this.config.root)
       .headers({

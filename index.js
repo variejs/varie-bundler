@@ -205,6 +205,7 @@ module.exports = class VarieBundler {
       webpack: {
         aliases: [],
         devServer: {
+          host,
           open: true,
           proxies: [],
         },
