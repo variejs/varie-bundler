@@ -7,7 +7,7 @@ const webpackConfigs = require("./configs");
 const WebpackChain = require("webpack-chain");
 
 module.exports = class VarieBundler {
-  constructor(mode, bundleName = "client") {
+  constructor(mode, bundleName = "Client") {
     this._webpackChain = new WebpackChain();
     this._setupEnv(mode);
     this._setupConfig(bundleName, process.env.PWD);
@@ -269,7 +269,7 @@ module.exports = class VarieBundler {
   }
 
   _makeModernBundle() {
-    this._config.bundleName = "Modern";
+    this._config.bundleName = "ES Modules";
 
     let modern = this._bundle();
 
