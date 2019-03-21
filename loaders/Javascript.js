@@ -25,7 +25,7 @@ module.exports = class Javascript extends Loader {
           .options(
             this.generateCacheConfig(
               "js",
-              ["@babel/runtime-corejs2", "babel-loader", "core-js"],
+              ["@babel/runtime-corejs3", "babel-loader", "core-js"],
               ["babel.config.js", ".browserslistrc"],
             ),
           );
