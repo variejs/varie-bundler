@@ -19,13 +19,14 @@ module.exports = class VarieBundler {
     return this;
   }
 
-  aggressiveSplitting(minSize = 30000, maxSize = 50000) {
-    new plugins.AggressiveSplitting(this, {
-      minSize,
-      maxSize,
-    });
-    return this;
-  }
+  // https://github.com/jantimon/html-webpack-plugin/issues/889
+  // aggressiveSplitting(minSize = 30000, maxSize = 50000) {
+  //   new plugins.AggressiveSplitting(this, {
+  //     minSize,
+  //     maxSize,
+  //   });
+  //   return this;
+  // }
 
   // When building modern, we must first separate legacy into its own config
   // otherwise it would keep its reference
@@ -250,7 +251,6 @@ module.exports = class VarieBundler {
       })
       .when(this._env.isProduction, () => {
         new plugins.HashedModules(this);
-        new plugins.AggressiveSplitting(this);
       })
       .when(this._env.isAnalyzing, () => {
         new plugins.BundleAnalyzer(this);
