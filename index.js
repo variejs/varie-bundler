@@ -7,10 +7,10 @@ const webpackConfigs = require("./configs");
 const WebpackChain = require("webpack-chain");
 
 module.exports = class VarieBundler {
-  constructor(mode, bundleName = "client") {
+  constructor(mode, config = {}) {
     this._webpackChain = new WebpackChain();
     this._setupEnv(mode);
-    this._setupConfig(bundleName, process.env.PWD);
+    this._setupConfig(config, process.env.PWD);
     this._presets();
   }
 
@@ -60,11 +60,6 @@ module.exports = class VarieBundler {
 
   chainWebpack(callback) {
     callback(this._webpackChain, this._env);
-    return this;
-  }
-
-  config(config) {
-    this._config = Object.assign(this._config, config);
     return this;
   }
 
@@ -148,7 +143,7 @@ module.exports = class VarieBundler {
   _bundle() {
     this._webpackChain.when(!this._env.isProduction, () => {
       new plugins.WebpackBar(this, {
-        name: this._config.bundleName,
+        name: this._config.bundleName || "Client",
       });
     });
 
@@ -176,14 +171,13 @@ module.exports = class VarieBundler {
     process.exit(0);
   }
 
-  _setupConfig(bundleName, root) {
+  _setupConfig(config, root) {
     let envConfig = dotenv.config().parsed;
     let outputPath = path.join(root, "public");
     let host = envConfig.APP_HOST || "localhost";
-    this._config = {
+    this._config = Object.assign(config, {
       root,
       host,
-      bundleName,
       outputPath,
       appName: envConfig.APP_NAME || "Varie",
       hashType: this._env.isHot ? "hash" : "contenthash",
@@ -217,7 +211,7 @@ module.exports = class VarieBundler {
       vue: {
         runtimeOnly: true,
       },
-    };
+    });
   }
 
   _setupEnv(mode = "development") {
@@ -269,7 +263,7 @@ module.exports = class VarieBundler {
   }
 
   _makeModernBundle() {
-    this._config.bundleName = "Modern";
+    this._config.bundleName = "ES Modules";
 
     let modern = this._bundle();
 
