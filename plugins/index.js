@@ -2,6 +2,7 @@ const Copy = require("./Copy");
 const Clean = require("./Clean");
 const Errors = require("./Errors");
 const Preload = require("./Preload");
+const WebpackBar = require("./WebpackBar");
 const BrowserSync = require("./BrowserSync");
 const NamedChunks = require("./NamedChunks");
 const LaravelPlugin = require("./LaravelPlugin");
@@ -16,6 +17,7 @@ module.exports = {
   Clean,
   Errors,
   Preload,
+  WebpackBar,
   BrowserSync,
   NamedChunks,
   LaravelPlugin,

@@ -7,10 +7,10 @@ const webpackConfigs = require("./configs");
 const WebpackChain = require("webpack-chain");
 
 module.exports = class VarieBundler {
-  constructor(args, root) {
+  constructor(mode, bundleName = "client") {
     this._webpackChain = new WebpackChain();
-    this._setupEnv(args ? args.mode : "development");
-    this._setupConfig(root);
+    this._setupEnv(mode);
+    this._setupConfig(bundleName, process.env.PWD);
     this._presets();
   }
 
@@ -145,6 +145,12 @@ module.exports = class VarieBundler {
   }
 
   _bundle() {
+    this._webpackChain.when(!this._env.isProduction, () => {
+      new plugins.WebpackBar(this, {
+        name: this._config.bundleName,
+      });
+    });
+
     this._webpackChain.when(this._env.isHot, () => {
       new webpackConfigs.DevServer(this, this._config.webpack.devServer);
     });
@@ -169,13 +175,14 @@ module.exports = class VarieBundler {
     process.exit(0);
   }
 
-  _setupConfig(root) {
+  _setupConfig(bundleName, root) {
     let envConfig = dotenv.config().parsed;
     let outputPath = path.join(root, "public");
     let host = envConfig.APP_HOST || "localhost";
     this._config = {
       root,
       host,
+      bundleName,
       outputPath,
       appName: envConfig.APP_NAME || "Varie",
       hashType: this._env.isHot ? "hash" : "contenthash",
@@ -262,6 +269,8 @@ module.exports = class VarieBundler {
   }
 
   _makeModernBundle() {
+    this._config.bundleName = "Modern";
+
     let modern = this._bundle();
 
     new plugins.Preload(this);

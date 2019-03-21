@@ -24,7 +24,7 @@
     "@vue/preload-webpack-plugin": "^1.1.0",
     "autoprefixer": "^9.5.0",
     "babel-loader": "^8.0.5",
-    "babel-preset-varie-app": "^0.1.3",
+    "babel-preset-varie-app": "^0.1.4",
     "browser-sync": "^2.26.3",
     "browser-sync-webpack-plugin": "^2.2.2",
     "cache-loader": "^2.0.1",
@@ -58,6 +58,7 @@
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1",
     "webpack-manifest-plugin": "^2.0.4",
+    "webpackbar": "^3.1.5",
     "worker-loader": "^2.0.0"
   },
   "peerDependencies": {
