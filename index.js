@@ -175,43 +175,46 @@ module.exports = class VarieBundler {
     let envConfig = dotenv.config().parsed;
     let outputPath = path.join(root, "public");
     let host = envConfig.APP_HOST || "localhost";
-    this._config = Object.assign(config, {
-      root,
-      host,
-      outputPath,
-      appName: envConfig.APP_NAME || "Varie",
-      hashType: this._env.isHot ? "hash" : "contenthash",
-      plugins: {
-        aliases: {},
-        copy: {
-          patterns: [],
+    this._config = Object.assign(
+      {
+        root,
+        host,
+        outputPath,
+        appName: envConfig.APP_NAME || "Varie",
+        hashType: this._env.isHot ? "hash" : "contenthash",
+        plugins: {
+          aliases: {},
+          copy: {
+            patterns: [],
+          },
+          browserSync: {
+            host,
+            outputPath,
+            port: 3000,
+            proxy: "localhost:8080",
+          },
+          clean: {
+            excludeList: [],
+          },
+          defineEnvironmentVariables: {
+            variables: [],
+          },
         },
-        browserSync: {
-          host,
-          outputPath,
-          port: 3000,
-          proxy: "localhost:8080",
+        webpack: {
+          aliases: [],
+          entryFiles: [],
+          devServer: {
+            host,
+            open: true,
+            proxies: [],
+          },
         },
-        clean: {
-          excludeList: [],
-        },
-        defineEnvironmentVariables: {
-          variables: [],
+        vue: {
+          runtimeOnly: true,
         },
       },
-      webpack: {
-        aliases: [],
-        entryFiles: [],
-        devServer: {
-          host,
-          open: true,
-          proxies: [],
-        },
-      },
-      vue: {
-        runtimeOnly: true,
-      },
-    });
+      config,
+    );
   }
 
   _setupEnv(mode = "development") {
