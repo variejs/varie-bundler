@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "lib": ["es6"],
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "removeComments": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "types": ["node", "webpack"]
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
+}
