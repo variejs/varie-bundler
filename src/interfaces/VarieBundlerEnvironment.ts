@@ -7,4 +7,5 @@ export default interface VarieBundlerEnvironment {
   isHot: boolean;
   isModern: boolean;
   isAnalyzing: boolean;
+  isInspecting: boolean;
 }

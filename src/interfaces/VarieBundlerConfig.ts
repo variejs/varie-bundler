@@ -20,8 +20,8 @@ export default interface VarieBundlerConfig {
     defineEnvironmentVariables: DefineVariablePluginConfig;
   };
   webpack: {
-    aliases: Array<String>;
-    entryFiles: Array<String>;
+    aliases: Array<string>;
+    entryFiles: Array<string>;
     devServer: WebpackDevServerConfig;
   };
   vue: VueConfig;

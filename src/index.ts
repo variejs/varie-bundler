@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
 import * as path from "path";
-import * as util from "util";
+import webpack from "webpack";
 import plugins from "./plugins";
 import loaders from "./loaders";
-import webpack = require("webpack");
 import webpackConfigs from "./configs";
 import WebpackChain from "webpack-chain";
 import { HashTypes } from "./types/HashTypes";
@@ -13,9 +12,10 @@ import VarieBundlerEnvironment from "./interfaces/VarieBundlerEnvironment";
 import { BrowserSyncPluginConfig } from "./interfaces/plugin-config-interfaces/BrowserSyncPluginConfig";
 
 export default class VarieBundler {
-  private config: VarieBundlerConfig;
-  private env: VarieBundlerEnvironment;
-  private webpackChain = new WebpackChain();
+  public config: VarieBundlerConfig;
+  public env: VarieBundlerEnvironment;
+  public webpackChain = new WebpackChain();
+  public bundles: Array<webpack.Configuration> = [];
 
   constructor(
     mode: EnvironmentTypes = EnvironmentTypes.Development,
@@ -26,12 +26,14 @@ export default class VarieBundler {
     this.presets();
   }
 
-  public aliases(aliases: Array<String>): this {
+  public aliases(aliases: Array<string>): this {
     this.config.webpack.aliases = aliases;
     return this;
   }
 
-  // https://github.com/jantimon/html-webpack-plugin/issues/889
+  // TODO - https://github.com/jantimon/html-webpack-plugin/issues/889
+  // Waiting for next version of  html-webpack-plugin V4
+  // https://github.com/jantimon/html-webpack-plugin/releases
   // aggressiveSplitting(minSize = 30000, maxSize = 50000) {
   //   new plugins.AggressiveSplitting(this, {
   //     minSize,
@@ -40,26 +42,15 @@ export default class VarieBundler {
   //   return this;
   // }
 
-  // When building modern, we must first separate legacy into its own config
-  // otherwise it would keep its reference
-  public build(): Array<webpack.Configuration> | webpack.Configuration {
-    let legacy = <webpack.Configuration>this.bundle().toConfig();
-
-    // TODO - instead of build we should just inspect directly, it should make it a bit cleaner too
-    // if (this.argumentsHas("--inspect")) {
-    //   legacy = this.bundle().toString();
-    // }
-    //
+  public build(): Array<webpack.Configuration> {
+    this.addBundle(this.bundle());
     if (this.env.isModern) {
-      let modern = this.makeModernBundle();
-      // return this.argumentsHas("--inspect")
-      //   ? this.inspect(legacy, modern)
-      //   : [modern.toConfig(), legacy];
-      return [modern.toConfig(), legacy];
+      this.addBundle(this.makeModernBundle());
     }
-
-    return legacy;
-    // return this.argumentsHas("--inspect") ? this.inspect(legacy) : legacy;
+    if (this.env.isInspecting) {
+      process.exit();
+    }
+    return this.bundles;
   }
 
   public browserSync(options?: BrowserSyncPluginConfig): this {
@@ -75,8 +66,9 @@ export default class VarieBundler {
     return this;
   }
 
-  // TODO - how to type this
-  public chainWebpack(callback): this {
+  public chainWebpack(
+    callback: (webpackChain: WebpackChain, env: VarieBundlerEnvironment) => any,
+  ): this {
     callback(this.webpackChain, this.env);
     return this;
   }
@@ -89,7 +81,7 @@ export default class VarieBundler {
     return this;
   }
 
-  public dontClean(exclude: Array<String> | string): this {
+  public dontClean(exclude: Array<string> | string): this {
     if (Array.isArray(exclude)) {
       this.config.plugins.clean.excludeList.push(...exclude);
     } else {
@@ -117,8 +109,10 @@ export default class VarieBundler {
     return this;
   }
 
-  // TODO - type plugin
-  public plugin(Plugin, options): this {
+  public plugin<T>(
+    Plugin: { new (VarieBundler: VarieBundler, options: object): T },
+    options: object,
+  ): this {
     new Plugin(this, options);
     return this;
   }
@@ -152,6 +146,13 @@ export default class VarieBundler {
     return this;
   }
 
+  private addBundle(bundle: WebpackChain) {
+    if (this.env.isInspecting) {
+      this.inspect(bundle);
+    }
+    this.bundles.push(bundle.toConfig());
+  }
+
   private argumentsHas(argument: string): boolean {
     let commandLineArguments = process.argv;
     return commandLineArguments
@@ -162,7 +163,7 @@ export default class VarieBundler {
   private bundle(): WebpackChain {
     this.webpackChain.when(!this.env.isProduction, () => {
       new plugins.WebpackBar(this, {
-        name: this.config.bundleName || "Client",
+        name: this.config.bundleName,
       });
     });
 
@@ -177,17 +178,15 @@ export default class VarieBundler {
     );
 
     if (this.config.plugins.copy.patterns.length > 0) {
-      new plugins.Copy(this, this.config.plugins.copy.patterns);
+      new plugins.Copy(this, this.config.plugins.copy);
     }
 
     return this.webpackChain;
   }
 
-  private inspect(...bundles) {
-    bundles.forEach((bundle) => {
-      util.inspect(console.log(bundle.toString()), false, null, true);
-    });
-    process.exit(0);
+  private inspect(bundle: WebpackChain): void {
+    console.log(`\n${this.config.bundleName} Bundle\n`);
+    console.log(bundle.toString());
   }
 
   private setupConfig(config: VarieBundlerConfig, root: string): void {
@@ -199,6 +198,7 @@ export default class VarieBundler {
         root,
         host,
         outputPath,
+        bundleName: "Client",
         appName: envConfig.APP_NAME || "Varie",
         hashType: this.env.isHot ? HashTypes.Hash : HashTypes.ContentHash,
         plugins: {
@@ -242,6 +242,7 @@ export default class VarieBundler {
       isHot: this.argumentsHas("--hot"),
       isModern: this.argumentsHas("--modern"),
       isAnalyzing: this.argumentsHas("--analyze"),
+      isInspecting: this.argumentsHas("--inspect"),
       isProduction: mode === EnvironmentTypes.Production,
       isDevelopment: mode === EnvironmentTypes.Development,
     };

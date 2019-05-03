@@ -2,17 +2,19 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "es5",
     "lib": ["es6"],
     "declaration": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "removeComments": true,
     "outDir": "dist",
     "baseUrl": ".",
-    "types": ["node", "webpack"]
+    "types": ["node", "webpack"],
+    "noUnusedLocals": true,
+    "noImplicitReturns": true
   },
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["./src/**/*"]
 }

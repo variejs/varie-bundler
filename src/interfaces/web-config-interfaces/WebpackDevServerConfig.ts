@@ -1,6 +1,6 @@
 interface WebpackProxyConfig {
   target: string;
-  context: Array<String>;
+  context: Array<string>;
   changeOrigin: boolean;
 }
 

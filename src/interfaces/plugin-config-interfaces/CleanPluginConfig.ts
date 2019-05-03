@@ -1,3 +1,3 @@
 export interface CleanPluginConfig {
-  excludeList: Array<String>;
+  excludeList: Array<string>;
 }
