@@ -10,7 +10,7 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "removeComments": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "baseUrl": ".",
     "types": ["node", "webpack"],
     "noUnusedLocals": true,

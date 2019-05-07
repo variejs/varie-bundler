@@ -22,7 +22,7 @@ export default class VarieBundler {
     config?: VarieBundlerConfig,
   ) {
     this.setupEnv(mode);
-    this.setupConfig(config, process.env.PWD);
+    this.setupConfig(config, process.cwd());
     this.presets();
   }
 
@@ -324,3 +324,5 @@ export default class VarieBundler {
     });
   }
 }
+
+module.exports = exports["default"];
