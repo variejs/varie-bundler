@@ -30,9 +30,9 @@ export default class Vue extends Loader<VueConfig> {
         whitespace: "condense",
       });
 
-    let alias = "vue/dist/vue.runtime.esm.js";
-    if (!this.options.runtimeOnly) {
-      alias = "vue/dist/vue.esm.js";
+    let alias = "vue/dist/vue.esm.js";
+    if (this.options.runtimeOnly) {
+      alias = "vue/dist/vue.runtime.esm.js";
     }
 
     this.varieBundler.webpackChain.resolve.alias.set("vue$", alias);
