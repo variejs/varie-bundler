@@ -1,5 +1,5 @@
 import Plugin from "./Plugin";
-import CleanWebpackPlugin from "clean-webpack-plugin/dist/clean-webpack-plugin";
+import { CleanWebpackPlugin } from "clean-webpack-plugin/dist/clean-webpack-plugin";
 import { CleanPluginConfig } from "../interfaces/plugin-config-interfaces/CleanPluginConfig";
 
 export default class Clean extends Plugin<CleanPluginConfig> {

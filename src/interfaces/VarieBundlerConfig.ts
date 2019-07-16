@@ -19,6 +19,11 @@ export default interface VarieBundlerConfig {
     browserSync: BrowserSyncPluginConfig;
     defineEnvironmentVariables: DefineVariablePluginConfig;
   };
+  loaders: {
+    sassLoader: {
+      globalIncludes: Array<string>;
+    };
+  };
   webpack: {
     aliases: Array<string>;
     entryFiles: Array<string>;

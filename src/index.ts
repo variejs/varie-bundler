@@ -136,6 +136,28 @@ export default class VarieBundler {
     return this;
   }
 
+  public globalSassIncludes(filePaths) {
+    if (!Array.isArray(filePaths)) {
+      filePaths = [filePaths];
+    }
+    this.config.loaders.sassLoader.globalIncludes = this.config.loaders.sassLoader.globalIncludes.concat(
+      filePaths,
+    );
+
+    this.webpackChain.module
+      .rule("sass")
+      .use("sass-loader")
+      .tap((options) => {
+        options.data = this.config.loaders.sassLoader.globalIncludes
+          .map((_filePath) => {
+            return `@import "${_filePath}";`;
+          })
+          .join("\n");
+        return options;
+      });
+    return this;
+  }
+
   public varieConfig(variables: Array<any>): this {
     this.config.plugins.defineEnvironmentVariables.variables = variables;
     return this;
@@ -217,6 +239,11 @@ export default class VarieBundler {
           },
           defineEnvironmentVariables: {
             variables: [],
+          },
+        },
+        loaders: {
+          sassLoader: {
+            globalIncludes: [],
           },
         },
         webpack: {
