@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "description": "A webpack bundler for Varie",
   "main": "lib",
   "repository": {
@@ -20,15 +20,15 @@
     "watch": "tsc --watch"
   },
   "dependencies": {
-    "@babel/core": "^7.4.5",
-    "@types/webpack-env": "^1.13.9",
+    "@babel/core": "^7.5.4",
+    "@types/webpack-env": "^1.14.0",
     "@vue/preload-webpack-plugin": "^1.1.0",
-    "autoprefixer": "^9.6.0",
+    "autoprefixer": "^9.6.1",
     "babel-loader": "^8.0.6",
     "babel-preset-varie-app": "^0.2.1",
     "browser-sync": "^2.26.7",
     "browser-sync-webpack-plugin": "^2.2.2",
-    "cache-loader": "^4.0.0",
+    "cache-loader": "^4.0.1",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.3",
@@ -36,27 +36,27 @@
     "cssnano": "^4.1.10",
     "dotenv": "^8.0.0",
     "file-loader": "^4.0.0",
-    "fork-ts-checker-webpack-plugin": "^1.3.7",
+    "fork-ts-checker-webpack-plugin": "^1.4.3",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^5.0.0",
-    "mini-css-extract-plugin": "^0.7.0",
+    "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.12.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
     "resolve-url-loader": "^3.1.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.3.0",
     "thread-loader": "^2.1.2",
-    "ts-loader": "^6.0.3",
-    "tslint": "^5.17.0",
-    "typescript": "^3.5.2",
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3",
     "vue-loader": "^15.6.4",
-    "webpack": "^4.34.0",
+    "webpack": "^4.36.1",
     "webpack-chain": "^6.0.0",
-    "webpack-cli": "^3.3.4",
+    "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2",
     "webpack-manifest-plugin": "^2.0.4",
     "webpackbar": "^3.2.0",
@@ -66,7 +66,7 @@
     "vue-template-compiler": "^2.0.0"
   },
   "devDependencies": {
-    "@types/node": "^10.14.9",
-    "@types/webpack": "^4.4.32"
+    "@types/node": "^10.14.12",
+    "@types/webpack": "^4.4.35"
   }
 }

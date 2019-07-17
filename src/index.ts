@@ -75,18 +75,22 @@ export default class VarieBundler {
 
   public copy(from: string, to: string = ""): this {
     this.config.plugins.copy.patterns.push({
-      from: from,
+      from: path.join(this.config.root, from),
       to: path.join(this.config.outputPath, to),
     });
     return this;
   }
 
   public dontClean(exclude: Array<string> | string): this {
-    if (Array.isArray(exclude)) {
-      this.config.plugins.clean.excludeList.push(...exclude);
-    } else {
-      this.config.plugins.clean.excludeList.push(exclude);
+    if (!Array.isArray(exclude)) {
+      exclude = [exclude];
     }
+
+    exclude.forEach((filePath) => {
+      this.config.plugins.clean.excludeList.push(
+        path.join(this.config.root, filePath),
+      );
+    });
 
     new plugins.Clean(this, this.config.plugins.clean);
 
@@ -150,7 +154,9 @@ export default class VarieBundler {
       .tap((options) => {
         options.data = this.config.loaders.sassLoader.globalIncludes
           .map((_filePath) => {
-            return `@import "${_filePath}";`;
+            return `@import "${path
+              .join(this.config.root, _filePath)
+              .replace(/\\/g, "/")}";`;
           })
           .join("\n");
         return options;
