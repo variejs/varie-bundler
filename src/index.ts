@@ -88,7 +88,7 @@ export default class VarieBundler {
 
     exclude.forEach((filePath) => {
       this.config.plugins.clean.excludeList.push(
-        path.join(this.config.root, filePath),
+        path.join(this.config.outputPath, filePath),
       );
     });
 
