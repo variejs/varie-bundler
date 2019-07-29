@@ -86,10 +86,8 @@ export default class VarieBundler {
       exclude = [exclude];
     }
 
-    exclude.forEach((filePath) => {
-      this.config.plugins.clean.excludeList.push(
-        path.join(this.config.root, filePath),
-      );
+    exclude.forEach((pattern) => {
+      this.config.plugins.clean.excludeList.push(pattern);
     });
 
     new plugins.Clean(this, this.config.plugins.clean);
@@ -219,8 +217,9 @@ export default class VarieBundler {
 
   private setupConfig(config: VarieBundlerConfig, root: string): void {
     let envConfig = dotenv.config().parsed;
-    let outputPath = path.join(root, envConfig.OUTPUT_PATH || "public");
     let host = envConfig.APP_HOST || "localhost";
+    let outputPath = path.join(root, envConfig.OUTPUT_PATH || "public");
+
     this.config = Object.assign(
       {
         root,
