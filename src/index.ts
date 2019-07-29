@@ -219,7 +219,7 @@ export default class VarieBundler {
 
   private setupConfig(config: VarieBundlerConfig, root: string): void {
     let envConfig = dotenv.config().parsed;
-    let outputPath = path.join(root, "public");
+    let outputPath = path.join(root, envConfig.OUTPUT_PATH || "public");
     let host = envConfig.APP_HOST || "localhost";
     this.config = Object.assign(
       {
