@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.10.10",
+  "version": "0.10.12",
   "description": "A webpack bundler for Varie",
   "main": "lib",
   "repository": {
