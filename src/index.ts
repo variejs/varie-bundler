@@ -1,3 +1,4 @@
+import fs from "fs";
 import dotenv from "dotenv";
 import * as path from "path";
 import webpack from "webpack";
@@ -193,26 +194,30 @@ export default class VarieBundler {
       });
     });
 
-    this.webpackChain.when(this.env.isHot, () => {
-      new webpackConfigs.DevServer(this, this.config.webpack.devServer);
-    });
-
     new webpackConfigs.Aliases(this, this.config.webpack.aliases);
+
     new plugins.DefineEnvironmentVariables(
       this,
       this.config.plugins.defineEnvironmentVariables,
     );
 
-    if (this.config.plugins.copy.patterns.length > 0) {
-      new plugins.Copy(this, this.config.plugins.copy);
+    if (!this.config.modern) {
+      if (this.config.plugins.copy.patterns.length > 0) {
+        new plugins.Copy(this, this.config.plugins.copy);
+      }
+
+      this.webpackChain.when(this.env.isHot, () => {
+        new webpackConfigs.DevServer(this, this.config.webpack.devServer);
+      });
     }
 
     return this.webpackChain;
   }
 
   private inspect(bundle: WebpackChain): void {
-    console.log(`\n${this.config.bundleName} Bundle\n`);
-    console.log(bundle.toString());
+    let logName = `${this.config.bundleName}-bundle-webpack-output.json`;
+    fs.writeFileSync(logName, bundle.toString());
+    console.log(`\n Wrote : ${this.config.bundleName} Bundle to ${logName}\n`);
   }
 
   private setupConfig(config: VarieBundlerConfig, root: string): void {
@@ -318,8 +323,9 @@ export default class VarieBundler {
   }
 
   private makeModernBundle(): WebpackChain {
-    this.config.bundleName = "ES Modules";
+    this.config.bundleName = `${this.config.bundleName} - Modern`;
 
+    this.config.modern = true;
     let modern = this.bundle();
 
     new plugins.Preload(this);
@@ -339,8 +345,6 @@ export default class VarieBundler {
     modern.output
       .filename(`js/[name]-[${this.config.hashType}].js`)
       .chunkFilename(`js/[name]-[${this.config.hashType}].js`);
-
-    modern.plugins.delete("clean");
 
     return modern;
   }

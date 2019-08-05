@@ -7,7 +7,7 @@ export default class WebWorkers extends Loader<undefined> {
     );
 
     // TODO - https://github.com/webpack-contrib/worker-loader/issues/177
-    // We have to wait till this issue goes away to turn this back on
+    // Turn thread loaders off
     this.varieBundler.webpackChain.module
       .rule("js")
       .uses.delete("thread-loader");
