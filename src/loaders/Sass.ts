@@ -64,7 +64,7 @@ export default class Sass extends Loader<{
       .use("css-loader")
       .loader("css-loader")
       .options({
-        sourceMap: true,
+        sourceMap: !this.varieBundler.env.isProduction,
         importLoaders: 4, // postcss-loader , resolve-url-loader, sass-loader, vue-loader
       })
       .end()

@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "0.10.12",
+  "version": "0.10.13",
   "description": "A webpack bundler for Varie",
   "main": "lib",
   "repository": {
@@ -18,7 +18,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "peer": "npm install --no-save vue vue-template-compiler"
+    "installPeers": "npm install --no-save vue vue-template-compiler"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
