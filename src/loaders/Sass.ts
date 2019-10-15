@@ -1,6 +1,7 @@
 import cssnano from "cssnano";
 import Loader from "./Loader";
 import useIf from "../helpers/useIf";
+import { OneOf } from "webpack-chain";
 import autoprefixer from "autoprefixer";
 import { HashTypes } from "../types/HashTypes";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
@@ -10,62 +11,105 @@ export default class Sass extends Loader<{
   hashType: HashTypes;
 }> {
   public register() {
-    this.varieBundler.webpackChain.module
-      .rule("sass")
-      .test(/\.s[ac]ss|\.css/)
-      .when(!this.varieBundler.env.isProduction, (config) => {
+    this.createCSSRule("css", /\.css$/);
+    this.createCSSRule("sass", /\.s[ac]ss$/, "sass-loader", {
+      sourceMap: true,
+      implementation: require("node-sass"),
+    });
+
+    if (!this.varieBundler.env.isHot) {
+      this.varieBundler.webpackChain
+        .plugin("mini-extract")
+        .use(MiniCssExtractPlugin, [
+          {
+            filename: `css/[name]-[${this.options.hashType}].css`,
+            chunkFilename: `css/[name]-[${this.options.hashType}].css`,
+          },
+        ]);
+    }
+    if (this.varieBundler.env.isProduction) {
+      this.varieBundler.webpackChain
+        .plugin("optimize-assets")
+        .use(OptimizeCSSAssetsPlugin, [
+          {
+            canPrint: false,
+            cssProcessorOptions: {
+              map: {
+                inline: false,
+                annotation: true,
+              },
+            },
+          },
+        ]);
+    }
+  }
+
+  private createCSSRule(
+    lang: string,
+    test: RegExp,
+    loader?,
+    loaderOptions = {},
+  ) {
+    let baseRule = this.varieBundler.webpackChain.module.rule(lang).test(test);
+
+    this.applyLoaders(
+      `${lang}-vue`,
+      baseRule.oneOf("vue").resourceQuery(/\?vue/),
+      loader,
+      loaderOptions,
+    );
+
+    this.applyLoaders(
+      `${lang}-normal`,
+      baseRule.oneOf("normal"),
+      loader,
+      loaderOptions,
+    );
+  }
+
+  private applyLoaders(
+    lang: string,
+    oneOf: OneOf,
+    loader?,
+    loaderOptions = {},
+  ) {
+    oneOf
+      .when(this.varieBundler.config.cache, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")
           .options(
             this.generateCacheConfig(
-              "sass-loader",
-              ["sass-loader", "style-loader", "postcss-loader"],
+              `${lang}-css-cache`,
+              ["sass-loader", "vue-loader", "postcss-loader"],
               [".browserslistrc"],
             ),
           )
           .end();
       })
-      .use("style-loader")
-      .options({
-        singleton: true,
-        hmr: this.varieBundler.env.isHot,
-      })
-      .loader("style-loader")
-      .end()
-      .when(!this.varieBundler.env.isHot, (config) => {
-        config
-          .use("extract")
-          .loader(MiniCssExtractPlugin.loader)
-          .end();
-
-        this.varieBundler.webpackChain
-          .plugin("optimize-assets")
-          .use(OptimizeCSSAssetsPlugin, [
-            {
-              cssProcessorOptions: {
-                map: {
-                  inline: false,
-                  annotation: true,
-                },
-              },
-              canPrint: !this.varieBundler.env.isProduction,
-            },
-          ])
-          .end()
-          .plugin("mini-extract")
-          .use(MiniCssExtractPlugin, [
-            {
-              filename: `css/[name]-[${this.options.hashType}].css`,
-              chunkFilename: `css/[name]-[${this.options.hashType}].css`,
-            },
-          ]);
-      })
+      .when(
+        !this.varieBundler.env.isHot,
+        (config) => {
+          config
+            .use("mini-extract-loader")
+            .loader(MiniCssExtractPlugin.loader)
+            .end();
+        },
+        (config) => {
+          config
+            .use("vue-style-loader")
+            .loader("vue-style-loader")
+            .options({
+              sourceMap: true,
+            })
+            .end();
+        },
+      )
       .use("css-loader")
       .loader("css-loader")
       .options({
         sourceMap: !this.varieBundler.env.isProduction,
-        importLoaders: 4, // postcss-loader , resolve-url-loader, sass-loader, vue-loader
+        importLoaders: loader ? 3 : 2, // postcss-loader (1), resolve-url-loader (2), *-loader (3)
       })
       .end()
       .use("postcss-loader")
@@ -74,22 +118,23 @@ export default class Sass extends Loader<{
         sourceMap: true,
         ident: "postcss",
         plugins: [
-          autoprefixer,
+          autoprefixer({ grid: true }),
           ...useIf(!this.varieBundler.env.isHot, [cssnano]),
         ],
       })
       .end()
-      .use("resolve-urls")
+      .use("resolve-url-loader")
       .loader("resolve-url-loader")
       .options({
         sourceMap: true,
       })
-      .end()
-      .use("sass-loader")
-      .loader("sass-loader")
-      .options({
-        sourceMap: true,
-        implementation: require("node-sass"),
-      });
+      .end();
+
+    if (loader) {
+      oneOf
+        .use(loader)
+        .loader(loader)
+        .options(loaderOptions);
+    }
   }
 }
