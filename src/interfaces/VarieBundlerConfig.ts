@@ -15,6 +15,7 @@ export default interface VarieBundlerConfig {
   outputPath: string;
   hashType: HashTypes;
   bundleName?: string;
+  aggressiveVendorSplitting: boolean;
   plugins: {
     copy: CopyPluginConfig;
     clean: CleanPluginConfig;

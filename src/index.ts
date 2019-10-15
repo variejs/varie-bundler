@@ -32,16 +32,11 @@ export default class VarieBundler {
     return this;
   }
 
-  // TODO - https://github.com/jantimon/html-webpack-plugin/issues/889
-  // Waiting for next version of  html-webpack-plugin V4
-  // https://github.com/jantimon/html-webpack-plugin/releases
-  // aggressiveSplitting(minSize = 30000, maxSize = 50000) {
-  //   new plugins.AggressiveSplitting(this, {
-  //     minSize,
-  //     maxSize,
-  //   });
-  //   return this;
-  // }
+  aggressiveVendorSplitting() {
+    this.config.aggressiveVendorSplitting = true;
+    new webpackConfigs.Optimization(this);
+    return this;
+  }
 
   public build(): Array<webpack.Configuration> {
     this.addBundle(this.bundle());
@@ -231,6 +226,7 @@ export default class VarieBundler {
         host,
         outputPath,
         bundleName: "Client",
+        aggressiveVendorSplitting: false,
         appName: envConfig.APP_NAME || "Varie",
         hashType: this.env.isHot ? HashTypes.Hash : HashTypes.ContentHash,
         cache: this.env.isHot && !this.argumentsHas("--disable-cache"),
