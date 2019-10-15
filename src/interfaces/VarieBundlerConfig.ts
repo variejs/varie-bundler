@@ -9,6 +9,7 @@ import { DefineVariablePluginConfig } from "./plugin-config-interfaces/DefineVar
 export default interface VarieBundlerConfig {
   root: string;
   host: string;
+  cache: boolean;
   modern: boolean;
   appName: string;
   outputPath: string;

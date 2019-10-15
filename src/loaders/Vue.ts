@@ -13,7 +13,7 @@ export default class Vue extends Loader<VueConfig> {
       .noParse(/^(vue|vue-router|vuex)$/)
       .rule("vue")
       .test(/\.vue$/)
-      .when(!this.varieBundler.env.isProduction, (config) => {
+      .when(this.varieBundler.config.cache, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")
