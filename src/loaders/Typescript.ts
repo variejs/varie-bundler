@@ -10,7 +10,7 @@ export default class Typescript extends Loader<{
     this.varieBundler.webpackChain.module
       .rule("typescript")
       .test(/\.tsx?$/)
-      .when(!this.varieBundler.env.isProduction, (config) => {
+      .when(this.varieBundler.config.cache, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")

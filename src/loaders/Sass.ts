@@ -13,7 +13,7 @@ export default class Sass extends Loader<{
     this.varieBundler.webpackChain.module
       .rule("sass")
       .test(/\.s[ac]ss|\.css/)
-      .when(!this.varieBundler.env.isProduction, (config) => {
+      .when(this.varieBundler.config.cache, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")

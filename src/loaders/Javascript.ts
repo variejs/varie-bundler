@@ -21,7 +21,7 @@ export default class Javascript extends Loader<{
       .use("thread-loader")
       .loader("thread-loader")
       .end()
-      .when(!this.varieBundler.env.isProduction, (config) => {
+      .when(this.varieBundler.config.cache, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")

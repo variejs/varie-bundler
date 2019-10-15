@@ -233,6 +233,7 @@ export default class VarieBundler {
         bundleName: "Client",
         appName: envConfig.APP_NAME || "Varie",
         hashType: this.env.isHot ? HashTypes.Hash : HashTypes.ContentHash,
+        cache: this.env.isHot && !this.argumentsHas("--disable-cache"),
         plugins: {
           aliases: {},
           copy: {
