@@ -107,6 +107,12 @@ export default class VarieBundler {
     return this;
   }
 
+  public eslint() {
+    new loaders.Eslint(this);
+    return this;
+  }
+
+
   public plugin<T>(
     Plugin: { new (VarieBundler: VarieBundler, options: object): T },
     options: object,
