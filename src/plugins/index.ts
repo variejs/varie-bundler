@@ -2,6 +2,7 @@ import Copy from "./Copy";
 import Clean from "./Clean";
 import Errors from "./Errors";
 import Preload from "./Preload";
+import PurgeCss from "./PurgeCss";
 import WebpackBar from "./WebpackBar";
 import BrowserSync from "./BrowserSync";
 import NamedChunks from "./NamedChunks";
@@ -17,6 +18,7 @@ export default {
   Clean,
   Errors,
   Preload,
+  PurgeCss,
   WebpackBar,
   BrowserSync,
   NamedChunks,

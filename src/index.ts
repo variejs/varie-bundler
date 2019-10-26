@@ -134,6 +134,19 @@ export default class VarieBundler {
     return this;
   }
 
+  public purgeCss(
+    paths: Array<string>,
+    config: {
+      whitelistSelectors: Array<string>;
+      whiteListPatterns: Array<RegExp>;
+      whitelistPatternsChildren: Array<RegExp>;
+    },
+  ): this {
+    this.config.plugins.purgeCss = Object.assign({}, { paths }, config);
+    new plugins.PurgeCss(this, this.config.plugins.purgeCss);
+    return this;
+  }
+
   public globalSassIncludes(filePaths) {
     if (!Array.isArray(filePaths)) {
       filePaths = [filePaths];
