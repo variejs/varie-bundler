@@ -1,14 +1,25 @@
 import Config from "./Config";
+import portFinderSync from "portfinder-sync";
 import { WebpackDevServerConfig } from "../interfaces/web-config-interfaces/WebpackDevServerConfig";
 
 export default class DevServer<T> extends Config<WebpackDevServerConfig> {
-  public register() {
+  public async register() {
+    let port = portFinderSync.getPort(
+      this.varieBundler.config.webpack.devServer.port,
+    );
     this.varieBundler.webpackChain.devServer
       .quiet(true)
       .noInfo(true)
       .overlay(true)
       .compress(true)
-      .host(this.options.host)
+      .public(
+        `${
+          this.options.host === "0.0.0.0" ? "localhost" : this.options.host
+          // @ts-ignore
+        }:${port}`,
+      )
+      .port(port)
+      .host("0.0.0.0")
       .historyApiFallback(true)
       .contentBase(this.varieBundler.config.root)
       .headers({

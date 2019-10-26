@@ -11,7 +11,7 @@ export default class BrowserSync extends Plugin<BrowserSyncPluginConfig> {
           port: this.options.port,
           host: this.options.host,
           proxy: this.options.proxy,
-          open: this.options.host ? "external" : "local",
+          open: this.options.host === "0.0.0.0" ? "local" : "external",
           files: [
             this.options.outputPath + "/**/*.js",
             this.options.outputPath + "**/*.css",

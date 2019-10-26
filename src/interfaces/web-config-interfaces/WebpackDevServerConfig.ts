@@ -7,5 +7,6 @@ interface WebpackProxyConfig {
 export interface WebpackDevServerConfig {
   host: string;
   open: boolean;
+  port: number;
   proxies: Array<WebpackProxyConfig>;
 }

@@ -46,6 +46,7 @@
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.13.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "portfinder-sync": "0.0.2",
     "postcss-loader": "^3.0.0",
     "purgecss-webpack-plugin": "^1.6.0",
     "resolve-url-loader": "^3.1.0",

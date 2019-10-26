@@ -1,11 +1,11 @@
 import VueConfig from "./VueConfig";
 import { HashTypes } from "../types/HashTypes";
+import { PurgeCssConfig } from "./plugin-config-interfaces/PurgeCssConfig";
 import { CopyPluginConfig } from "./plugin-config-interfaces/CopyPluginConfig";
 import { CleanPluginConfig } from "./plugin-config-interfaces/CleanPluginConfig";
 import { WebpackDevServerConfig } from "./web-config-interfaces/WebpackDevServerConfig";
 import { BrowserSyncPluginConfig } from "./plugin-config-interfaces/BrowserSyncPluginConfig";
 import { DefineVariablePluginConfig } from "./plugin-config-interfaces/DefineVariablePluginConfig";
-import { PurgeCssConfig } from "./plugin-config-interfaces/PurgeCssConfig";
 
 export default interface VarieBundlerConfig {
   root: string;
