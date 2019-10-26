@@ -160,7 +160,9 @@ export default class VarieBundler {
       .use("sass-loader")
       .tap((options) => {
         options.prependData = (loaderContext) => {
+          console.info(loaderContext.resourcePath, '')
           if (rx.test(loaderContext.resourcePath)) {
+
             return this.config.loaders.sassLoader.globalIncludes
               .map((_filePath) => {
                 return `@import "${path

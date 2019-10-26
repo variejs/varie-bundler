@@ -4,11 +4,13 @@ export default class Images extends Loader<undefined> {
   public register() {
     this.varieBundler.webpackChain.module
       .rule("images")
-      .test(/\.(png|jpe?g|gif)$/)
-      .use("file")
+      .exclude.add(/fonts/)
+      .end()
+      .test(/\.(png|jpe?g|gif|svg)$/)
+      .use("file-loader")
       .loader("file-loader")
       .options({
-        name: "img/[name].[ext]?[hash:8]",
+        name: "images/[name].[ext]?[hash:8]",
       })
       .end()
       .use("image-webpack-loader")
