@@ -2,7 +2,7 @@ import Vue from "./Vue";
 import Html from "./Html";
 import Sass from "./Sass";
 import Fonts from "./Fonts";
-import EsLint from "./Eslint";
+import Eslint from "./Eslint";
 import Images from "./Images";
 import Typescript from "./Typescript";
 import Javascript from "./Javascript";
