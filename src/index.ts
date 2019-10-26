@@ -230,7 +230,7 @@ export default class VarieBundler {
 
   private setupConfig(config: VarieBundlerConfig, root: string): void {
     let envConfig = dotenv.config().parsed;
-    let host = envConfig.APP_HOST || "localhost";
+    let host = envConfig.APP_HOST || "0.0.0.0";
     let outputPath = path.join(root, envConfig.OUTPUT_PATH || "public");
 
     this.config = Object.assign(
@@ -252,7 +252,7 @@ export default class VarieBundler {
             host,
             outputPath,
             port: 3000,
-            proxy: "localhost:8080",
+            proxy: `${host}:8080`,
           },
           clean: {
             excludeList: [],
@@ -273,6 +273,7 @@ export default class VarieBundler {
             host,
             open: true,
             proxies: [],
+            port: 8080,
           },
         },
         vue: {
