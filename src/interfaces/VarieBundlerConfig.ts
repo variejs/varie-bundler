@@ -5,6 +5,7 @@ import { CleanPluginConfig } from "./plugin-config-interfaces/CleanPluginConfig"
 import { WebpackDevServerConfig } from "./web-config-interfaces/WebpackDevServerConfig";
 import { BrowserSyncPluginConfig } from "./plugin-config-interfaces/BrowserSyncPluginConfig";
 import { DefineVariablePluginConfig } from "./plugin-config-interfaces/DefineVariablePluginConfig";
+import { PurgeCssConfig } from "./plugin-config-interfaces/PurgeCssConfig";
 
 export default interface VarieBundlerConfig {
   root: string;
@@ -19,6 +20,7 @@ export default interface VarieBundlerConfig {
   plugins: {
     copy: CopyPluginConfig;
     clean: CleanPluginConfig;
+    purgeCss: PurgeCssConfig;
     browserSync: BrowserSyncPluginConfig;
     defineEnvironmentVariables: DefineVariablePluginConfig;
   };
