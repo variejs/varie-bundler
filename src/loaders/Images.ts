@@ -22,7 +22,7 @@ export default class Images extends Loader<undefined> {
           optimizationLevel: 3,
         },
         pngquant: {
-          quality: "75-90",
+          quality: [0.75, 0.9],
           speed: 4,
         },
         gifsicle: {

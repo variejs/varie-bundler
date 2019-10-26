@@ -147,25 +147,30 @@ export default class VarieBundler {
     return this;
   }
 
-  public globalSassIncludes(filePaths) {
+  public globalSassIncludes(filePaths, rx: RegExp = /\.vue$/) {
     if (!Array.isArray(filePaths)) {
       filePaths = [filePaths];
     }
     this.config.loaders.sassLoader.globalIncludes = this.config.loaders.sassLoader.globalIncludes.concat(
       filePaths,
     );
-
     this.webpackChain.module
       .rule("sass")
+      .oneOf("vue")
       .use("sass-loader")
       .tap((options) => {
-        options.data = this.config.loaders.sassLoader.globalIncludes
-          .map((_filePath) => {
-            return `@import "${path
-              .join(this.config.root, _filePath)
-              .replace(/\\/g, "/")}";`;
-          })
-          .join("\n");
+        options.prependData = (loaderContext) => {
+          if (rx.test(loaderContext.resourcePath)) {
+            return this.config.loaders.sassLoader.globalIncludes
+              .map((_filePath) => {
+                return `@import "${path
+                  .join(this.config.root, _filePath)
+                  .replace(/\\/g, "/")}";`;
+              })
+              .join("\n");
+          }
+          return "";
+        };
         return options;
       });
     return this;
