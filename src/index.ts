@@ -109,7 +109,9 @@ export default class VarieBundler {
   }
 
   public eslint() {
-    new loaders.Eslint(this);
+    if(!this.env.isProduction) {
+      new loaders.Eslint(this);
+    }
     return this;
   }
 
