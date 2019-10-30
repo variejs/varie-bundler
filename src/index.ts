@@ -4,6 +4,7 @@ import * as path from "path";
 import webpack from "webpack";
 import plugins from "./plugins";
 import loaders from "./loaders";
+import deepMerge from 'deepmerge'
 import webpackConfigs from "./configs";
 import WebpackChain from "webpack-chain";
 import { HashTypes } from "./types/HashTypes";
@@ -246,7 +247,7 @@ export default class VarieBundler {
     let host = envConfig.APP_HOST || "0.0.0.0";
     let outputPath = path.join(root, envConfig.OUTPUT_PATH || "public");
 
-    this.config = Object.assign(
+    this.config = deepMerge(
       {
         root,
         host,
