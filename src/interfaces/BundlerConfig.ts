@@ -7,7 +7,7 @@ import { WebpackDevServerConfig } from "./web-config-interfaces/WebpackDevServer
 import { BrowserSyncPluginConfig } from "./plugin-config-interfaces/BrowserSyncPluginConfig";
 import { DefineVariablePluginConfig } from "./plugin-config-interfaces/DefineVariablePluginConfig";
 
-export default interface VarieBundlerConfig {
+export default interface BundlerConfig {
   root: string;
   host: string;
   cache: boolean;
@@ -20,7 +20,7 @@ export default interface VarieBundlerConfig {
   plugins: {
     copy: CopyPluginConfig;
     clean: CleanPluginConfig;
-    purgeCss: PurgeCssConfig;
+    purgeCss?: PurgeCssConfig;
     browserSync: BrowserSyncPluginConfig;
     defineEnvironmentVariables: DefineVariablePluginConfig;
   };
@@ -30,9 +30,9 @@ export default interface VarieBundlerConfig {
     };
   };
   webpack: {
-    aliases: Array<string>;
     entryFiles: Array<string>;
     devServer: WebpackDevServerConfig;
+    aliases: { [key: string]: string };
   };
   vue: VueConfig;
 }

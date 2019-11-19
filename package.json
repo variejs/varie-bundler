@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "1.0.1",
+  "version": "2.0.4",
   "description": "A webpack bundler for Varie",
   "main": "lib",
   "repository": {
@@ -13,7 +13,8 @@
   },
   "homepage": "https://varie.io/docs/latest/varie-bundler",
   "files": [
-    "lib"
+    "lib",
+    "webpack-tsconfig.json"
   ],
   "scripts": {
     "build": "tsc",
@@ -24,7 +25,7 @@
     "@babel/core": "^7.7.2",
     "@types/webpack-env": "^1.14.1",
     "@vue/preload-webpack-plugin": "^1.1.1",
-    "autoprefixer": "^9.7.1",
+    "autoprefixer": "^9.7.2",
     "babel-loader": "^8.0.6",
     "babel-preset-varie-app": "^0.2.1",
     "browser-sync": "^2.26.7",
@@ -33,6 +34,7 @@
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.5",
+    "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
     "cssnano": "^4.1.10",
     "deepmerge": "^4.2.2",
@@ -55,7 +57,10 @@
     "sass-loader": "^8.0.0",
     "terser-webpack-plugin": "^2.2.1",
     "thread-loader": "^2.1.3",
+    "ts-essentials": "^3.0.4",
     "ts-loader": "^6.2.1",
+    "ts-node": "^8.5.2",
+    "tsconfig-paths": "^3.9.0",
     "tslint": "^5.20.1",
     "typescript": "^3.7.2",
     "vue-loader": "^15.7.2",
@@ -73,6 +78,6 @@
   },
   "devDependencies": {
     "@types/node": "^10.17.5",
-    "@types/webpack": "^4.39.8"
+    "@types/webpack": "^4.41.0"
   }
 }

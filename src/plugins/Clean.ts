@@ -11,8 +11,8 @@ export default class Clean extends Plugin<CleanPluginConfig> {
       cleanPatterns.push(`!${pattern}/**/*`);
     });
 
-    if (!this.varieBundler.env.isModern) {
-      this.varieBundler.webpackChain.plugin("clean").use(CleanWebpackPlugin, [
+    if (!this.bundler.env.isModern) {
+      this.bundler.webpackChain.plugin("clean").use(CleanWebpackPlugin, [
         {
           cleanOnceBeforeBuildPatterns: cleanPatterns,
         },

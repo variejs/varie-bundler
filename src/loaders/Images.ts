@@ -2,7 +2,7 @@ import Loader from "./Loader";
 
 export default class Images extends Loader<undefined> {
   public register() {
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("images")
       .exclude.add(/fonts/)
       .end()
@@ -30,7 +30,7 @@ export default class Images extends Loader<undefined> {
         gifsicle: {
           interlaced: true,
         },
-        disable: !this.varieBundler.env.isProduction,
+        disable: !this.bundler.env.isProduction,
       });
   }
 }

@@ -2,7 +2,7 @@ import Config from "./Config";
 
 export default class Stats<T> extends Config<undefined> {
   public register() {
-    this.varieBundler.webpackChain.stats({
+    this.bundler.webpackChain.stats({
       hash: false,
       chunks: false,
       modules: false,

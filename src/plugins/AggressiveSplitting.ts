@@ -6,7 +6,7 @@ export default class AggressiveSplitting extends Plugin<{
   maxSize: Number;
 }> {
   public register() {
-    this.varieBundler.webpackChain
+    this.bundler.webpackChain
       .plugin("agressive-splitting")
       .use(webpack.optimize.AggressiveSplittingPlugin, [
         {

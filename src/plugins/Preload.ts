@@ -2,7 +2,7 @@ import Plugin from "./Plugin";
 import PreloadPlugin from "@vue/preload-webpack-plugin";
 export default class Preload extends Plugin<undefined> {
   public register() {
-    this.varieBundler.webpackChain
+    this.bundler.webpackChain
       .plugin("preload")
       .use(PreloadPlugin, [
         {
@@ -13,7 +13,7 @@ export default class Preload extends Plugin<undefined> {
       ])
       .before("multi-build");
 
-    this.varieBundler.webpackChain
+    this.bundler.webpackChain
       .plugin("prefetch")
       .use(PreloadPlugin, [
         {

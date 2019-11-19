@@ -17,7 +17,7 @@ export default class PurgeCss extends Plugin<PurgeCssConfig> {
       this.addToScannedDirectories(directory);
     });
 
-    this.varieBundler.webpackChain.plugin("purge-css").use(PurgeCssPlugin, [
+    this.bundler.webpackChain.plugin("purge-css").use(PurgeCssPlugin, [
       {
         rejected: true,
         paths: glob.sync(this.scanDirectories, { nodir: true }),
@@ -32,7 +32,7 @@ export default class PurgeCss extends Plugin<PurgeCssConfig> {
     FILE_TYPES.forEach((type) => {
       this.scanDirectories.push(
         path.join(
-          this.varieBundler.config.root,
+          this.bundler.config.root,
           `${scanPath.replace(/\/+$/, "")}/**/*.${type}`,
         ),
       );

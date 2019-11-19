@@ -6,7 +6,7 @@ export default class Javascript extends Loader<{
   entryFiles: Array<string>;
 }> {
   public register() {
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("js")
       .exclude.add((filepath) => {
         // always transpile js in vue files
@@ -21,7 +21,7 @@ export default class Javascript extends Loader<{
       .use("thread-loader")
       .loader("thread-loader")
       .end()
-      .when(this.varieBundler.config.cache, (config) => {
+      .when(this.bundler.config.cache, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")

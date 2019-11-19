@@ -1,12 +1,12 @@
-import VarieBundler from "../index";
+import Bundler from "../interfaces/Bundler";
 
 export default abstract class Config<T> {
   protected options: T;
-  protected varieBundler: VarieBundler;
+  protected bundler: Bundler;
 
-  constructor(varieBundler: VarieBundler, options?: T) {
+  constructor(bundler: Bundler, options?: T) {
     this.options = options;
-    this.varieBundler = varieBundler;
+    this.bundler = bundler;
     this.register();
   }
 
