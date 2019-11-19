@@ -24,7 +24,7 @@ export default class Optimization<T> extends Config<undefined> {
       },
     };
 
-    if (this.varieBundler.config.aggressiveVendorSplitting) {
+    if (this.bundler.config.aggressiveVendorSplitting) {
       splitChunks.cacheGroups.vendors = {
         test: /[\\/]node_modules[\\/]/,
         // @ts-ignore
@@ -33,7 +33,7 @@ export default class Optimization<T> extends Config<undefined> {
             /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
           );
           if (packageName) {
-            return this.varieBundler.env.isProduction
+            return this.bundler.env.isProduction
               ? hash(packageName[1])
               : `vendor.${packageName[1]}`;
           } else {
@@ -43,10 +43,10 @@ export default class Optimization<T> extends Config<undefined> {
       };
     }
 
-    this.varieBundler.webpackChain.optimization
+    this.bundler.webpackChain.optimization
       .splitChunks(splitChunks)
       .runtimeChunk(true)
-      .noEmitOnErrors(this.varieBundler.env.isProduction)
+      .noEmitOnErrors(this.bundler.env.isProduction)
       .minimizer("minify")
       .use(TerserPlugin, [
         {

@@ -5,15 +5,15 @@ import VueConfig from "../interfaces/VueConfig";
 export default class Vue extends Loader<VueConfig> {
   public register() {
     // Vue has their own setImmediate polyfill
-    this.varieBundler.webpackChain.node.merge({
+    this.bundler.webpackChain.node.merge({
       setImmediate: false,
     });
 
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .noParse(/^(vue|vue-router|vuex)$/)
       .rule("vue")
       .test(/\.vue$/)
-      .when(this.varieBundler.config.cache, (config) => {
+      .when(this.bundler.config.cache, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")
@@ -35,7 +35,7 @@ export default class Vue extends Loader<VueConfig> {
       alias = "vue/dist/vue.runtime.esm.js";
     }
 
-    this.varieBundler.webpackChain.resolve.alias.set("vue$", alias);
-    this.varieBundler.webpackChain.plugin("vue").use(VueLoaderPlugin);
+    this.bundler.webpackChain.resolve.alias.set("vue$", alias);
+    this.bundler.webpackChain.plugin("vue").use(VueLoaderPlugin);
   }
 }

@@ -1,15 +1,15 @@
 import fs from "fs";
 import path from "path";
 import hash from "hash-sum";
-import VarieBundler from "../index";
+import Bundler from '../interfaces/Bundler'
 
 export default abstract class Loader<T> {
   protected options: T;
-  protected varieBundler: VarieBundler;
+  protected bundler: Bundler;
 
-  constructor(varieBundler: VarieBundler, options?: T) {
+  constructor(bundler: Bundler, options?: T) {
     this.options = options;
-    this.varieBundler = varieBundler;
+    this.bundler = bundler;
     this.register();
   }
 
@@ -38,14 +38,14 @@ export default abstract class Loader<T> {
         loader,
         configs,
         versions,
-        modern: this.varieBundler.env.isModern,
+        modern: this.bundler.env.isModern,
       }),
       cacheDirectory: this.getPath(`node_modules/.cache/${loader}`),
     };
   }
 
   private getPath(_path) {
-    return path.resolve(this.varieBundler.config.root, _path);
+    return path.resolve(this.bundler.config.root, _path);
   }
 
   private getFile(_path) {

@@ -4,7 +4,7 @@ import { CopyPluginConfig } from "../interfaces/plugin-config-interfaces/CopyPlu
 
 export default class Copy extends Plugin<CopyPluginConfig> {
   public register() {
-    this.varieBundler.webpackChain
+    this.bundler.webpackChain
       .plugin("copy")
       .use(CopyWebpackPlugin, [this.options.patterns]);
   }

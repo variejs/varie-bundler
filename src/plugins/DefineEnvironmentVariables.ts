@@ -8,7 +8,7 @@ export default class DefineEnvironmentVariables extends Plugin<
   public register() {
     let variables = {
       app: {
-        env: this.varieBundler.env.mode,
+        env: this.bundler.env.mode,
       },
     };
 
@@ -20,7 +20,7 @@ export default class DefineEnvironmentVariables extends Plugin<
       );
     }
 
-    this.varieBundler.webpackChain.plugin("variables").use(DefinePlugin, [
+    this.bundler.webpackChain.plugin("variables").use(DefinePlugin, [
       {
         __ENV_VARIABLES__: this.stringify(variables),
       },

@@ -17,8 +17,8 @@ export default class Sass extends Loader<{
       implementation: require("node-sass"),
     });
 
-    if (!this.varieBundler.env.isHot) {
-      this.varieBundler.webpackChain
+    if (!this.bundler.env.isHot) {
+      this.bundler.webpackChain
         .plugin("mini-extract")
         .use(MiniCssExtractPlugin, [
           {
@@ -27,8 +27,8 @@ export default class Sass extends Loader<{
           },
         ]);
     }
-    if (this.varieBundler.env.isProduction) {
-      this.varieBundler.webpackChain
+    if (this.bundler.env.isProduction) {
+      this.bundler.webpackChain
         .plugin("optimize-assets")
         .use(OptimizeCSSAssetsPlugin, [
           {
@@ -50,7 +50,7 @@ export default class Sass extends Loader<{
     loader?,
     loaderOptions = {},
   ) {
-    let baseRule = this.varieBundler.webpackChain.module.rule(lang).test(test);
+    let baseRule = this.bundler.webpackChain.module.rule(lang).test(test);
 
     this.applyLoaders(
       `${lang}-vue`,
@@ -74,7 +74,7 @@ export default class Sass extends Loader<{
     loaderOptions = {},
   ) {
     oneOf
-      .when(this.varieBundler.config.cache, (config) => {
+      .when(this.bundler.config.cache, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")
@@ -88,7 +88,7 @@ export default class Sass extends Loader<{
           .end();
       })
       .when(
-        !this.varieBundler.env.isHot,
+        !this.bundler.env.isHot,
         (config) => {
           config
             .use("mini-extract-loader")
@@ -108,7 +108,7 @@ export default class Sass extends Loader<{
       .use("css-loader")
       .loader("css-loader")
       .options({
-        sourceMap: !this.varieBundler.env.isProduction,
+        sourceMap: !this.bundler.env.isProduction,
         importLoaders: loader ? 3 : 2, // postcss-loader (1), resolve-url-loader (2), *-loader (3)
       })
       .end()
@@ -119,7 +119,7 @@ export default class Sass extends Loader<{
         ident: "postcss",
         plugins: [
           autoprefixer({ grid: true }),
-          ...useIf(!this.varieBundler.env.isHot, [cssnano]),
+          ...useIf(!this.bundler.env.isHot, [cssnano]),
         ],
       })
       .end()

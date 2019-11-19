@@ -2,28 +2,28 @@ import Loader from "./Loader";
 
 export default class WebWorkers extends Loader<undefined> {
   public register() {
-    this.varieBundler.webpackChain.output.globalObject(
+    this.bundler.webpackChain.output.globalObject(
       `(typeof self !== 'undefined' ? self : this)`,
     );
 
     // TODO - https://github.com/webpack-contrib/worker-loader/issues/177
     // Turn thread loaders off
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("js")
       .uses.delete("thread-loader");
 
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("typescript")
       .uses.delete("thread-loader");
 
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("js")
       .exclude.add(/\.worker\.js$/);
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("typescript")
       .exclude.add(/\.worker\.js$/);
 
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("workers")
       .test(/\.worker\.js$/)
       .use("worker-loader")
@@ -33,7 +33,7 @@ export default class WebWorkers extends Loader<undefined> {
       .loader("babel-loader")
       .end();
 
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("type-script-service-workers")
       .test(/\.worker\.tsx?$/)
       .use("babel")
@@ -44,11 +44,11 @@ export default class WebWorkers extends Loader<undefined> {
       .options({
         happyPackMode: true,
         transpileOnly:
-          this.varieBundler.env.isHot || this.varieBundler.env.isProduction,
+          this.bundler.env.isHot || this.bundler.env.isProduction,
       })
       .end();
 
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("service-workers")
       .test(/\.service-worker\.js$/)
       .use("file")
@@ -61,7 +61,7 @@ export default class WebWorkers extends Loader<undefined> {
       .loader("babel-loader")
       .end();
 
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("type-script-service-workers")
       .test(/\.service-worker\.tsx?$/)
       .use("file")
@@ -78,7 +78,7 @@ export default class WebWorkers extends Loader<undefined> {
       .options({
         happyPackMode: true,
         transpileOnly:
-          this.varieBundler.env.isHot || this.varieBundler.env.isProduction,
+          this.bundler.env.isHot || this.bundler.env.isProduction,
       })
       .end();
   }

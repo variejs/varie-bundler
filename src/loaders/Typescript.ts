@@ -7,10 +7,10 @@ export default class Typescript extends Loader<{
   entryFiles: Array<string>;
 }> {
   public register() {
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("typescript")
       .test(/\.tsx?$/)
-      .when(this.varieBundler.config.cache, (config) => {
+      .when(this.bundler.config.cache, (config) => {
         config
           .use("cache-loader")
           .loader("cache-loader")
@@ -38,15 +38,15 @@ export default class Typescript extends Loader<{
         happyPackMode: true,
         appendTsSuffixTo: [/\.vue$/],
         transpileOnly:
-          this.varieBundler.env.isHot || this.varieBundler.env.isProduction,
+          this.bundler.env.isHot || this.bundler.env.isProduction,
       })
       .end();
 
     if (
-      this.varieBundler.env.isHot &&
-      !this.varieBundler.webpackChain.plugins.has("ts-checker")
+      this.bundler.env.isHot &&
+      !this.bundler.webpackChain.plugins.has("ts-checker")
     ) {
-      this.varieBundler.webpackChain
+      this.bundler.webpackChain
         .plugin("ts-checker")
         .use(ForkTsCheckerWebpackPlugin, [
           {
@@ -54,7 +54,7 @@ export default class Typescript extends Loader<{
             async: false,
             formatter: "codeframe",
             checkSyntacticErrors: true,
-            workers: this.varieBundler.env.isHot
+            workers: this.bundler.env.isHot
               ? 1
               : ForkTsCheckerWebpackPlugin.TWO_CPUS_FREE,
           },

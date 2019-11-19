@@ -4,7 +4,7 @@ import { WebpackBarConfig } from "../interfaces/plugin-config-interfaces/Webpack
 
 export default class WebpackBar extends Plugin<WebpackBarConfig> {
   public register() {
-    this.varieBundler.webpackChain.plugin("webpackbar").use(Webpackbar, [
+    this.bundler.webpackChain.plugin("webpackbar").use(Webpackbar, [
       {
         name: `${this.options.name || "Client"} Bundle`,
       },

@@ -4,7 +4,7 @@ import { BrowserSyncPluginConfig } from "../interfaces/plugin-config-interfaces/
 
 export default class BrowserSync extends Plugin<BrowserSyncPluginConfig> {
   public register() {
-    this.varieBundler.webpackChain
+    this.bundler.webpackChain
       .plugin("browser-sync")
       .use(BrowserSyncPlugin, [
         {

@@ -4,7 +4,7 @@ import MultiBuildHtml from "./../plugins/MultiBuild";
 
 export default class Html extends Loader<undefined> {
   public register() {
-    this.varieBundler.webpackChain.module
+    this.bundler.webpackChain.module
       .rule("html")
       .test(/\.html$/)
       .use("html-loader")
@@ -14,15 +14,15 @@ export default class Html extends Loader<undefined> {
         name: "fonts/[name].[ext]?[hash:8]",
       });
 
-    this.varieBundler.webpackChain.plugin("html").use(HtmlWebpackPlugin, [
+    this.bundler.webpackChain.plugin("html").use(HtmlWebpackPlugin, [
       {
         inject: true,
         template: "./index.html",
       },
     ]);
 
-    if (this.varieBundler.env.isModern) {
-      this.varieBundler.webpackChain.plugin("multi-build").use(MultiBuildHtml);
+    if (this.bundler.env.isModern) {
+      this.bundler.webpackChain.plugin("multi-build").use(MultiBuildHtml);
     }
   }
 }

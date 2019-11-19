@@ -5,9 +5,9 @@ import { WebpackDevServerConfig } from "../interfaces/web-config-interfaces/Webp
 export default class DevServer<T> extends Config<WebpackDevServerConfig> {
   public async register() {
     let port = portFinderSync.getPort(
-      this.varieBundler.config.webpack.devServer.port,
+      this.bundler.config.webpack.devServer.port,
     );
-    this.varieBundler.webpackChain.devServer
+    this.bundler.webpackChain.devServer
       .quiet(true)
       .noInfo(true)
       .overlay(true)
@@ -21,7 +21,7 @@ export default class DevServer<T> extends Config<WebpackDevServerConfig> {
       .port(port)
       .host("0.0.0.0")
       .historyApiFallback(true)
-      .contentBase(this.varieBundler.config.root)
+      .contentBase(this.bundler.config.root)
       .headers({
         "Access-Control-Allow-Origin": "*",
       })
