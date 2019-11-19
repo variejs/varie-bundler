@@ -232,7 +232,6 @@ export default abstract class AbstractBundler {
     let host = envConfig.APP_HOST || "0.0.0.0";
     let outputPath = path.join(root, envConfig.OUTPUT_PATH || "public");
 
-    // TODO
     this.config = deepMerge(
       {
         root,

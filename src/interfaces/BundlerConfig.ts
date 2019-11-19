@@ -20,7 +20,7 @@ export default interface BundlerConfig {
   plugins: {
     copy: CopyPluginConfig;
     clean: CleanPluginConfig;
-    purgeCss: PurgeCssConfig;
+    purgeCss?: PurgeCssConfig;
     browserSync: BrowserSyncPluginConfig;
     defineEnvironmentVariables: DefineVariablePluginConfig;
   };
