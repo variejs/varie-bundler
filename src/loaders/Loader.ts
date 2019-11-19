@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import hash from "hash-sum";
-import Bundler from '../interfaces/Bundler'
+import Bundler from "../interfaces/Bundler";
 
 export default abstract class Loader<T> {
   protected options: T;

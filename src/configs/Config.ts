@@ -1,4 +1,4 @@
-import Bundler from '../interfaces/Bundler'
+import Bundler from "../interfaces/Bundler";
 
 export default abstract class Config<T> {
   protected options: T;

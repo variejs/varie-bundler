@@ -9,7 +9,7 @@ import { EnvironmentTypes } from "./types/EnvironmentTypes";
 export default class WebBundler extends AbstractBundler {
   constructor(
     mode: EnvironmentTypes = EnvironmentTypes.Development,
-    config?: DeepPartial<BundlerConfig>,
+    config: DeepPartial<BundlerConfig> = {},
   ) {
     super(mode, config);
 

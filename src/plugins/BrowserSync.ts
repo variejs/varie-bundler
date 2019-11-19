@@ -4,20 +4,18 @@ import { BrowserSyncPluginConfig } from "../interfaces/plugin-config-interfaces/
 
 export default class BrowserSync extends Plugin<BrowserSyncPluginConfig> {
   public register() {
-    this.bundler.webpackChain
-      .plugin("browser-sync")
-      .use(BrowserSyncPlugin, [
-        {
-          port: this.options.port,
-          host: this.options.host,
-          proxy: this.options.proxy,
-          open: this.options.host === "0.0.0.0" ? "local" : "external",
-          files: [
-            this.options.outputPath + "/**/*.js",
-            this.options.outputPath + "**/*.css",
-          ],
-        },
-        { reload: false },
-      ]);
+    this.bundler.webpackChain.plugin("browser-sync").use(BrowserSyncPlugin, [
+      {
+        port: this.options.port,
+        host: this.options.host,
+        proxy: this.options.proxy,
+        open: this.options.host === "0.0.0.0" ? "local" : "external",
+        files: [
+          this.options.outputPath + "/**/*.js",
+          this.options.outputPath + "**/*.css",
+        ],
+      },
+      { reload: false },
+    ]);
   }
 }

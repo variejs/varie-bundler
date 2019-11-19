@@ -130,7 +130,7 @@ export default abstract class AbstractBundler {
 
   public purgeCss(
     paths: Array<string>,
-    config: {
+    config?: {
       whiteListPatterns?: Array<RegExp>;
       whitelistSelectors?: Array<string>;
       whitelistPatternsChildren?: Array<RegExp>;

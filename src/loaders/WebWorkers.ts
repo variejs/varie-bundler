@@ -8,17 +8,13 @@ export default class WebWorkers extends Loader<undefined> {
 
     // TODO - https://github.com/webpack-contrib/worker-loader/issues/177
     // Turn thread loaders off
-    this.bundler.webpackChain.module
-      .rule("js")
-      .uses.delete("thread-loader");
+    this.bundler.webpackChain.module.rule("js").uses.delete("thread-loader");
 
     this.bundler.webpackChain.module
       .rule("typescript")
       .uses.delete("thread-loader");
 
-    this.bundler.webpackChain.module
-      .rule("js")
-      .exclude.add(/\.worker\.js$/);
+    this.bundler.webpackChain.module.rule("js").exclude.add(/\.worker\.js$/);
     this.bundler.webpackChain.module
       .rule("typescript")
       .exclude.add(/\.worker\.js$/);
@@ -43,8 +39,7 @@ export default class WebWorkers extends Loader<undefined> {
       .loader("ts-loader")
       .options({
         happyPackMode: true,
-        transpileOnly:
-          this.bundler.env.isHot || this.bundler.env.isProduction,
+        transpileOnly: this.bundler.env.isHot || this.bundler.env.isProduction,
       })
       .end();
 
@@ -77,8 +72,7 @@ export default class WebWorkers extends Loader<undefined> {
       .loader("ts-loader")
       .options({
         happyPackMode: true,
-        transpileOnly:
-          this.bundler.env.isHot || this.bundler.env.isProduction,
+        transpileOnly: this.bundler.env.isHot || this.bundler.env.isProduction,
       })
       .end();
   }

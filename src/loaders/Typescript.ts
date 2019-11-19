@@ -37,8 +37,7 @@ export default class Typescript extends Loader<{
       .options({
         happyPackMode: true,
         appendTsSuffixTo: [/\.vue$/],
-        transpileOnly:
-          this.bundler.env.isHot || this.bundler.env.isProduction,
+        transpileOnly: this.bundler.env.isHot || this.bundler.env.isProduction,
       })
       .end();
 
