@@ -6,6 +6,7 @@ import { CleanPluginConfig } from "./plugin-config-interfaces/CleanPluginConfig"
 import { WebpackDevServerConfig } from "./web-config-interfaces/WebpackDevServerConfig";
 import { BrowserSyncPluginConfig } from "./plugin-config-interfaces/BrowserSyncPluginConfig";
 import { DefineVariablePluginConfig } from "./plugin-config-interfaces/DefineVariablePluginConfig";
+import { HtmlWebpackPluginConfig } from "./plugin-config-interfaces/HtmlWebpackPluginConfig";
 
 export default interface BundlerConfig {
   root: string;
@@ -21,6 +22,7 @@ export default interface BundlerConfig {
     copy: CopyPluginConfig;
     clean: CleanPluginConfig;
     purgeCss?: PurgeCssConfig;
+    html: HtmlWebpackPluginConfig;
     browserSync: BrowserSyncPluginConfig;
     defineEnvironmentVariables: DefineVariablePluginConfig;
   };

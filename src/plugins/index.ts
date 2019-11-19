@@ -1,4 +1,5 @@
 import Copy from "./Copy";
+import Html from "./Html";
 import Clean from "./Clean";
 import Errors from "./Errors";
 import Preload from "./Preload";
@@ -15,6 +16,7 @@ import DefineEnvironmentVariables from "./DefineEnvironmentVariables";
 
 export default {
   Copy,
+  Html,
   Clean,
   Errors,
   Preload,
