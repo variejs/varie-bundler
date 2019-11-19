@@ -19,10 +19,10 @@ export default class WebBundler extends AbstractBundler {
       hashType: this.config.hashType,
     });
 
-    new loaders.Html(this);
     new loaders.Fonts(this);
     new loaders.Images(this);
 
+    new plugins.Html(this);
     new plugins.Clean(this, this.config.plugins.clean);
   }
 

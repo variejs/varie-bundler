@@ -53,15 +53,17 @@ export default abstract class AbstractBundler {
   }
 
   public browserSync(options?: BrowserSyncPluginConfig): this {
-    this.config.webpack.devServer.open = false;
+    if (this.env.isHot) {
+      this.config.webpack.devServer.open = false;
 
-    let browserSyncOptions = Object.assign(
-      {},
-      this.config.plugins.browserSync,
-      options || {},
-    );
+      let browserSyncOptions = Object.assign(
+        {},
+        this.config.plugins.browserSync,
+        options || {},
+      );
 
-    new plugins.BrowserSync(this, browserSyncOptions);
+      new plugins.BrowserSync(this, browserSyncOptions);
+    }
     return this;
   }
 
@@ -98,6 +100,21 @@ export default abstract class AbstractBundler {
     if (!this.env.isProduction) {
       new loaders.Eslint(this);
     }
+    return this;
+  }
+
+  public html() {
+    new loaders.Html(this);
+    return this;
+  }
+
+  public htmlVariables(variables) {
+    this.config.plugins.html.variables = Object.assign(
+      {},
+      this.config.plugins.html.variables,
+      variables,
+    );
+    new plugins.Html(this, this.config.plugins.html);
     return this;
   }
 
@@ -245,6 +262,9 @@ export default abstract class AbstractBundler {
         plugins: {
           copy: {
             patterns: [],
+          },
+          html: {
+            variables: {},
           },
           browserSync: {
             host,

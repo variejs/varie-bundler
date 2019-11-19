@@ -27,7 +27,7 @@
     "@vue/preload-webpack-plugin": "^1.1.1",
     "autoprefixer": "^9.7.2",
     "babel-loader": "^8.0.6",
-    "babel-preset-varie-app": "^0.2.1",
+    "babel-preset-varie-app": "^0.2.2",
     "browser-sync": "^2.26.7",
     "browser-sync-webpack-plugin": "^2.2.2",
     "cache-loader": "^4.1.0",
