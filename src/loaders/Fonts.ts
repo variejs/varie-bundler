@@ -3,8 +3,7 @@ export default class Fonts extends Loader<undefined> {
   public register() {
     this.varieBundler.webpackChain.module
       .rule("fonts")
-      .exclude
-      .add(/images/)
+      .exclude.add(/images/)
       .add(/img/)
       .end()
       .test(/\.(woff|woff2|ttf|eot|otf|svg)$/)

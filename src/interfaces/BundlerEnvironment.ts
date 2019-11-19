@@ -1,6 +1,6 @@
 import { EnvironmentTypes } from "../types/EnvironmentTypes";
 
-export default interface VarieBundlerEnvironment {
+export default interface BundlerEnvironment {
   mode: EnvironmentTypes;
   isProduction: boolean;
   isDevelopment: boolean;

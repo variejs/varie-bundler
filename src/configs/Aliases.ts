@@ -1,7 +1,7 @@
 import path from "path";
 import Config from "./Config";
 
-export default class Aliases<T> extends Config<Array<string>> {
+export default class Aliases<T> extends Config<{ [key: string]: string }> {
   public register() {
     let webpackAliases = this.varieBundler.webpackChain.resolve.alias;
     for (let alias in this.options) {
