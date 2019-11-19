@@ -101,9 +101,9 @@ export default abstract class AbstractBundler {
     return this;
   }
 
-  public plugin<T>(
-    Plugin: { new (Bundler: Bundler, options: object): T },
-    options: object,
+  public plugin<T, U>(
+    Plugin: { new (Bundler: Bundler, options?: U): T },
+    options?: U,
   ): this {
     new Plugin(this, options);
     return this;
