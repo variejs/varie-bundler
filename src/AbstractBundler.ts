@@ -23,7 +23,7 @@ export default abstract class AbstractBundler {
 
   constructor(
     mode: EnvironmentTypes = EnvironmentTypes.Development,
-    config?: DeepPartial<BundlerConfig>,
+    config: DeepPartial<BundlerConfig> = {},
   ) {
     this.setupEnv(mode);
     this.setupConfig(config, process.cwd());
@@ -244,8 +244,11 @@ export default abstract class AbstractBundler {
     console.log(`\n Wrote : ${this.config.bundleName} Bundle to ${logName}\n`);
   }
 
-  private setupConfig(config: DeepPartial<BundlerConfig>, root: string): void {
-    let envConfig = dotenv.config().parsed;
+  private setupConfig(
+    config: DeepPartial<BundlerConfig> = {},
+    root: string,
+  ): void {
+    let envConfig = dotenv.config().parsed || {};
     let host = envConfig.APP_HOST || "0.0.0.0";
     let outputPath = path.join(root, envConfig.OUTPUT_PATH || "public");
 

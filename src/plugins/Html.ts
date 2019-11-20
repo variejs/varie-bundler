@@ -10,8 +10,10 @@ export default class Copy extends Plugin<HtmlWebpackPluginConfig> {
       template: "./index.html",
     };
 
-    for (let variableName in this.options.variables) {
-      config[variableName] = this.options.variables[variableName];
+    if (this.options && this.options.variables) {
+      for (let variableName in this.options.variables) {
+        config[variableName] = this.options.variables[variableName];
+      }
     }
 
     this.bundler.webpackChain.plugin("html").use(HtmlWebpackPlugin, [config]);
