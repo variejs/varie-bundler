@@ -10,7 +10,7 @@ export default class UmdBundler extends AbstractBundler {
     mode: EnvironmentTypes = EnvironmentTypes.Development,
     name: string,
     entryPath: string,
-    config: DeepPartial<BundlerConfig> = {},
+    config?: DeepPartial<BundlerConfig>,
   ) {
     super(mode, config);
 
