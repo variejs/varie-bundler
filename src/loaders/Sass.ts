@@ -1,11 +1,10 @@
 import cssnano from "cssnano";
 import Loader from "./Loader";
 import useIf from "../helpers/useIf";
-import { OneOf } from "webpack-chain";
 import autoprefixer from "autoprefixer";
 import { HashTypes } from "../types/HashTypes";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import OptimizeCSSAssetsPlugin from "optimize-css-assets-webpack-plugin";
+import { Rule } from 'webpack-chain'
 
 export default class Sass extends Loader<{
   hashType: HashTypes;
@@ -27,21 +26,6 @@ export default class Sass extends Loader<{
           },
         ]);
     }
-    if (this.bundler.env.isProduction) {
-      this.bundler.webpackChain
-        .plugin("optimize-assets")
-        .use(OptimizeCSSAssetsPlugin, [
-          {
-            canPrint: false,
-            cssProcessorOptions: {
-              map: {
-                inline: false,
-                annotation: true,
-              },
-            },
-          },
-        ]);
-    }
   }
 
   private createCSSRule(
@@ -53,14 +37,12 @@ export default class Sass extends Loader<{
     let baseRule = this.bundler.webpackChain.module.rule(lang).test(test);
 
     this.applyLoaders(
-      `${lang}-vue`,
       baseRule.oneOf("vue").resourceQuery(/\?vue/),
       loader,
       loaderOptions,
     );
 
     this.applyLoaders(
-      `${lang}-normal`,
       baseRule.oneOf("normal"),
       loader,
       loaderOptions,
@@ -68,25 +50,11 @@ export default class Sass extends Loader<{
   }
 
   private applyLoaders(
-    lang: string,
-    oneOf: OneOf,
+    oneOf: Rule<Rule>,
     loader?,
     loaderOptions = {},
   ) {
     oneOf
-      .when(this.bundler.config.cache, (config) => {
-        config
-          .use("cache-loader")
-          .loader("cache-loader")
-          .options(
-            this.generateCacheConfig(
-              `${lang}-css-cache`,
-              ["sass-loader", "vue-loader", "postcss-loader"],
-              [".browserslistrc"],
-            ),
-          )
-          .end();
-      })
       .when(
         !this.bundler.env.isHot,
         (config) => {
@@ -115,12 +83,14 @@ export default class Sass extends Loader<{
       .use("postcss-loader")
       .loader("postcss-loader")
       .options({
-        sourceMap: true,
-        ident: "postcss",
-        plugins: [
-          autoprefixer({ grid: true }),
-          ...useIf(!this.bundler.env.isHot, [cssnano]),
-        ],
+        postcssOptions: {
+          sourceMap: true,
+          ident: "postcss",
+          plugins: [
+            autoprefixer({ grid: true }),
+            ...useIf(!this.bundler.env.isHot, [cssnano]),
+          ],
+        }
       })
       .end()
       .use("resolve-url-loader")

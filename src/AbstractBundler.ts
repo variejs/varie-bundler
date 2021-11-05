@@ -43,9 +43,6 @@ export default abstract class AbstractBundler {
 
   public build(): Array<webpack.Configuration> {
     this.addBundle(this.bundle());
-    if (this.env.isModern) {
-      this.addBundle(this.makeModernBundle());
-    }
     if (this.env.isInspecting) {
       process.exit();
     }
@@ -55,14 +52,6 @@ export default abstract class AbstractBundler {
   public browserSync(options?: BrowserSyncPluginConfig): this {
     if (this.env.isHot) {
       this.config.webpack.devServer.open = false;
-
-      let browserSyncOptions = Object.assign(
-        {},
-        this.config.plugins.browserSync,
-        options || {},
-      );
-
-      new plugins.BrowserSync(this, browserSyncOptions);
     }
     return this;
   }
@@ -187,7 +176,7 @@ export default abstract class AbstractBundler {
     return this;
   }
 
-  public varieConfig(variables: Array<any>): this {
+  public varieConfig(variables: Record<string, unknown>): this {
     this.config.plugins.defineEnvironmentVariables.variables = variables;
     return this;
   }
@@ -217,7 +206,6 @@ export default abstract class AbstractBundler {
         name: this.config.bundleName,
       });
     });
-
     new webpackConfigs.Aliases(this, this.config.webpack.aliases);
 
     new plugins.DefineEnvironmentVariables(
@@ -225,15 +213,13 @@ export default abstract class AbstractBundler {
       this.config.plugins.defineEnvironmentVariables,
     );
 
-    if (!this.config.modern) {
-      if (this.config.plugins.copy.patterns.length > 0) {
-        new plugins.Copy(this, this.config.plugins.copy);
-      }
-
-      this.webpackChain.when(this.env.isHot, () => {
-        new webpackConfigs.DevServer(this, this.config.webpack.devServer);
-      });
+    if (this.config.plugins.copy.patterns.length > 0) {
+      new plugins.Copy(this, this.config.plugins.copy);
     }
+
+    this.webpackChain.when(this.env.isHot, () => {
+      new webpackConfigs.DevServer(this, this.config.webpack.devServer);
+    });
 
     return this.webpackChain;
   }
@@ -252,64 +238,60 @@ export default abstract class AbstractBundler {
     let host = envConfig.APP_HOST || "0.0.0.0";
     let outputPath = path.join(root, envConfig.OUTPUT_PATH || "public");
 
-    this.config = deepMerge(
-      {
-        root,
-        host,
-        outputPath,
-        bundleName: "Client",
-        aggressiveVendorSplitting: false,
-        appName: envConfig.APP_NAME || "Varie",
-        hashType: this.env.isHot ? HashTypes.Hash : HashTypes.ContentHash,
-        cache: this.env.isHot && !this.argumentsHas("--disable-cache"),
-        plugins: {
-          copy: {
-            patterns: [],
-          },
-          html: {
-            variables: {},
-          },
-          browserSync: {
-            host,
-            outputPath,
-            port: 3000,
-            proxy: `${host}:8080`,
-          },
-          clean: {
-            excludeList: [],
-          },
-          defineEnvironmentVariables: {
-            variables: [],
-          },
+    this.config = deepMerge({
+      root,
+      host,
+      outputPath,
+      bundleName: "Client",
+      aggressiveVendorSplitting: false,
+      appName: envConfig.APP_NAME || "Varie",
+      hashType: this.env.isHot ? HashTypes.Hash : HashTypes.ContentHash,
+      cache: this.env.isHot && !this.argumentsHas("--disable-cache"),
+      plugins: {
+        copy: {
+          patterns: [],
         },
-        loaders: {
-          sassLoader: {
-            globalIncludes: [],
-          },
+        html: {
+          variables: {},
         },
-        webpack: {
-          aliases: {},
-          entryFiles: [],
-          devServer: {
-            host,
-            open: true,
-            proxies: [],
-            port: 8080,
-          },
+        browserSync: {
+          host,
+          outputPath,
+          port: 3000,
+          proxy: `${host}:8080`,
         },
-        vue: {
-          runtimeOnly: true,
+        clean: {
+          excludeList: [],
+        },
+        defineEnvironmentVariables: {
+          variables: [],
         },
       },
-      config,
-    );
+      loaders: {
+        sassLoader: {
+          globalIncludes: [],
+        },
+      },
+      webpack: {
+        aliases: {},
+        entryFiles: [],
+        devServer: {
+          host,
+          open: true,
+          proxies: [],
+          port: 8080,
+        },
+      },
+      vue: {
+        runtimeOnly: true,
+      },
+    }, config) as BundlerConfig;
   }
 
   private setupEnv(mode: EnvironmentTypes): void {
     this.env = {
       mode,
       isHot: this.argumentsHas("--hot"),
-      isModern: this.argumentsHas("--modern"),
       isAnalyzing: this.argumentsHas("--analyze"),
       isInspecting: this.argumentsHas("--inspect"),
       isProduction: mode === EnvironmentTypes.Production,
@@ -318,16 +300,9 @@ export default abstract class AbstractBundler {
   }
 
   private presets(): void {
-    new plugins.NamedChunks(this);
     new plugins.CaseSensitivePaths(this);
 
     this.webpackChain
-      .when(!this.env.isProduction, () => {
-        new plugins.Errors(this);
-      })
-      .when(this.env.isProduction, () => {
-        new plugins.HashedModules(this);
-      })
       .when(this.env.isAnalyzing, () => {
         new plugins.BundleAnalyzer(this);
       });
@@ -344,40 +319,11 @@ export default abstract class AbstractBundler {
     new webpackConfigs.Optimization(this);
   }
 
-  private makeModernBundle(): WebpackChain {
-    this.config.bundleName = `${this.config.bundleName} - Modern`;
-
-    this.config.modern = true;
-    let modern = this.bundle();
-
-    new plugins.Preload(this);
-
-    this.updateJavascriptLoaders();
-
-    if (this.env.isAnalyzing) {
-      modern.plugin("analyzer").tap(() => {
-        return [
-          {
-            analyzerPort: 8889,
-          },
-        ];
-      });
-    }
-
-    modern.output
-      .filename(`js/[name]-[${this.config.hashType}].js`)
-      .chunkFilename(`js/[name]-[${this.config.hashType}].js`);
-
-    return modern;
-  }
-
-  protected updateJavascriptLoaders(modernBuild: boolean = false): void {
+  protected updateJavascriptLoaders(): void {
     new loaders.Javascript(this, {
-      modernBuild,
       entryFiles: this.config.webpack.entryFiles,
     });
     new loaders.Typescript(this, {
-      modernBuild,
       entryFiles: this.config.webpack.entryFiles,
     });
   }

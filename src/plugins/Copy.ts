@@ -6,6 +6,8 @@ export default class Copy extends Plugin<CopyPluginConfig> {
   public register() {
     this.bundler.webpackChain
       .plugin("copy")
-      .use(CopyWebpackPlugin, [this.options.patterns]);
+      .use(CopyWebpackPlugin, [{
+        patterns: this.options.patterns
+      }]);
   }
 }

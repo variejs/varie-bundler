@@ -22,7 +22,7 @@ export default class WebBundler extends AbstractBundler {
     new loaders.Fonts(this);
     new loaders.Images(this);
 
-    new plugins.Html(this);
+    new plugins.Html(this, this.config.plugins.html);
     new plugins.Clean(this, this.config.plugins.clean);
   }
 

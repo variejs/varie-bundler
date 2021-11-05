@@ -7,11 +7,7 @@ export default class Fonts extends Loader<undefined> {
       .add(/img/)
       .end()
       .test(/\.(woff|woff2|ttf|eot|otf|svg)$/)
-      .use("file-loader")
-      .loader("file-loader")
-      .options({
-        limit: 4096,
-        name: "fonts/[name].[ext]?[hash:8]",
-      });
+      // @ts-ignore
+      .type('asset/resource')
   }
 }

@@ -10,6 +10,7 @@ export default class Images extends Loader<undefined> {
       .use("file-loader")
       .loader("file-loader")
       .options({
+        esModule: false,
         name: "images/[name].[ext]?[hash:8]",
       })
       .end()

@@ -2,7 +2,6 @@ import path from "path";
 import Loader from "./Loader";
 
 export default class Javascript extends Loader<{
-  modernBuild: boolean;
   entryFiles: Array<string>;
 }> {
   public register() {
@@ -21,23 +20,10 @@ export default class Javascript extends Loader<{
       .use("thread-loader")
       .loader("thread-loader")
       .end()
-      .when(this.bundler.config.cache, (config) => {
-        config
-          .use("cache-loader")
-          .loader("cache-loader")
-          .options(
-            this.generateCacheConfig(
-              "js",
-              ["@babel/runtime-corejs3", "babel-loader", "core-js"],
-              ["babel.config.js", ".browserslistrc"],
-            ),
-          );
-      })
       .use("babel-loader")
       .loader(path.join(__dirname, "BabelLoader"))
       .options({
         entryFiles: this.options.entryFiles,
-        modernBuild: this.options.modernBuild,
       })
       .end();
   }
