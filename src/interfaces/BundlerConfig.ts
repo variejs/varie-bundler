@@ -12,7 +12,6 @@ export default interface BundlerConfig {
   root: string;
   host: string;
   cache: boolean;
-  modern: boolean;
   appName: string;
   outputPath: string;
   hashType: HashTypes;

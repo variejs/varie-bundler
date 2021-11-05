@@ -1,9 +1,8 @@
 import Plugin from "./Plugin";
-import MultiBuildHtml from "./MultiBuild";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import { HtmlWebpackPluginConfig } from "../interfaces/plugin-config-interfaces/HtmlWebpackPluginConfig";
 
-export default class Copy extends Plugin<HtmlWebpackPluginConfig> {
+export default class Html extends Plugin<HtmlWebpackPluginConfig> {
   public register() {
     let config = {
       inject: true,
@@ -15,9 +14,5 @@ export default class Copy extends Plugin<HtmlWebpackPluginConfig> {
     }
 
     this.bundler.webpackChain.plugin("html").use(HtmlWebpackPlugin, [config]);
-
-    if (this.bundler.env.isModern) {
-      this.bundler.webpackChain.plugin("multi-build").use(MultiBuildHtml);
-    }
   }
 }

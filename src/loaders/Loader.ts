@@ -16,8 +16,6 @@ export default abstract class Loader<T> {
   abstract register(): void;
 
   public generateCacheConfig(loader, relatedPackages = [], configFiles = []) {
-    relatedPackages.push("cache-loader");
-
     let configs = {};
     let versions = {
       "varie-bundler": require("../../package.json").version,
@@ -38,7 +36,6 @@ export default abstract class Loader<T> {
         loader,
         configs,
         versions,
-        modern: this.bundler.env.isModern,
       }),
       cacheDirectory: this.getPath(`node_modules/.cache/${loader}`),
     };

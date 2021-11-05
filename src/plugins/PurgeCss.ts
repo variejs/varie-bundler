@@ -21,9 +21,6 @@ export default class PurgeCss extends Plugin<PurgeCssConfig> {
       {
         rejected: true,
         paths: glob.sync(this.scanDirectories, { nodir: true }),
-        whiteListPatterns: this.options.whiteListPatterns,
-        whitelistSelectors: this.options.whiteListPatterns,
-        whitelistPatternsChildren: this.options.whitelistPatternsChildren,
       },
     ]);
   }

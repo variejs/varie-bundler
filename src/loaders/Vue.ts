@@ -4,26 +4,16 @@ import VueConfig from "../interfaces/VueConfig";
 
 export default class Vue extends Loader<VueConfig> {
   public register() {
+    // TODO - is it required anymore?
     // Vue has their own setImmediate polyfill
-    this.bundler.webpackChain.node.merge({
-      setImmediate: false,
-    });
+    // this.bundler.webpackChain.node.merge({
+    //   setImmediate: false,
+    // });
 
     this.bundler.webpackChain.module
       .noParse(/^(vue|vue-router|vuex)$/)
       .rule("vue")
       .test(/\.vue$/)
-      .when(this.bundler.config.cache, (config) => {
-        config
-          .use("cache-loader")
-          .loader("cache-loader")
-          .options(
-            this.generateCacheConfig("vue-loader", [
-              "vue-loader",
-              "vue-template-compiler",
-            ]),
-          );
-      })
       .use("vue-loader")
       .loader("vue-loader")
       .options({

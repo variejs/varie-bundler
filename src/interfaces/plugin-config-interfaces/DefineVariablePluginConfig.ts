@@ -1,3 +1,3 @@
 export interface DefineVariablePluginConfig {
-  variables: Array<any>;
+  variables: Record<string, unknown>;
 }

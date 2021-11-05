@@ -50,9 +50,7 @@ export default class Optimization<T> extends Config<undefined> {
       .minimizer("minify")
       .use(TerserPlugin, [
         {
-          cache: true,
           parallel: true,
-          sourceMap: true,
           terserOptions: {
             mangle: true,
             safari10: true,
