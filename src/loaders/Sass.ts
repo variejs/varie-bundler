@@ -76,8 +76,14 @@ export default class Sass extends Loader<{
       .use("css-loader")
       .loader("css-loader")
       .options({
-        sourceMap: !this.bundler.env.isProduction,
+        sourceMap: true,
         importLoaders: loader ? 3 : 2, // postcss-loader (1), resolve-url-loader (2), *-loader (3)
+      })
+      .end()
+      .use("resolve-url-loader")
+      .loader("resolve-url-loader")
+      .options({
+        sourceMap: true,
       })
       .end()
       .use("postcss-loader")
@@ -93,12 +99,6 @@ export default class Sass extends Loader<{
         }
       })
       .end()
-      .use("resolve-url-loader")
-      .loader("resolve-url-loader")
-      .options({
-        sourceMap: true,
-      })
-      .end();
 
     if (loader) {
       oneOf
