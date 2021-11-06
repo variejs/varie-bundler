@@ -1,6 +1,6 @@
 {
   "name": "varie-bundler",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A webpack bundler for Varie",
   "main": "lib",
   "repository": {
@@ -26,7 +26,7 @@
     "@types/webpack-env": "^1.14.1",
     "autoprefixer": "^10.4.0",
     "babel-loader": "^8.0.6",
-    "babel-preset-varie-app": "^0.5.0",
+    "babel-preset-varie-app": "^1.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^9.0.1",
@@ -41,7 +41,7 @@
     "glob-all": "^3.1.0",
     "html-loader": "^3.0.1",
     "html-webpack-plugin": "^5.5.0",
-    "image-webpack-loader": "^8.0.1",
+    "image-webpack-loader": "^6.0.0",
     "mini-css-extract-plugin": "^2.4.4",
     "node-sass": "^6.0.1",
     "portfinder-sync": "0.0.2",
