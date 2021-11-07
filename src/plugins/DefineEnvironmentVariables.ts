@@ -2,9 +2,7 @@ import Plugin from "./Plugin";
 import { DefinePlugin } from "webpack";
 import { DefineVariablePluginConfig } from "../interfaces/plugin-config-interfaces/DefineVariablePluginConfig";
 
-export default class DefineEnvironmentVariables extends Plugin<
-  DefineVariablePluginConfig
-> {
+export default class DefineEnvironmentVariables extends Plugin<DefineVariablePluginConfig> {
   public register() {
     let variables = {
       app: {

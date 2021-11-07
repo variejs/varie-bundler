@@ -4,21 +4,12 @@ import VueConfig from "../interfaces/VueConfig";
 
 export default class Vue extends Loader<VueConfig> {
   public register() {
-    // TODO - is it required anymore?
-    // Vue has their own setImmediate polyfill
-    // this.bundler.webpackChain.node.merge({
-    //   setImmediate: false,
-    // });
-
     this.bundler.webpackChain.module
       .noParse(/^(vue|vue-router|vuex)$/)
       .rule("vue")
       .test(/\.vue$/)
       .use("vue-loader")
-      .loader("vue-loader")
-      .options({
-        whitespace: "condense",
-      });
+      .loader("vue-loader");
 
     let alias = "vue/dist/vue.esm.js";
     if (this.options.runtimeOnly) {

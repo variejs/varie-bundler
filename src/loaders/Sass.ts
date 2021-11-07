@@ -4,7 +4,7 @@ import useIf from "../helpers/useIf";
 import autoprefixer from "autoprefixer";
 import { HashTypes } from "../types/HashTypes";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import { Rule } from 'webpack-chain'
+import { Rule } from "webpack-chain";
 
 export default class Sass extends Loader<{
   hashType: HashTypes;
@@ -13,7 +13,7 @@ export default class Sass extends Loader<{
     this.createCSSRule("css", /\.css$/);
     this.createCSSRule("sass", /\.s[ac]ss$/, "sass-loader", {
       sourceMap: true,
-      implementation: require("node-sass"),
+      implementation: require("sass"),
     });
 
     if (!this.bundler.env.isHot) {
@@ -42,18 +42,10 @@ export default class Sass extends Loader<{
       loaderOptions,
     );
 
-    this.applyLoaders(
-      baseRule.oneOf("normal"),
-      loader,
-      loaderOptions,
-    );
+    this.applyLoaders(baseRule.oneOf("normal"), loader, loaderOptions);
   }
 
-  private applyLoaders(
-    oneOf: Rule<Rule>,
-    loader?,
-    loaderOptions = {},
-  ) {
+  private applyLoaders(oneOf: Rule<Rule>, loader?, loaderOptions = {}) {
     oneOf
       .when(
         !this.bundler.env.isHot,
@@ -96,15 +88,12 @@ export default class Sass extends Loader<{
             autoprefixer({ grid: true }),
             ...useIf(!this.bundler.env.isHot, [cssnano]),
           ],
-        }
+        },
       })
-      .end()
+      .end();
 
     if (loader) {
-      oneOf
-        .use(loader)
-        .loader(loader)
-        .options(loaderOptions);
+      oneOf.use(loader).loader(loader).options(loaderOptions);
     }
   }
 }
