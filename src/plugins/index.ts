@@ -1,6 +1,7 @@
 import Copy from "./Copy";
 import Html from "./Html";
 import Clean from "./Clean";
+import Eslint from "./Eslint";
 import PurgeCss from "./PurgeCss";
 import WebpackBar from "./WebpackBar";
 import BundleAnalyzer from "./BundleAnalyzer";
@@ -12,6 +13,7 @@ export default {
   Copy,
   Html,
   Clean,
+  Eslint,
   PurgeCss,
   WebpackBar,
   BundleAnalyzer,

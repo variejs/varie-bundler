@@ -14,7 +14,7 @@ import BundlerConfig from "./interfaces/BundlerConfig";
 import { EnvironmentTypes } from "./types/EnvironmentTypes";
 import BundlerEnvironment from "./interfaces/BundlerEnvironment";
 import { BrowserSyncPluginConfig } from "./interfaces/plugin-config-interfaces/BrowserSyncPluginConfig";
-
+import { Options as ESLintOptions } from "eslint-webpack-plugin";
 export default abstract class AbstractBundler {
   public config: BundlerConfig;
   public env: BundlerEnvironment;
@@ -85,9 +85,9 @@ export default abstract class AbstractBundler {
     return this;
   }
 
-  public eslint() {
+  public eslint(options?: ESLintOptions) {
     if (!this.env.isProduction) {
-      new loaders.Eslint(this);
+      new plugins.Eslint(this, options);
     }
     return this;
   }
@@ -159,17 +159,18 @@ export default abstract class AbstractBundler {
       .oneOf("vue")
       .use("sass-loader")
       .tap((options) => {
-        options.prependData = (loaderContext) => {
+        options.additionalData = (content, loaderContext) => {
           if (rx.test(loaderContext.resourcePath)) {
-            return this.config.loaders.sassLoader.globalIncludes
-              .map((_filePath) => {
-                return `@import "${path
-                  .join(this.config.root, _filePath)
-                  .replace(/\\/g, "/")}";`;
-              })
-              .join("\n");
+            content =
+              this.config.loaders.sassLoader.globalIncludes
+                .map((_filePath) => {
+                  return `@import "${path
+                    .join(this.config.root, _filePath)
+                    .replace(/\\/g, "/")}";`;
+                })
+                .join("\n") + content;
           }
-          return "";
+          return content;
         };
         return options;
       });
@@ -238,54 +239,57 @@ export default abstract class AbstractBundler {
     let host = envConfig.APP_HOST || "0.0.0.0";
     let outputPath = path.join(root, envConfig.OUTPUT_PATH || "public");
 
-    this.config = deepMerge({
-      root,
-      host,
-      outputPath,
-      bundleName: "Client",
-      aggressiveVendorSplitting: false,
-      appName: envConfig.APP_NAME || "Varie",
-      hashType: this.env.isHot ? HashTypes.Hash : HashTypes.ContentHash,
-      cache: this.env.isHot && !this.argumentsHas("--disable-cache"),
-      plugins: {
-        copy: {
-          patterns: [],
+    this.config = deepMerge(
+      {
+        root,
+        host,
+        outputPath,
+        bundleName: "Client",
+        aggressiveVendorSplitting: false,
+        appName: envConfig.APP_NAME || "Varie",
+        hashType: this.env.isHot ? HashTypes.Hash : HashTypes.ContentHash,
+        cache: this.env.isHot && !this.argumentsHas("--disable-cache"),
+        plugins: {
+          copy: {
+            patterns: [],
+          },
+          html: {
+            variables: {},
+          },
+          browserSync: {
+            host,
+            outputPath,
+            port: 3000,
+            proxy: `${host}:8080`,
+          },
+          clean: {
+            excludeList: [],
+          },
+          defineEnvironmentVariables: {
+            variables: [],
+          },
         },
-        html: {
-          variables: {},
+        loaders: {
+          sassLoader: {
+            globalIncludes: [],
+          },
         },
-        browserSync: {
-          host,
-          outputPath,
-          port: 3000,
-          proxy: `${host}:8080`,
+        webpack: {
+          aliases: {},
+          entryFiles: [],
+          devServer: {
+            host,
+            open: true,
+            proxies: [],
+            port: 8080,
+          },
         },
-        clean: {
-          excludeList: [],
-        },
-        defineEnvironmentVariables: {
-          variables: [],
+        vue: {
+          runtimeOnly: true,
         },
       },
-      loaders: {
-        sassLoader: {
-          globalIncludes: [],
-        },
-      },
-      webpack: {
-        aliases: {},
-        entryFiles: [],
-        devServer: {
-          host,
-          open: true,
-          proxies: [],
-          port: 8080,
-        },
-      },
-      vue: {
-        runtimeOnly: true,
-      },
-    }, config) as BundlerConfig;
+      config,
+    ) as BundlerConfig;
   }
 
   private setupEnv(mode: EnvironmentTypes): void {
@@ -302,10 +306,9 @@ export default abstract class AbstractBundler {
   private presets(): void {
     new plugins.CaseSensitivePaths(this);
 
-    this.webpackChain
-      .when(this.env.isAnalyzing, () => {
-        new plugins.BundleAnalyzer(this);
-      });
+    this.webpackChain.when(this.env.isAnalyzing, () => {
+      new plugins.BundleAnalyzer(this);
+    });
 
     this.webpackChain
       .mode(this.env.mode)

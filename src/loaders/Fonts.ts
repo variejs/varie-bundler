@@ -8,6 +8,6 @@ export default class Fonts extends Loader<undefined> {
       .end()
       .test(/\.(woff|woff2|ttf|eot|otf|svg)$/)
       // @ts-ignore
-      .type('asset/resource')
+      .type("asset/resource");
   }
 }

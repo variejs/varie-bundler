@@ -37,9 +37,9 @@ export default class Typescript extends Loader<{
           {
             typescript: {
               extensions: {
-                vue: true
-              }
-            }
+                vue: true,
+              },
+            },
           },
         ]);
     }
